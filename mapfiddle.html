@@ -11,6 +11,7 @@
 
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
         <script src="lib/angular/angular.js"></script>
+        <script src="js/ui-bootstrap-tpls-0.10.0.js"></script>
     </head>
 
     <body>
@@ -22,8 +23,25 @@
                 <button id="run" type="button" class="btn btn-primary"><i class="fa fa-play">&nbsp;</i>
                     Run
                 </button>
-            </div>
+                <button id="html" type="button" class="btn btn-primary">HTML</button>
 
+                <div ng-controller="HtmlOutputController">
+                    <script type="text/ng-template" id="myModalContent.html">
+                        <div class="modal-header">
+                            <h3>{{ header }}</h3>
+                        </div>
+                        <div class="modal-body">
+                            {{ body }}
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" ng-click="ok()">OK</button>
+                            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+                        </div>
+                    </script>
+
+                    <button class="btn btn-primary" ng-click="open()">HTML</button>
+                </div>
+            </div>
         </header>
         <div class="container-fluid">
             <div class="row-fluid">
@@ -33,12 +51,24 @@
                         <h4>Map Options</h4>
                     </form>
                     <div ng-controller="mfController" class="input-prepend map-option-container">
-                        <select id="add-map-option">
-                            <option value="noa">Add an Option</option>
-                        </select>
+                        <!--<select id="add-map-option">-->
+                            <!--<option value="noa">Add an Option</option>-->
+                        <!--</select>-->
+                        <label>{{options.zoom.label}}: {{options.zoom.value}}</label>
+                        <input ng-model="options.zoom.value" ng-change="updateMap()" min="{{options.zoom.min}}" max="{{options.zoom.max}}" type="range" class="add-on mapoption-range">
 
-                        <div option-range></div>
-                        <div option-checkbox></div>
+                        <label>{{options.panControl.label}}:</label>
+                        <input ng-model="options.panControl.value" ng-change="updateMap()" type="checkbox" class="add-on mapoption-checkbox">
+
+                        <label>{{options.zoomControl.label}}:</label>
+                        <input ng-model="options.zoomControl.value" ng-change="updateMap()" type="checkbox" class="add-on mapoption-checkbox">
+
+                        <label>{{options.streetViewControl.label}}:</label>
+                        <input ng-model="options.streetViewControl.value" ng-change="updateMap()" type="checkbox" class="add-on mapoption-checkbox">
+
+                        <label>{{options.mapTypeControl.label}}:</label>
+                        <input ng-model="options.mapTypeControl.value" ng-change="updateMap()" type="checkbox" class="add-on mapoption-checkbox">
+
                     </div>
                     <!--TODO Make styling it's own tab - or someway to input the json for styles -->
                     <!--<textarea id="json-data" rows="6" style="width:175px;" placeholder="JSON Styles"></textarea>-->
@@ -46,7 +76,7 @@
                 <!-- /Map Options -->
                 <!-- HTML & Map -->
                 <div>
-                    <div class="row-fluid" style="height:820px">
+                    <div class="row-fluid" style="height:820px;">
                         <div id="map-canvas" class="span8" style="height:100%;"></div>
                     </div>
                 </div>
