@@ -13,6 +13,7 @@
         <script src="lib/angular/angular.js"></script>
         <script src="js/ui-bootstrap-tpls-0.10.0.js"></script>
         <script src="js/linq.js"></script>
+        <script src="js/utility.js"></script>
     </head>
 
     <body>
@@ -24,9 +25,7 @@
                 <button id="run" type="button" class="btn btn-primary"><i class="fa fa-play">&nbsp;</i>
                     Run
                 </button>
-                <button id="html" type="button" class="btn btn-primary">HTML</button>
-
-                <div ng-controller="HtmlOutputController">
+                <div style="display:inline;" ng-controller="HtmlOutputController">
                     <script type="text/ng-template" id="myModalContent.html">
                         <div class="modal-header">
                             <h3>{{ header }}</h3>
@@ -42,6 +41,19 @@
 
                     <button class="btn btn-primary" ng-click="open()">HTML</button>
                 </div>
+                <div class="dropdown btn-group">
+                    <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+                        Action
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Google Maps</a></li>
+                        <li><a href="#">Leaflet</a></li>
+                    </ul>
+                </div>
+                <!--<div class="input-group">-->
+                    <!---->
+                <!--</div>&lt;!&ndash; /input-group &ndash;&gt;-->
             </div>
         </header>
         <div class="container-fluid">
