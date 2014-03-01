@@ -87,7 +87,7 @@ mfApp.factory('mapOutputService', function() {
                 js += o.Key + ": " + o.Value.value;
             }
 
-            if (index !== usedOptions.length) {
+            if (index !== usedOptions.length - 1) {
                 js += ",";
             }
 
