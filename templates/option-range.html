@@ -1,2 +1,2 @@
-<input ng-model="options.zoom.value" ng-change="updateMap()" min="{{options.zoom.min}}" max="{{options.zoom.max}}" type="range" class="add-on mapoption-range">
-<span>Zoom: {{options.zoom.value}}</span>
+<label>{{item.label}}: {{item.value}}</label>
+<input ng-model="item.value" ng-change="$parent.updateMap()" min="{{item.min}}" max="{{item.max}}" type="range" class="add-on mapoption-range">

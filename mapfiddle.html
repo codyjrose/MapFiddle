@@ -60,28 +60,15 @@
             <div class="row-fluid">
                 <!-- Map Options -->
                 <div class="fixed">
-                    <form id="map-options">
-                        <h4>Map Options</h4>
-                    </form>
+                    <h4>Map Options</h4>
+
                     <div ng-controller="mfController" class="input-prepend map-option-container">
-                        <!--<select id="add-map-option">-->
-                            <!--<option value="noa">Add an Option</option>-->
-                        <!--</select>-->
-                        <label>{{options.zoom.label}}: {{options.zoom.value}}</label>
-                        <input ng-model="options.zoom.value" ng-change="updateMap()" min="{{options.zoom.min}}" max="{{options.zoom.max}}" type="range" class="add-on mapoption-range">
 
-                        <label>{{options.panControl.label}}:</label>
-                        <input ng-model="options.panControl.value" ng-change="updateMap()" type="checkbox" class="add-on mapoption-checkbox">
+                        <div ng-repeat="option in options" class="map-option-container">
+                            <div ng-if="option.inputType == 'range'" option-range="option"></div>
+                            <div ng-if="option.inputType == 'checkbox'" option-checkbox="option"></div>
 
-                        <label>{{options.zoomControl.label}}:</label>
-                        <input ng-model="options.zoomControl.value" ng-change="updateMap()" type="checkbox" class="add-on mapoption-checkbox">
-
-                        <label>{{options.streetViewControl.label}}:</label>
-                        <input ng-model="options.streetViewControl.value" ng-change="updateMap()" type="checkbox" class="add-on mapoption-checkbox">
-
-                        <label>{{options.mapTypeControl.label}}:</label>
-                        <input ng-model="options.mapTypeControl.value" ng-change="updateMap()" type="checkbox" class="add-on mapoption-checkbox">
-
+                        </div>
                     </div>
                     <!--TODO Make styling it's own tab - or someway to input the json for styles -->
                     <!--<textarea id="json-data" rows="6" style="width:175px;" placeholder="JSON Styles"></textarea>-->

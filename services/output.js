@@ -8,7 +8,8 @@ mfApp.factory('mapOutputService', function() {
             type: "number",
             label: "Zoom",
             required: true,
-            default: 8
+            default: 8,
+            inputType: "range"
         },
         center: {
             value: new google.maps.LatLng(-34.397, 150.644),
@@ -16,31 +17,36 @@ mfApp.factory('mapOutputService', function() {
             typeText: "new google.maps.LatLng",
             label: "Map Center",
             required: true,
-            default: new google.maps.LatLng(-34.397, 150.644)
+            default: new google.maps.LatLng(-34.397, 150.644),
+            inputType: "none"
         },
         panControl: {
             value: true,
             type: "boolean",
             label: "Pan Control",
-            default: true
+            default: true,
+            inputType: "checkbox"
         },
         zoomControl: {
             value: true,
             type: "boolean",
             label: "Zoom Control",
-            default: true
+            default: true,
+            inputType: "checkbox"
         },
         streetViewControl: {
             value: true,
             type: "boolean",
             label: "Street View Control",
-            default: true
+            default: true,
+            inputType: "checkbox"
         },
         mapTypeControl: {
             value: true,
             type: "boolean",
             label: "Map Type Control",
-            default: true
+            default: true,
+            inputType: "checkbox"
         }
     };
 
@@ -98,7 +104,7 @@ mfApp.factory('mapOutputService', function() {
     };
 
     var getUsedOptions = function() {
-        Enumerable.From(options).Where(function(o) { return o.Value.value != o.Value.default || o.Value.required == true }).ToArray()
+        return Enumerable.From(options).Where(function(o) { return o.Value.value != o.Value.default || o.Value.required == true }).ToArray()
     };
 
     var genHtml = function() {
