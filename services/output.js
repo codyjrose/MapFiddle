@@ -44,6 +44,7 @@ mfApp.factory('mapOutputService', function() {
         }
     };
 
+    //region Static HTML
     var staticBeginHtml = '' +
         '<!DOCTYPE html>' +
         '<html>' +
@@ -62,8 +63,9 @@ mfApp.factory('mapOutputService', function() {
         '<div id="map-canvas"></div>' +
         '</body>' +
         '</html>';
+    //endregion
 
-    var mapJS = function() {
+    var getMapJS = function() {
 
         var usedOptions = getUsedOptions();
 
@@ -98,19 +100,17 @@ mfApp.factory('mapOutputService', function() {
     };
 
     var getUsedOptions = function() {
-        Enumerable.From(options).Where(function(o) { return o.Value.value != o.Value.default || o.Value.required == true }).ToArray()
+        return Enumerable.From(options).Where(function(o) { return o.Value.value != o.Value.default || o.Value.required == true }).ToArray()
     };
 
-    var genHtml = function() {
-        var return_html = staticBeginHtml + mapJS() + staticEndHtml;
-        // Need to do some beautifying here at some point: https://github.com/einars/js-beautify
-
-        return return_html;
+    var getMapMarkup = function() {
+        // TODO Need to do some beautifying here at some point: https://github.com/einars/js-beautify
+        return staticBeginHtml + getMapJS() + staticEndHtml;
     };
 
     return {
         generateHtml: function(data) {
-            return genHtml(data);
+            return getMapMarkup(data);
         },
         getOptions: function() {
             return options;
