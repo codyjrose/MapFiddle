@@ -8,7 +8,8 @@ mfApp.factory('mapOutputService', function() {
             type: "number",
             label: "Zoom",
             required: true,
-            default: 8
+            default: 8,
+            inputType: "range"
         },
         center: {
             value: new google.maps.LatLng(-34.397, 150.644),
@@ -16,31 +17,36 @@ mfApp.factory('mapOutputService', function() {
             typeText: "new google.maps.LatLng",
             label: "Map Center",
             required: true,
-            default: new google.maps.LatLng(-34.397, 150.644)
+            default: new google.maps.LatLng(-34.397, 150.644),
+            inputType: "none"
         },
         panControl: {
             value: true,
             type: "boolean",
             label: "Pan Control",
-            default: true
+            default: true,
+            inputType: "checkbox"
         },
         zoomControl: {
             value: true,
             type: "boolean",
             label: "Zoom Control",
-            default: true
+            default: true,
+            inputType: "checkbox"
         },
         streetViewControl: {
             value: true,
             type: "boolean",
             label: "Street View Control",
-            default: true
+            default: true,
+            inputType: "checkbox"
         },
         mapTypeControl: {
             value: true,
             type: "boolean",
             label: "Map Type Control",
-            default: true
+            default: true,
+            inputType: "checkbox"
         }
     };
 
@@ -83,7 +89,7 @@ mfApp.factory('mapOutputService', function() {
                 js += o.Key + ": " + o.Value.value;
             }
 
-            if (index !== usedOptions.length) {
+            if (index !== usedOptions.length - 1) {
                 js += ",";
             }
 

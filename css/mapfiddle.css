@@ -22,11 +22,13 @@ header .btn {
 }
 
 .map-option-container  {
-    width:100%;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
 }
-.map-option-container select {
-    width:195px;
-}
+/*.map-option-container select {*/
+    /*width:195px;*/
+/*}*/
 
 #map_canvas img{max-width: none;}
 
@@ -288,8 +290,7 @@ header .btn {
 /*}*/
 
 .mapoption-range {
-    margin: 5px !important;
-    width: 58% !important;
+    width: 100%;
 }
 /*.mapoption-checkbox {*/
     /*width: 80% !important;*/
