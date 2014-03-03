@@ -4,7 +4,7 @@
      (pagination, tabs etc.). But in AngularJS adding empty href attributes to link tags will cause unwanted
      route changes. This is why we need to remove empty href attributes from directive templates and as a result
      styling is not applied correctly. The remedy is simple, just add the following styling to your application:
- */
+*/
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
 
 .fixed {
@@ -26,278 +26,23 @@ header .btn {
     margin-left: auto;
     margin-right: auto;
 }
-/*.map-option-container select {*/
-    /*width:195px;*/
-/*}*/
 
 #map_canvas img{max-width: none;}
 
-/*textarea {*/
-    /*resize: none;*/
-/*}*/
-
-/*.add-on.input-label {*/
-    /*background-color: #fff;*/
-    /*width: 130px;*/
-/*}*/
-
-/*input.input-range {*/
-    /*width: 130px !important;*/
-    /*margin: 0 5px 0 5px !important;*/
-    /*border-color: #CCC !important;*/
-/*}*/
-
-/*input.input-text {*/
-    /*width: 150px !important;*/
-
-/*}*/
-
-/*select.input-dropdown {*/
-    /*width: 165px;*/
-/*}*/
-
-
-/*.panel {*/
-    /*margin-bottom: 20px;*/
-    /*margin-right: 10px;*/
-    /*background-color: #ffffff;*/
-    /*border: 1px solid transparent;*/
-    /*border-radius: 4px;*/
-    /*-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);*/
-    /*box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);*/
-/*}*/
-
-/*.panel-body {*/
-    /*padding: 5px;*/
-/*}*/
-
-/*.panel-body:before,*/
-/*.panel-body:after {*/
-    /*display: table;*/
-    /*content: " ";*/
-/*}*/
-
-/*.panel-body:after {*/
-    /*clear: both;*/
-/*}*/
-
-/*.panel-body:before,*/
-/*.panel-body:after {*/
-    /*display: table;*/
-    /*content: " ";*/
-/*}*/
-
-/*.panel-body:after {*/
-    /*clear: both;*/
-/*}*/
-
-/*.panel > .list-group {*/
-    /*margin-bottom: 0;*/
-/*}*/
-
-/*.panel > .list-group .list-group-item {*/
-    /*border-width: 1px 0;*/
-/*}*/
-
-/*.panel > .list-group .list-group-item:first-child {*/
-    /*border-top-right-radius: 0;*/
-    /*border-top-left-radius: 0;*/
-/*}*/
-
-/*.panel > .list-group .list-group-item:last-child {*/
-    /*border-bottom: 0;*/
-/*}*/
-
-/*.panel-heading + .list-group .list-group-item:first-child {*/
-    /*border-top-width: 0;*/
-/*}*/
-
-/*.panel > .table {*/
-    /*margin-bottom: 0;*/
-/*}*/
-
-/*.panel > .panel-body + .table {*/
-    /*border-top: 1px solid #dddddd;*/
-/*}*/
-
-/*.panel-heading {*/
-    /*padding: 10px 15px;*/
-    /*border-bottom: 1px solid transparent;*/
-    /*border-top-right-radius: 3px;*/
-    /*border-top-left-radius: 3px;*/
-    /*padding: 3px;*/
-/*}*/
-
-/*.panel-title {*/
-    /*margin-top: 0;*/
-    /*margin-bottom: 0;*/
-    /*font-size: 16px;*/
-    /*line-height: 20px;*/
-/*}*/
-
-/*.panel-title > a {*/
-    /*color: inherit;*/
-/*}*/
-
-/*.panel-footer {*/
-    /*padding: 10px 15px;*/
-    /*background-color: #f5f5f5;*/
-    /*border-top: 1px solid #dddddd;*/
-    /*border-bottom-right-radius: 3px;*/
-    /*border-bottom-left-radius: 3px;*/
-/*}*/
-
-/*.panel-group .panel {*/
-    /*margin-bottom: 0;*/
-    /*overflow: hidden;*/
-    /*border-radius: 4px;*/
-/*}*/
-
-/*.panel-group .panel + .panel {*/
-    /*margin-top: 5px;*/
-/*}*/
-
-/*.panel-group .panel-heading {*/
-    /*border-bottom: 0;*/
-/*}*/
-
-/*.panel-group .panel-heading + .panel-collapse .panel-body {*/
-    /*border-top: 1px solid #dddddd;*/
-/*}*/
-
-/*.panel-group .panel-footer {*/
-    /*border-top: 0;*/
-/*}*/
-
-/*.panel-group .panel-footer + .panel-collapse .panel-body {*/
-    /*border-bottom: 1px solid #dddddd;*/
-/*}*/
-
-/*.panel-default {*/
-    /*border-color: #dddddd;*/
-/*}*/
-
-/*.panel-default > .panel-heading {*/
-    /*color: #333333;*/
-    /*background-color: #f5f5f5;*/
-    /*border-color: #dddddd;*/
-/*}*/
-
-/*.panel-default > .panel-heading + .panel-collapse .panel-body {*/
-    /*border-top-color: #dddddd;*/
-/*}*/
-
-/*.panel-default > .panel-footer + .panel-collapse .panel-body {*/
-    /*border-bottom-color: #dddddd;*/
-/*}*/
-
-/*.panel-primary {*/
-    /*border-color: #428bca;*/
-/*}*/
-
-/*.panel-primary > .panel-heading {*/
-    /*color: #ffffff;*/
-    /*background-color: #428bca;*/
-    /*border-color: #428bca;*/
-/*}*/
-
-/*.panel-primary > .panel-heading + .panel-collapse .panel-body {*/
-    /*border-top-color: #428bca;*/
-/*}*/
-
-/*.panel-primary > .panel-footer + .panel-collapse .panel-body {*/
-    /*border-bottom-color: #428bca;*/
-/*}*/
-
-/*.panel-success {*/
-    /*border-color: #d6e9c6;*/
-/*}*/
-
-/*.panel-success > .panel-heading {*/
-    /*color: #468847;*/
-    /*background-color: #dff0d8;*/
-    /*border-color: #d6e9c6;*/
-/*}*/
-
-/*.panel-success > .panel-heading + .panel-collapse .panel-body {*/
-    /*border-top-color: #d6e9c6;*/
-/*}*/
-
-/*.panel-success > .panel-footer + .panel-collapse .panel-body {*/
-    /*border-bottom-color: #d6e9c6;*/
-/*}*/
-
-/*.panel-warning {*/
-    /*border-color: #fbeed5;*/
-/*}*/
-
-/*.panel-warning > .panel-heading {*/
-    /*color: #c09853;*/
-    /*background-color: #fcf8e3;*/
-    /*border-color: #fbeed5;*/
-/*}*/
-
-/*.panel-warning > .panel-heading + .panel-collapse .panel-body {*/
-    /*border-top-color: #fbeed5;*/
-/*}*/
-
-/*.panel-warning > .panel-footer + .panel-collapse .panel-body {*/
-    /*border-bottom-color: #fbeed5;*/
-/*}*/
-
-/*.panel-danger {*/
-    /*border-color: #eed3d7;*/
-/*}*/
-
-/*.panel-danger > .panel-heading {*/
-    /*color: #b94a48;*/
-    /*background-color: #f2dede;*/
-    /*border-color: #eed3d7;*/
-/*}*/
-
-/*.panel-danger > .panel-heading + .panel-collapse .panel-body {*/
-    /*border-top-color: #eed3d7;*/
-/*}*/
-
-/*.panel-danger > .panel-footer + .panel-collapse .panel-body {*/
-    /*border-bottom-color: #eed3d7;*/
-/*}*/
-
-/*.panel-info {*/
-    /*border-color: #bce8f1;*/
-/*}*/
-
-/*.panel-info > .panel-heading {*/
-    /*color: #3a87ad;*/
-    /*background-color: #d9edf7;*/
-    /*border-color: #bce8f1;*/
-/*}*/
-
-/*.panel-info > .panel-heading + .panel-collapse .panel-body {*/
-    /*border-top-color: #bce8f1;*/
-/*}*/
-
-/*.panel-info > .panel-footer + .panel-collapse .panel-body {*/
-    /*border-bottom-color: #bce8f1;*/
-/*}*/
-
-/*.input-append, .input-prepend {*/
-    /*margin-bottom: 0px;*/
-/*}*/
-
-/*.mapoption-text {*/
-    /*width: 77% !important;*/
-/*}*/
+.map-container {
+    margin: 20px 20px 0 0;
+    height:650px;
+}
+.well-map {
+    min-height: 20px;
+    padding: 1px;
+    background-color: #f5f5f5;
+    border: 1px solid #e3e3e3;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+}
 
 .mapoption-range {
     width: 100%;
 }
-/*.mapoption-checkbox {*/
-    /*width: 80% !important;*/
-    /*margin-bottom: 0px;*/
-/*}*/
-
-/*.mapoption-select {*/
-    /*width: 85% !important;*/
-
-/*}*/
