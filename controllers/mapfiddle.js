@@ -1,11 +1,14 @@
-/**
- * Created by Cody on 12/25/13.
- */
 var mfApp = angular.module('mfApp', ['ui.bootstrap']);
 
 mfApp.controller('mfController', function($scope, mapOutputService) {
-   $scope.map = null;
-   $scope.options = mapOutputService.getOptions();
+    var mapType = {
+        Leaflet: "leaflet",
+        Google: "google"
+    }
+
+    $scope.map = null;
+    $scope.mapType = mapType.Leaflet;
+    $scope.options = mapOutputService.getOptions($scope.mapType);
 
     $scope.initMap = function() {
         var mapOptions = {};
@@ -16,8 +19,11 @@ mfApp.controller('mfController', function($scope, mapOutputService) {
                 mapOptions[key] = value.value;
             }
         });
-        $scope.map = new google.maps.Map(document.getElementById("map-canvas"),
-            mapOptions);
+
+        $scope.map = $scope.mapType == mapType.Leaflet ?
+            L.map('map-canvas', mapOptions) :
+            new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+
     };
 
     $scope.updateOptions = function() {
@@ -50,54 +56,16 @@ mfApp.controller('mfController', function($scope, mapOutputService) {
     angular.element(document).ready(function () {
         $scope.initMap();
 
-        google.maps.event.addListener($scope.map, 'idle', function() {
-            $scope.updateOptions();
-        });
+        if ($scope.mapType == mapType.Leaflet) {
+            // Write method to update leaflet options.
+        } else {
+            google.maps.event.addListener($scope.map, 'idle', function() {
+                $scope.updateOptions();
+            });
+        }
     });
 });
 
-// Angular UI modal stuff
-mfApp.controller('HtmlOutputController', function($scope, $modal, mapOutputService) {
-    $scope.header = "Copy/Pasta this into an HTML file.";
-
-    $scope.open = function () {
-        $scope.body = mapOutputService.generateHtml();
-
-        var modalInstance = $modal.open({
-            templateUrl: 'myModalContent.html',
-            controller: ModalInstanceCtrl,
-            resolve: {
-                innerScope: function () {
-                    return $scope;
-                }
-            }
-        });
-
-//        modalInstance.result.then(
-//            function () {
-//                $log.info("Modal OK'd at: " + new Date());
-//            },
-//            function () {
-//                $log.info('Modal dismissed at: ' + new Date());
-//            }
-//        );
-    };
-});
-
-// Please note that $modalInstance represents a modal window (instance) dependency.
-// It is not the same as the $modal service used above.
-var ModalInstanceCtrl = function ($scope, $modalInstance, innerScope) {
-    $scope.header = innerScope.header;
-    $scope.body = innerScope.body;
-
-    $scope.ok = function () {
-        $modalInstance.close();
-    };
-
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-    };
-};
 
 /*  Directives */
 mfApp.directive('optionRange', function() {

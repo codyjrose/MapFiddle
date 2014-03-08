@@ -1,6 +1,6 @@
 mfApp.factory('mapOutputService', function() {
 
-    var options = {
+    var googleMapOptions = {
         zoom: {
             value: 8,
             min: 1,
@@ -48,6 +48,34 @@ mfApp.factory('mapOutputService', function() {
             default: true,
             inputType: "checkbox"
         }
+    }
+
+    var leafletOsmOptions = {
+        zoom: {
+            value: 8,
+            min: 1,
+            max: 21,
+            type: "number",
+            label: "Zoom",
+            required: true,
+            default: 8,
+            inputType: "range"
+        },
+        center: {
+            value: [-34.397, 150.644],
+            type: "array",
+            label: "Map Center",
+            required: true,
+            default: [-34.397, 150.644],
+            inputType: "none"
+        },
+        layers: {
+            value: L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: 'Map data © OpenStreetMap contributors' }),
+            type: "object",
+            required: true,
+            inputType: "none"
+        }
+
     };
 
     //region Static HTML
@@ -118,8 +146,8 @@ mfApp.factory('mapOutputService', function() {
         generateHtml: function(data) {
             return getMapMarkup(data);
         },
-        getOptions: function() {
-            return options;
+        getOptions: function(mapType) {
+            return mapType == "leaflet" ? leafletOsmOptions : googleMapOptions;
         }
     };
 });

@@ -10,6 +10,10 @@
         <link rel="stylesheet" href="css/mapfiddle.css">
 
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
+
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+        <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+
         <script src="lib/angular/angular.js"></script>
         <script src="js/ui-bootstrap-tpls-0.10.0.js"></script>
         <script src="js/linq.js"></script>
@@ -41,19 +45,28 @@
 
                     <button class="btn btn-primary" ng-click="open()">HTML</button>
                 </div>
-                <div class="dropdown btn-group">
-                    <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
-                        Action
+
+                <div class="dropdown btn-group" ng-controller="DropdownCtrl">
+                    <a class="dropdown-toggle btn btn-primary">
+                        Map Type
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Google Maps</a></li>
-                        <li><a href="#">Leaflet</a></li>
+                        <li ng-repeat="choice in items">
+                            <a>{{ choice }}</a>
+                        </li>
                     </ul>
                 </div>
-                <!--<div class="input-group">-->
-                    <!---->
-                <!--</div>&lt;!&ndash; /input-group &ndash;&gt;-->
+                <!--<div class="dropdown btn-group">-->
+                    <!--<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">-->
+                        <!--Action-->
+                        <!--<span class="caret"></span>-->
+                    <!--</a>-->
+                    <!--<ul class="dropdown-menu">-->
+                        <!--<li><a href="#">Google Maps</a></li>-->
+                        <!--<li><a href="#">Leaflet</a></li>-->
+                    <!--</ul>-->
+                <!--</div>-->
             </div>
         </header>
         <div class="container-fluid">
@@ -84,6 +97,7 @@
             </div>
         </div>
         <script type="text/javascript" src="controllers/mapfiddle.js"></script>
+        <script type="text/javascript" src="controllers/angularui.js"></script>
         <script type="text/javascript" src="services/output.js"></script>
     </body>
 
