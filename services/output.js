@@ -1,5 +1,5 @@
+// Responsible for outputing map HTML
 mfApp.factory('mapOutputService', function() {
-
     var googleMapOptions = {
         zoom: {
             value: 8,
@@ -77,6 +77,8 @@ mfApp.factory('mapOutputService', function() {
         }
 
     };
+
+    var options = googleMapOptions;
 
     //region Static HTML
     var staticBeginHtml = '' +

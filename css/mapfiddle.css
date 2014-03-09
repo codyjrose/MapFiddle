@@ -27,7 +27,17 @@ header .btn {
     margin-right: auto;
 }
 
-#map_canvas img{max-width: none;}
+/*#map_canvas img{max-width: none;}*/
+
+#google-map-canvas {
+    height:100%;
+}
+
+#leaflet-map-canvas {
+    height:100%;
+}
+
+
 
 .map-container {
     margin: 20px 20px 0 0;

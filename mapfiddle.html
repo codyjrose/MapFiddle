@@ -18,7 +18,7 @@
         <script src="js/ui-bootstrap-tpls-0.10.0.js"></script>
         <script src="js/linq.js"></script>
         <script src="js/utility.js"></script>
-    </head>
+        </head>
 
     <body>
         <header class="navbar navbar-default" role="banner">
@@ -46,27 +46,17 @@
                     <button class="btn btn-primary" ng-click="open()">HTML</button>
                 </div>
 
-                <div class="dropdown btn-group" ng-controller="DropdownCtrl">
+                <div class="dropdown btn-group" ng-controller="mfController">
                     <a class="dropdown-toggle btn btn-primary">
                         Map Type
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li ng-repeat="choice in items">
-                            <a>{{ choice }}</a>
+                        <li ng-repeat="choice in mapTypeItems">
+                            <a ng-click="toggleMapType()">{{ choice }}</a>
                         </li>
                     </ul>
                 </div>
-                <!--<div class="dropdown btn-group">-->
-                    <!--<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">-->
-                        <!--Action-->
-                        <!--<span class="caret"></span>-->
-                    <!--</a>-->
-                    <!--<ul class="dropdown-menu">-->
-                        <!--<li><a href="#">Google Maps</a></li>-->
-                        <!--<li><a href="#">Leaflet</a></li>-->
-                    <!--</ul>-->
-                <!--</div>-->
             </div>
         </header>
         <div class="container-fluid">
@@ -80,7 +70,6 @@
                         <div ng-repeat="option in options" class="map-option-container">
                             <div ng-if="option.inputType == 'range'" option-range="option"></div>
                             <div ng-if="option.inputType == 'checkbox'" option-checkbox="option"></div>
-
                         </div>
                     </div>
                     <!--TODO Make styling it's own tab - or someway to input the json for styles -->
@@ -88,9 +77,10 @@
                 </div>
                 <!-- /Map Options -->
                 <!-- HTML & Map -->
-                <div>
+                <div >
                     <div class="row-fluid well-map map-container">
-                        <div id="map-canvas" class="span8" style="height:100%;"></div>
+                        <div id="google-map-canvas" class="span8"></div>
+                        <div id="leaflet-map-canvas" class="span8" style="display:none;"></div>
                     </div>
                 </div>
                 <!-- /HTML & Map -->
@@ -99,6 +89,7 @@
         <script type="text/javascript" src="controllers/mapfiddle.js"></script>
         <script type="text/javascript" src="controllers/angularui.js"></script>
         <script type="text/javascript" src="services/output.js"></script>
+        <script type="text/javascript" src="services/display.js"></script>
     </body>
 
 </html>

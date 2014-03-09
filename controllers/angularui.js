@@ -1,8 +1,12 @@
-mfApp.controller('DropdownCtrl', function($scope) {
+mfApp.controller('DropdownCtrl', function($scope, mapOutputService) {
     $scope.items = [
         "Leaflet w/ OSM",
         "Google Maps"
     ];
+
+    $scope.toggleMapType = function() {
+
+    }
 });
 
 // Angular UI modal stuff
