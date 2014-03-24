@@ -1,11 +1,11 @@
 /**
  * Created by Cody on 3/9/14.
- * Responsible for controlling the map type (Google or Leaflet/OSM) and displaying the map.
+ * Responsible the map type (Google or Leaflet/OSM).
  */
-mfApp.factory('mapDisplayService', function() {
+mfApp.factory('mapChoiceService', function() {
     var mapType = {
-        Leaflet: "leaflet",
-        Google: "google"
+        Leaflet: { codename: "leaflet", label: "Leaflet w/ OSM" },
+        Google: { codename: "google", label: "Google Maps" }
     };
 
     var currentMapType = mapType.Leaflet;
@@ -17,7 +17,7 @@ mfApp.factory('mapDisplayService', function() {
     };
 
     return {
-        getMapType: function() {
+        getMapTypes: function() {
             return mapType;
         },
         getDefaultMapType: function() {

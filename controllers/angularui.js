@@ -1,14 +1,3 @@
-mfApp.controller('DropdownCtrl', function($scope, mapOutputService) {
-    $scope.items = [
-        "Leaflet w/ OSM",
-        "Google Maps"
-    ];
-
-    $scope.toggleMapType = function() {
-
-    }
-});
-
 // Angular UI modal stuff
 mfApp.controller('HtmlOutputController', function($scope, $modal, mapOutputService) {
     $scope.header = "Copy/Pasta this into an HTML file.";

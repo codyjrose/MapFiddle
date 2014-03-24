@@ -1,84 +1,6 @@
-// Responsible for outputing map HTML
+// Responsible for outputting map HTML + Javascript
 mfApp.factory('mapOutputService', function() {
-    var googleMapOptions = {
-        zoom: {
-            value: 8,
-            min: 1,
-            max: 21,
-            type: "number",
-            label: "Zoom",
-            required: true,
-            default: 8,
-            inputType: "range"
-        },
-        center: {
-            value: new google.maps.LatLng(-34.397, 150.644),
-            type: "object",
-            typeText: "new google.maps.LatLng",
-            label: "Map Center",
-            required: true,
-            default: new google.maps.LatLng(-34.397, 150.644),
-            inputType: "none"
-        },
-        panControl: {
-            value: true,
-            type: "boolean",
-            label: "Pan Control",
-            default: true,
-            inputType: "checkbox"
-        },
-        zoomControl: {
-            value: true,
-            type: "boolean",
-            label: "Zoom Control",
-            default: true,
-            inputType: "checkbox"
-        },
-        streetViewControl: {
-            value: true,
-            type: "boolean",
-            label: "Street View Control",
-            default: true,
-            inputType: "checkbox"
-        },
-        mapTypeControl: {
-            value: true,
-            type: "boolean",
-            label: "Map Type Control",
-            default: true,
-            inputType: "checkbox"
-        }
-    }
-
-    var leafletOsmOptions = {
-        zoom: {
-            value: 8,
-            min: 1,
-            max: 21,
-            type: "number",
-            label: "Zoom",
-            required: true,
-            default: 8,
-            inputType: "range"
-        },
-        center: {
-            value: [-34.397, 150.644],
-            type: "array",
-            label: "Map Center",
-            required: true,
-            default: [-34.397, 150.644],
-            inputType: "none"
-        },
-        layers: {
-            value: L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: 'Map data © OpenStreetMap contributors' }),
-            type: "object",
-            required: true,
-            inputType: "none"
-        }
-
-    };
-
-    var options = googleMapOptions;
+    var usedOptions;
 
     //region Static HTML
     var staticBeginHtml = '' +
@@ -102,8 +24,6 @@ mfApp.factory('mapOutputService', function() {
     //endregion
 
     var getMapJS = function() {
-
-        var usedOptions = getUsedOptions();
 
         var js = '' +
             'var map;' +
@@ -135,21 +55,15 @@ mfApp.factory('mapOutputService', function() {
         return js;
     };
 
-    var getUsedOptions = function() {
-        return Enumerable.From(options).Where(function(o) { return o.Value.value != o.Value.default || o.Value.required == true }).ToArray()
-    };
-
     var getMapMarkup = function() {
         // TODO Need to do some beautifying here at some point: https://github.com/einars/js-beautify
         return staticBeginHtml + getMapJS() + staticEndHtml;
     };
 
     return {
-        generateHtml: function(data) {
-            return getMapMarkup(data);
-        },
-        getOptions: function(mapType) {
-            return mapType == "leaflet" ? leafletOsmOptions : googleMapOptions;
+        generateHtml: function(mapOptions) {
+            usedOptions = mapOptions;
+            return getMapMarkup();
         }
     };
 });

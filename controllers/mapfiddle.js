@@ -1,45 +1,30 @@
 var mfApp = angular.module('mfApp', ['ui.bootstrap']);
 
-mfApp.controller('mfController', function($scope, mapOutputService, mapDisplayService) {
-
-    // Wrapping map divs with ng-controller seems to bonk the map update. Need to figure out how to show and hide map.
-//    $scope.showGoogleMap = true;
-//    $scope.showLeafletMap = false;
-
-    var mapTypes = mapDisplayService.getMapType();
-    $scope.mapType = mapDisplayService.getDefaultMapType();
-
-    $scope.options = mapOutputService.getOptions($scope.mapType);
+mfApp.controller('mfController', function($scope, mapOutputService, mapChoiceService, mapOptionsService) {
+    $scope.mapTypes = mapChoiceService.getMapTypes();
+    $scope.currentMapType = mapChoiceService.getDefaultMapType();
+    $scope.options = mapOptionsService.getOptions($scope.currentMapType);
     $scope.map = null;
 
-    // Returns an options object for map creation.
-    $scope.getOptions = function() {
-        var mapOptions = {};
-        angular.forEach($scope.options, function(value, key) {
-            if (value.type == "number") {
-                mapOptions[key] = parseInt(value.value);
-            } else {
-                mapOptions[key] = value.value;
-            }
-        });
-        return mapOptions;
-    }
+    $scope.showGoogleMap = $scope.currentMapType == $scope.mapTypes.Google;
+    $scope.showLeafletMap = $scope.currentMapType == $scope.mapTypes.Leaflet;
 
-    // Initialized the map.
+    // Initialize the map.
     $scope.initMap = function() {
-        var mapOptions = $scope.getOptions();
+        var options = mapOptionsService.getOptions($scope.currentMapType);
+        var mapOptionsObject = mapOptionsService.getMapOptionsObject(options);
 
-        $scope.map = $scope.mapType == mapTypes.Leaflet ?
-            L.map('leaflet-map-canvas', mapOptions) :
-            new google.maps.Map(document.getElementById("google-map-canvas"), mapOptions);
+        $scope.map = $scope.currentMapType == $scope.mapTypes.Leaflet ?
+            L.map('leaflet-map-canvas', mapOptionsObject) :
+            new google.maps.Map(document.getElementById("google-map-canvas"), mapOptionsObject);
     };
 
-    // Updates the options side bar when the map is changed. updateOption's sister function.
-    $scope.updateOptions = function() {
+    // Updates the options side bar when the map is changed. reflectMapChangesToSidebar's sister function.
+    $scope.reflectMapChangesToSidebar = function() {
+        var options = mapOptionsService.getOptions($scope.currentMapType);
         // Map is up to date, sync to map options.
-        angular.forEach($scope.options, function (value, key) {
-            $scope.options[key].value = $scope.map[key];
-//            console.log(key + ": " + $scope.options[key].value);
+        angular.forEach(options, function (value, key) {
+            options[key].value = $scope.map[key];
         });
 
         // Save Apply
@@ -48,36 +33,32 @@ mfApp.controller('mfController', function($scope, mapOutputService, mapDisplaySe
         }
     };
 
-    // Updates the map when options are changed from the sidebar. updateMap's sister function.
-    $scope.updateMap = function() {
-        var mapOptions = $scope.getOptions();
+    // Updates the map when options are changed from the sidebar. reflectSidebarChangesToMap's sister function.
+    $scope.reflectSidebarChangesToMap = function() {
+        var options = mapOptionsService.getOptions($scope.currentMapType);
+        var mapOptionsObject = mapOptionsService.getMapOptionsObject(options);
 
-        $scope.map.setOptions(mapOptions);
+        $scope.map.setOptions(mapOptionsObject);
     };
 
-
-    $scope.mapTypeItems = [
-        "Leaflet w/ OSM",
-        "Google Maps"
-    ];
-
     $scope.toggleMapType = function() {
-        $scope.mapType = mapDisplayService.toggleCurrentMapType();
-        $scope.showGoogleMap = $scope.showLeafletMap;
-        $scope.showLeafletMap = !$scope.showGoogleMap;
+        console.log("Toggling map..");
+        // Toggle $scope.currentMapType
+        $scope.currentMapType = mapChoiceService.toggleCurrentMapType();
+        // Hide the one map
 
-        //$scope.safeApply();
-        //location.reload();
+        // Show the other
+
     };
 
     angular.element(document).ready(function () {
         $scope.initMap();
 
-        if ($scope.mapType == mapTypes.Leaflet) {
+        if ($scope.mapType == $scope.mapTypes.Leaflet) {
             // Write method to update leaflet options.
         } else {
             google.maps.event.addListener($scope.map, 'idle', function() {
-                $scope.updateOptions();
+                $scope.reflectMapChangesToSidebar();
             });
         }
     });
@@ -102,6 +83,20 @@ mfApp.directive('optionCheckbox', function() {
         },
         restrict: 'AEC',
         templateUrl: 'templates/option-checkbox.html'
+    };
+});
+
+mfApp.directive('googleMapCanvas', function() {
+    return {
+        restrict: 'AEC',
+        template: '<div id="google-map-canvas" class="span8"></div>'
+    };
+});
+
+mfApp.directive('leafletMapCanvas', function() {
+    return {
+        restrict: 'AEC',
+        template: '<div id="leaflet-map-canvas" class="span8"></div>'
     };
 });
 /* /Directives */
