@@ -1,18 +1,25 @@
 var mfApp = angular.module('mfApp', ['ui.bootstrap']);
 
 mfApp.controller('mfController', function($scope, mapOutputService, mapChoiceService, mapOptionsService) {
-    $scope.mapTypes = mapChoiceService.getMapTypes();
-    $scope.currentMapType = mapChoiceService.getDefaultMapType();
-    $scope.options = mapOptionsService.getOptions($scope.currentMapType);
-    $scope.map = null;
 
-    $scope.showGoogleMap = $scope.currentMapType == $scope.mapTypes.Google;
-    $scope.showLeafletMap = $scope.currentMapType == $scope.mapTypes.Leaflet;
+    $scope.initController = function() {
+        $scope.mapTypes = mapChoiceService.getMapTypes();
+        $scope.currentMapType = mapChoiceService.getDefaultMapType();
+
+        // Used to build sidebar.
+        $scope.options = mapOptionsService.getDefaultMapOptions($scope.currentMapType);
+
+        // Init map object
+        $scope.map = null;
+
+        // TODO make toggling work. These are currently unused.
+        $scope.showGoogleMap = $scope.currentMapType == $scope.mapTypes.Google;
+        $scope.showLeafletMap = $scope.currentMapType == $scope.mapTypes.Leaflet;
+    };
 
     // Initialize the map.
     $scope.initMap = function() {
-        var options = mapOptionsService.getOptions($scope.currentMapType);
-        var mapOptionsObject = mapOptionsService.getMapOptionsObject(options);
+        var mapOptionsObject = mapOptionsService.getMapOptionsObject();
 
         $scope.map = $scope.currentMapType == $scope.mapTypes.Leaflet ?
             L.map('leaflet-map-canvas', mapOptionsObject) :
@@ -21,10 +28,9 @@ mfApp.controller('mfController', function($scope, mapOutputService, mapChoiceSer
 
     // Updates the options side bar when the map is changed. reflectMapChangesToSidebar's sister function.
     $scope.reflectMapChangesToSidebar = function() {
-        var options = mapOptionsService.getOptions($scope.currentMapType);
-        // Map is up to date, sync to map options.
-        angular.forEach(options, function (value, key) {
-            options[key].value = $scope.map[key];
+        // Map has changed, sync to sidebar map options.
+        angular.forEach($scope.options, function (value, key) {
+            $scope.options[key].value = $scope.map[key];
         });
 
         // Save Apply
@@ -35,8 +41,7 @@ mfApp.controller('mfController', function($scope, mapOutputService, mapChoiceSer
 
     // Updates the map when options are changed from the sidebar. reflectSidebarChangesToMap's sister function.
     $scope.reflectSidebarChangesToMap = function() {
-        var options = mapOptionsService.getOptions($scope.currentMapType);
-        var mapOptionsObject = mapOptionsService.getMapOptionsObject(options);
+        var mapOptionsObject = mapOptionsService.getMapOptionsObject();
 
         $scope.map.setOptions(mapOptionsObject);
     };
@@ -48,9 +53,12 @@ mfApp.controller('mfController', function($scope, mapOutputService, mapChoiceSer
         // Hide the one map
 
         // Show the other
-
     };
 
+    // Get this party started
+    $scope.initController();
+
+    // Setup map on DOM ready.
     angular.element(document).ready(function () {
         $scope.initMap();
 
@@ -64,7 +72,7 @@ mfApp.controller('mfController', function($scope, mapOutputService, mapChoiceSer
     });
 });
 
-
+// TODO Move these out of this file.
 /*  Directives */
 mfApp.directive('optionRange', function() {
     return {

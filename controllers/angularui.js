@@ -1,9 +1,11 @@
 // Angular UI modal stuff
-mfApp.controller('HtmlOutputController', function($scope, $modal, mapOutputService) {
+mfApp.controller('HtmlOutputController', function($scope, $modal, mapOutputService, mapOptionsService) {
     $scope.header = "Copy/Pasta this into an HTML file.";
 
     $scope.open = function () {
-        $scope.body = mapOutputService.generateHtml();
+        // Pass all of the used options to be shown in the popup dialog.
+        var mapOptions = mapOptionsService.getUsedMapOptionsObject();
+        $scope.body = mapOutputService.generateHtml(mapOptions);
 
         var modalInstance = $modal.open({
             templateUrl: 'myModalContent.html',
