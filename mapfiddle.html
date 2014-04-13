@@ -67,7 +67,7 @@
 
                     <div ng-controller="mfController" class="input-prepend map-option-container">
 
-                        <div ng-repeat="option in options" class="map-option-container">
+                        <div ng-repeat="option in getMapOptions()" class="map-option-container">
                             <div ng-if="option.inputType == 'range'" option-range="option"></div>
                             <div ng-if="option.inputType == 'checkbox'" option-checkbox="option"></div>
                         </div>

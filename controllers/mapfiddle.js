@@ -6,13 +6,14 @@ mfApp.controller('mfController', function($scope, mapOutputService, mapChoiceSer
         $scope.mapTypes = mapChoiceService.getMapTypes();
         $scope.currentMapType = mapChoiceService.getDefaultMapType();
 
-        // Used to build sidebar.
-        $scope.options = mapOptionsService.getDefaultMapOptions($scope.currentMapType);
+        $scope.getMapOptions = function() {
+            return mapOptionsService.get();
+        };
 
         // Init map object
         $scope.map = null;
 
-        // TODO make toggling work. These are currently unused.
+        // TODO make map toggle work. These are currently unused.
         $scope.showGoogleMap = $scope.currentMapType == $scope.mapTypes.Google;
         $scope.showLeafletMap = $scope.currentMapType == $scope.mapTypes.Leaflet;
     };
@@ -29,8 +30,8 @@ mfApp.controller('mfController', function($scope, mapOutputService, mapChoiceSer
     // Updates the options side bar when the map is changed. reflectMapChangesToSidebar's sister function.
     $scope.reflectMapChangesToSidebar = function() {
         // Map has changed, sync to sidebar map options.
-        angular.forEach($scope.options, function (value, key) {
-            $scope.options[key].value = $scope.map[key];
+        angular.forEach(mapOptionsService.get(), function (value, key) {
+            mapOptionsService.set(key, $scope.map[key]);
         });
 
         // Save Apply
@@ -41,7 +42,7 @@ mfApp.controller('mfController', function($scope, mapOutputService, mapChoiceSer
 
     // Updates the map when options are changed from the sidebar. reflectSidebarChangesToMap's sister function.
     $scope.reflectSidebarChangesToMap = function() {
-        var mapOptionsObject = mapOptionsService.getMapOptionsObject();
+        var mapOptionsObject = mapOptionsService.getMapOptionsObject($scope.options);
 
         $scope.map.setOptions(mapOptionsObject);
     };

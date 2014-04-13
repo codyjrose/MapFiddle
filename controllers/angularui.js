@@ -4,8 +4,8 @@ mfApp.controller('HtmlOutputController', function($scope, $modal, mapOutputServi
 
     $scope.open = function () {
         // Pass all of the used options to be shown in the popup dialog.
-        var mapOptions = mapOptionsService.getUsedMapOptionsObject();
-        $scope.body = mapOutputService.generateHtml(mapOptions);
+        var mapOptionsObject = mapOptionsService.getUsedMapOptionsObject();
+        $scope.body = mapOutputService.generateHtml(mapOptionsObject);
 
         var modalInstance = $modal.open({
             templateUrl: 'myModalContent.html',
