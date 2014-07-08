@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+    <meta charset="utf-8">
+    <title>Map Fiddle</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="css/bs/bootstrap.css">
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+
+
+    <style>
+        @media (min-height:570px) { /* 768 */
+            #map {
+                height: 456px;
+            }
+        }
+        @media (min-height:870px) { /* 1050 */
+            #map {
+                height: 756px;
+            }
+        }
+
+        @media (min-height:900px) { /* 1080 */
+            #map {
+                height: 786px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<!--Header / Navigation-->
+<!--http://getbootstrap.com/components/#navbar-->
+<nav class="navbar navbar-default" role="navigation">
+    <div class="navbar-header">
+        <a class="navbar-brand" href="#">MapFiddle</a>
+    </div>
+</nav>
+<!-- END Header / Navigation-->
+<div class="container-fluid">
+    <!-- Tabs -->
+    <!--http://getbootstrap.com/css/#grid-->
+    <div class="row ">
+        <div class="col-sm-2"><h4>Map Options</h4></div>
+        <div class="col-sm-10">
+            <!-- Tab panes -->
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li ng-class="active : tab[0]"><a href="#MapView" role="tab" data-toggle="tab">Map</a></li>
+                <li><a href="#CodeView" role="tab" data-toggle="tab">HTML + JavaScript</a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- END Tabs -->
+
+    <!-- Options & Map -->
+    <div class="row ">
+        <div class="col-sm-2" ng-controller="OptionsController as oc">
+            <form role="form" class="">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Email address</label>
+                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+                </div>
+                <div class="form-group">
+                    <label for="example">Zoom: 18</label>
+                    <input id="example" min="0" max="20" type="range" class="add-on mapoption-range">
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"> Check me out
+                    </label>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-10 col-sm-">
+            <div id="map"></div>
+        </div>
+    </div>
+    <!-- END Options & Map -->
+</div>
+
+<!--<script src="js/bootstrap.min.js"></script>-->
+<script src="js/angular.js"></script>
+<!--<script src="js/linq.js"></script>-->
+<script src="js/utility.js"></script>
+<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+<script>
+    var map = new L.Map('map');
+
+    // create the tile layer with correct attribution
+    var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+    var osm = new L.TileLayer(osmUrl, {minZoom: 8, maxZoom: 12, attribution: osmAttrib});
+
+    // start the map in South-East England
+    map.setView(new L.LatLng(51.3, 0.7),9);
+    map.addLayer(osm);
+</script>
+<!--<script type="text/javascript" src="controllers/mapfiddle.js"></script>-->
+<!--<script type="text/javascript" src="controllers/angularui.js"></script>-->
+<!--<script type="text/javascript" src="services/output.js"></script>-->
+<!--<script type="text/javascript" src="services/options.js"></script>-->
+<!--<script type="text/javascript" src="services/mapchoice.js"></script>-->
+</body>
+
+</html>
