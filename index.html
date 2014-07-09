@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="css/bs/bootstrap.css">
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
 
-
     <style>
         @media (min-height:570px) { /* 768 */
             #map {
@@ -42,14 +41,14 @@
 <div class="container-fluid">
     <!-- Tabs -->
     <!--http://getbootstrap.com/css/#grid-->
-    <div class="row ">
+    <div class="row" ng-controller="NavController as nc">
         <div class="col-sm-2"><h4>Map Options</h4></div>
         <div class="col-sm-10">
             <!-- Tab panes -->
             <!-- Nav tabs -->
             <ul class="nav nav-tabs" role="tablist">
-                <li ng-class="active : tab[0]"><a href="#MapView" role="tab" data-toggle="tab">Map</a></li>
-                <li><a href="#CodeView" role="tab" data-toggle="tab">HTML + JavaScript</a></li>
+                <li ng-class="{ active: nc.isSelected(1) }"><a ng-click="nc.selectTab(1)" href="#/map" role="tab" data-toggle="tab">Map</a></li>
+                <li ng-class="{ active: nc.isSelected(2) }"><a ng-click="nc.selectTab(2)" href="#/code" role="tab" data-toggle="tab">HTML + JavaScript</a></li>
             </ul>
         </div>
     </div>
@@ -74,8 +73,8 @@
                 </div>
             </form>
         </div>
-        <div class="col-sm-10 col-sm-">
-            <div id="map"></div>
+        <div class="col-sm-10">
+            <div ng-view></div>
         </div>
     </div>
     <!-- END Options & Map -->
@@ -83,21 +82,16 @@
 
 <!--<script src="js/bootstrap.min.js"></script>-->
 <script src="js/angular.js"></script>
+<script src="js/angular-route.min.js"></script>
 <!--<script src="js/linq.js"></script>-->
 <script src="js/utility.js"></script>
-<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
-<script>
-    var map = new L.Map('map');
+<script src="js/leaflet.js"></script>
+<script type="text/javascript" src="app.js"></script>
+<script type="text/javascript" src="controllers/nav.js"></script>
+<script type="text/javascript" src="controllers/options.js"></script>
+<script type="text/javascript" src="controllers/mapview.js"></script>
+<script type="text/javascript" src="controllers/codeview.js"></script>
 
-    // create the tile layer with correct attribution
-    var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-    var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
-    var osm = new L.TileLayer(osmUrl, {minZoom: 8, maxZoom: 12, attribution: osmAttrib});
-
-    // start the map in South-East England
-    map.setView(new L.LatLng(51.3, 0.7),9);
-    map.addLayer(osm);
-</script>
 <!--<script type="text/javascript" src="controllers/mapfiddle.js"></script>-->
 <!--<script type="text/javascript" src="controllers/angularui.js"></script>-->
 <!--<script type="text/javascript" src="services/output.js"></script>-->
