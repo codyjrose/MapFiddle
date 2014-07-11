@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
 
     <style>
+        /* TODO replace with some JS to resize the map */
         @media (min-height:570px) { /* 768 */
             #map {
                 height: 456px;
@@ -71,7 +72,17 @@
                         <input type="checkbox"> Check me out
                     </label>
                 </div>
+
+                <div class="form-group" ng-repeat="option in oc.getSideBarOptionsAll()">
+                    <div ng-if="option.inputType == 'range'" option-range="option"></div>
+                    <div ng-if="option.inputType == 'checkbox'" option-checkbox="option"></div>
+                    <pre>{{option}}</pre>
+                </div>
+
             </form>
+
+
+
         </div>
         <div class="col-sm-10">
             <div ng-view></div>
@@ -84,6 +95,7 @@
 <script src="js/angular.js"></script>
 <script src="js/angular-route.min.js"></script>
 <!--<script src="js/linq.js"></script>-->
+<script src="js/lodash.js"></script>
 <script src="js/utility.js"></script>
 <script src="js/leaflet.js"></script>
 <script type="text/javascript" src="app.js"></script>
@@ -91,11 +103,11 @@
 <script type="text/javascript" src="controllers/options.js"></script>
 <script type="text/javascript" src="controllers/mapview.js"></script>
 <script type="text/javascript" src="controllers/codeview.js"></script>
-
+<script type="text/javascript" src="directives/directives.js"></script>
 <!--<script type="text/javascript" src="controllers/mapfiddle.js"></script>-->
 <!--<script type="text/javascript" src="controllers/angularui.js"></script>-->
 <!--<script type="text/javascript" src="services/output.js"></script>-->
-<!--<script type="text/javascript" src="services/options.js"></script>-->
+<script type="text/javascript" src="services/options.js"></script>
 <!--<script type="text/javascript" src="services/mapchoice.js"></script>-->
 </body>
 

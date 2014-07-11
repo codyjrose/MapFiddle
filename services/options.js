@@ -2,106 +2,74 @@
  * Created by Cody on 3/15/14.
  * Service responsible for holding map options.
  */
-mfApp.factory('mapOptionsService', function() {
-    /**
-     * Currently used map options. This is the one true source of map options currently being used.
-     */
-    var mapOptions;
-
-    /**
-     * Google map options
-     * @type {{zoom: {value: number, min: number, max: number, type: string, label: string, required: boolean, default: number, inputType: string}, center: {value: google.maps.LatLng, type: string, typeText: string, label: string, required: boolean, default: google.maps.LatLng, inputType: string}, panControl: {value: boolean, type: string, label: string, default: boolean, inputType: string}, zoomControl: {value: boolean, type: string, label: string, default: boolean, inputType: string}, streetViewControl: {value: boolean, type: string, label: string, default: boolean, inputType: string}, mapTypeControl: {value: boolean, type: string, label: string, default: boolean, inputType: string}}}
-     */
-    var googleMapOptions = {
-        zoom: {
-            value: 8,
-            min: 1,
-            max: 21,
-            type: "number",
-            label: "Zoom",
-            required: true,
-            default: 8,
-            inputType: "range"
-        },
-        center: {
-            value: new google.maps.LatLng(-34.397, 150.644),
-            type: "object",
-            typeText: "new google.maps.LatLng",
-            label: "Map Center",
-            required: true,
-            default: new google.maps.LatLng(-34.397, 150.644),
-            inputType: "none"
-        },
-        panControl: {
-            value: true,
-            type: "boolean",
-            label: "Pan Control",
-            default: true,
-            inputType: "checkbox"
-        },
-        zoomControl: {
-            value: true,
-            type: "boolean",
-            label: "Zoom Control",
-            default: true,
-            inputType: "checkbox"
-        },
-        streetViewControl: {
-            value: true,
-            type: "boolean",
-            label: "Street View Control",
-            default: true,
-            inputType: "checkbox"
-        },
-        mapTypeControl: {
-            value: true,
-            type: "boolean",
-            label: "Map Type Control",
-            default: true,
-            inputType: "checkbox"
-        }
-    };
-
+app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
     /**
      * Leaflet map options
      * @type {{zoom: {value: number, min: number, max: number, type: string, label: string, required: boolean, default: number, inputType: string}, center: {value: number[], type: string, label: string, required: boolean, default: number[], inputType: string}, layers: {value: *, type: string, required: boolean, inputType: string}}}
      */
-    var leafletOsmOptions = {
-        zoom: {
-            value: 8,
-            min: 1,
-            max: 21,
-            type: "number",
-            label: "Zoom",
-            required: true,
-            default: 8,
-            inputType: "range"
+    var lastUpdatedOption = {},
+        leafletOsmOptions = {
+            zoom: {
+                value: 8,
+                min: 1,
+                max: 21,
+                type: "number",
+                label: "Zoom",
+                required: true,
+                default: 8,
+                inputType: "range"
+            },
+            zoomControl: {
+                value: true,
+                type: "boolean",
+                label: "Zoom Control",
+                required: "false",
+                default: true,
+                inputType: "checkbox"
+            },
+            center: {
+                value: [-34.397, 150.644],
+                type: "array",
+                label: "Map Center",
+                required: true,
+                default: [-34.397, 150.644],
+                inputType: false
+            },
+            url: {
+                value: "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                type: "string",
+                required: true,
+                inputType: false
+            },
+            attribution: {
+                value: "Map data © OpenStreetMap contributors",
+                type: "string",
+                required: true,
+                inputType: false
+            }
         },
-        center: {
-            value: [-34.397, 150.644],
-            type: "array",
-            label: "Map Center",
-            required: true,
-            default: [-34.397, 150.644],
-            inputType: "none"
-        },
-        layers: {
-            value: L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: 'Map data © OpenStreetMap contributors' }),
-            type: "object",
-            required: true,
-            inputType: "none"
+        mapOptions = {};
+
+        mapOptions.data = leafletOsmOptions;
+
+    /**
+     * Returns a map option value
+     * @returns {object}
+     */
+    var get = function (option, key) {
+        if (mapOptions.data.hasOwnProperty(option) && mapOptions.data[option].hasOwnProperty(key)) {
+            return mapOptions.data[option][key];
         }
+
+        return false;
     };
 
     /**
      * Returns all map options
      * @returns {object}
      */
-    var get = function () {
-        if (!mapOptions) {
-            mapOptions = googleMapOptions;
-        }
-        return mapOptions;
+    var getAll = function () {
+        return mapOptions.data;
     };
 
     /**
@@ -109,8 +77,14 @@ mfApp.factory('mapOptionsService', function() {
      * @param {string} key The map option to set.
      * @param {object} value the map options new value
      */
-    var set = function(key, value) {
-        mapOptions[key].value = value;
+    var set = function(option, value) {
+        if (mapOptions.data.hasOwnProperty(option)) {
+            mapOptions.data[option].value = value;
+        }
+    };
+
+    var getSidebarOptions = function() {
+        return _.filter(mapOptions.data, function(opt) { return opt.inputType != false });
     };
 
     /**
@@ -119,7 +93,7 @@ mfApp.factory('mapOptionsService', function() {
      */
     var getMapOptionsObject = function() {
         var optionsObject = {};
-        angular.forEach(mapOptions, function(value, key) {
+        angular.forEach(mapOptions.data, function(value, key) {
             if (value.type == "number") {
                 optionsObject[key] = parseInt(value.value);
             } else {
@@ -137,13 +111,19 @@ mfApp.factory('mapOptionsService', function() {
         return Enumerable.From(mapOptions).Where(function(o) { return o.Value.value != o.Value.default || o.Value.required == true }).ToArray()
     };
 
+
+    var broadcastChangedItem = function(item) {
+        lastUpdatedOption = item;
+        $rootScope.$broadcast('mapOptionChange')
+    };
+
     return {
-        get: function() {
-            return get();
-        },
-        set: function(key, value) {
-            set(key, value);
-        },
+        get: get,
+        getAll: getAll,
+        getSideBarOptions: getSidebarOptions,
+        set: set,
+        broadcastChangedItem: broadcastChangedItem,
+        lastUpdatedOption: function() { return lastUpdatedOption },
         getMapOptionsObject: function() {
             return getMapOptionsObject();
         },
@@ -151,4 +131,39 @@ mfApp.factory('mapOptionsService', function() {
             return getUsedMapOptionsObject();
         }
     }
-});
+}]);
+
+
+// Future Map Options
+//{
+//    "attribution": "Map data © OpenStreetMap contributors",
+//    "attributionControl": true,
+//    "bounceAtZoomLimits": true,
+//    "boxZoom": true,
+//    "center": Array[2],
+//    "closePopupOnClick": true,
+//    "crs": Object,
+//    "doubleClickZoom": true,
+//    "dragging": true,
+//    "easeLinearity": 0.25,
+//    "fadeAnimation": true,
+//    "inertia": true,
+//    "inertiaDeceleration": 3400,
+//    "inertiaMaxSpeed": Infinity,
+//    "inertiaThreshold": 18,
+//    "keyboard": true,
+//    "keyboardPanOffset": 80,
+//    "keyboardZoomOffset": 1,
+//    "markerZoomAnimation": true,
+//    "scrollWheelZoom": true,
+//    "tap": true,
+//    "tapTolerance": 15,
+//    "touchZoom": false,
+//    "trackResize": true,
+//    "url": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+//    "worldCopyJump": false,
+//    "zoom": 8,
+//    "zoomAnimation": true,
+//    "zoomAnimationThreshold": 4,
+//    "zoomControl": true
+//}

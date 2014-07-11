@@ -43,7 +43,6 @@ mfApp.controller('mfController', function($scope, mapOutputService, mapChoiceSer
     // Updates the map when options are changed from the sidebar. reflectSidebarChangesToMap's sister function.
     $scope.reflectSidebarChangesToMap = function() {
         var mapOptionsObject = mapOptionsService.getMapOptionsObject($scope.options);
-
         $scope.map.setOptions(mapOptionsObject);
     };
 
