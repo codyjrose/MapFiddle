@@ -36,11 +36,11 @@ app.controller("MapViewController", ['$scope', 'mapOptionsService', function($sc
     initMap();
 
     // Still working on updating options when the map has been updated.
-    map.on('moveend', function(e) {
-        var options = e.target.options;
-        console.log(options);
-        mapOptionsService.set("zoom", options.zoom);
-    });
+//    map.on('moveend', function(e) {
+//        var options = e.target.options;
+//        console.log(options);
+//        mapOptionsService.set("zoom", options.zoom);
+//    });
 
     $scope.$on('mapOptionChange', function() {
         console.log("From MapView Controller: ");

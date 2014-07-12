@@ -1,3 +1,3 @@
-app.controller("CodeViewController", function($scope) {
-    $scope.phText = "This is where the code will go!!";
-});
+app.controller("CodeViewController", ['$scope', 'mapCodeService', function($scope, mapCodeService) {
+    $scope.phText = mapCodeService.generateHtml();
+}]);
