@@ -111,10 +111,17 @@ app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
         return Enumerable.From(mapOptions).Where(function(o) { return o.Value.value != o.Value.default || o.Value.required == true }).ToArray()
     };
 
-
     var broadcastChangedItem = function(item) {
         lastUpdatedOption = item;
-        $rootScope.$broadcast('mapOptionChange')
+        $rootScope.$broadcast('mapOptionChange');
+    };
+
+    var broadCastChangedMap = function(options) {
+        console.log(options);
+        mapOptions.zoom = options.zoom;
+        mapOptions.zoomControl = options.zoomControl;
+
+        $rootScope.$broadcast('mapChange');
     };
 
     return {
@@ -123,6 +130,7 @@ app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
         getSideBarOptions: getSidebarOptions,
         set: set,
         broadcastChangedItem: broadcastChangedItem,
+        broadcastChangedMap: broadCastChangedMap,
         lastUpdatedOption: function() { return lastUpdatedOption },
         getMapOptionsObject: function() {
             return getMapOptionsObject();
