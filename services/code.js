@@ -58,7 +58,11 @@ app.factory('mapCodeService', ['mapOptionsService', function(mapOptionsService) 
 
     var getMapMarkup = function() {
         // TODO Need to do some beautifying here at some point: https://github.com/einars/js-beautify
-        return staticBeginHtml + getMapJS() + staticEndHtml;
+        var sections = [];
+        sections.push(staticBeginHtml);
+        sections.push(getMapJS());
+        sections.push(staticEndHtml);
+        return sections;
     };
 
     return {

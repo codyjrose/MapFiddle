@@ -17,7 +17,7 @@ app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
                 label: "Zoom",
                 required: true,
                 default: 8,
-                inputType: "range"
+                inputType: false
             },
             zoomControl: {
                 value: true,
@@ -56,11 +56,10 @@ app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
      * Returns a map option value
      * @returns {object}
      */
-    var get = function (option, key) {
-        if (mapOptions.data.hasOwnProperty(option) && mapOptions.data[option].hasOwnProperty(key)) {
-            return mapOptions.data[option][key];
+    var get = function (option) {
+        if (mapOptions.data.hasOwnProperty(option) && mapOptions.data[option].hasOwnProperty('value')) {
+            return mapOptions.data[option].value;
         }
-
         return false;
     };
 
@@ -73,9 +72,9 @@ app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
     };
 
     /**
-     * Sets a value in the map options object
+     * Sets a value in the map options object. This is the one true way to set the value of map options.
      * @param {string} key The map option to set.
-     * @param {object} value the map options new value
+     * @param {object} value the map options new value.
      */
     var set = function(option, value) {
         if (mapOptions.data.hasOwnProperty(option)) {
@@ -83,8 +82,21 @@ app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
         }
     };
 
+    /**
+     * Pass in an object of map options to set multiple map options at once.
+     * @param {object} Object containing a group of map objects.
+     */
+    var setMany = function(options) {
+        for(var option in options) {
+            set(option, options[option]);
+        }
+    };
+
+    /**
+     * Gets all options that can be used in the sidebar
+     */
     var getSidebarOptions = function() {
-        return _.filter(mapOptions.data, function(opt) { return opt.inputType != false });
+        return _.filter(getAll(), function(opt) { return opt.inputType != false });
     };
 
     /**
@@ -112,16 +124,13 @@ app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
     };
 
     var broadcastChangedItem = function(item) {
-        lastUpdatedOption = item;
-        $rootScope.$broadcast('mapOptionChange');
+        lastUpdatedOption = item;                   // Sidebar has changed, store it.
+        $rootScope.$broadcast('mapOptionChange');   //
     };
 
     var broadCastChangedMap = function(options) {
-        console.log(options);
-        mapOptions.zoom = options.zoom;
-        mapOptions.zoomControl = options.zoomControl;
-
-        $rootScope.$broadcast('mapChange');
+        setMany(options);                       // Map has changed, update the options object with updated values.
+        $rootScope.$broadcast('mapChange');     // Let everyone know.
     };
 
     return {

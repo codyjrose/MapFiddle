@@ -27,7 +27,9 @@ app.controller("MapViewController", ['$scope', 'mapOptionsService', function($sc
     };
 
     $scope.$on('mapOptionChange', function() {
-        updateMap(mapOptionsService.lastUpdatedOption())
+
+            updateMap(mapOptionsService.lastUpdatedOption());
+
     });
 
     map.on('moveend', function(e) {

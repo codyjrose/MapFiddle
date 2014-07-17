@@ -3,7 +3,9 @@ app.controller('OptionsController', ['$scope', 'mapOptionsService', function($sc
         return mapOptionsService.getSideBarOptions();
     };
 
-    $scope.options = $scope.getSideBarOptionsAll();
+    $scope.initOptions = function() {
+        $scope.options = $scope.getSideBarOptionsAll();
+    };
 
     // Option templates fire this function on click to raise event 'mapOptionChange'
     $scope.changeHandler = function(item) {
@@ -14,7 +16,10 @@ app.controller('OptionsController', ['$scope', 'mapOptionsService', function($sc
     $scope.$on('mapChange', function() {
         // Save Apply
         $scope.$apply(function() {
-            $scope.options = $scope.getSideBarOptionsAll();
+            $scope.initOptions();
         });
     });
+
+    // Init the sidebar
+    $scope.initOptions();
 }]);

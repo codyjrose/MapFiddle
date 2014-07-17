@@ -7,7 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="css/bs/bootstrap.css">
-    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    <link rel="stylesheet" href="css/leaflet.css" />
+    <link rel="stylesheet" href="js/prettify/prettify.css" />
 
     <style>
         /* TODO replace with some JS to resize the map */
@@ -79,17 +80,30 @@
 <script src="js/lodash.js"></script>
 <script src="js/utility.js"></script>
 <script src="js/leaflet.js"></script>
-<script type="text/javascript" src="app.js"></script>
-<script type="text/javascript" src="controllers/nav.js"></script>
-<script type="text/javascript" src="controllers/options.js"></script>
-<script type="text/javascript" src="controllers/mapview.js"></script>
-<script type="text/javascript" src="controllers/codeview.js"></script>
-<script type="text/javascript" src="directives/directives.js"></script>
+<script src="app.js"></script>
+<script src="controllers/nav.js"></script>
+<script src="controllers/options.js"></script>
+<script src="controllers/mapview.js"></script>
+<script src="controllers/codeview.js"></script>
+<script src="directives/directives.js"></script>
 <!--<script type="text/javascript" src="controllers/mapfiddle.js"></script>-->
 <!--<script type="text/javascript" src="controllers/angularui.js"></script>-->
 <!--<script type="text/javascript" src="services/output.js"></script>-->
-<script type="text/javascript" src="services/options.js"></script>
-<script type="text/javascript" src="services/code.js"></script>
+<script src="services/options.js"></script>
+<script src="services/code.js"></script>
+
+
+<!--Before-->
+<script src="js/prettify/run_prettify.js"></script>
+<script type="text/javascript">
+    (function() {
+        try {
+            prettyPrint();
+        } catch(e) {}
+    })();
+</script>
+<!--<script src="js/prettify/google-code-prettify.js"></script>-->
+<!--End-->
 </body>
 
 </html>

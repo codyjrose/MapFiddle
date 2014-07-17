@@ -1,7 +1,10 @@
 app.controller("CodeViewController", ['$scope', 'mapCodeService', function($scope, mapCodeService) {
-    $scope.phText = mapCodeService.generateHtml();
+    $scope.sections = mapCodeService.generateHtml();
+    //$scope.js = mapCodeService.getJS();
+
+    //prettyPrint();
 
     $scope.$on('mapOptionChange', function() {
-        $scope.phText = mapCodeService.generateHtml();
+        $scope.sections = mapCodeService.generateHtml();
     });
 }]);
