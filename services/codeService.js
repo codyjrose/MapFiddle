@@ -8,56 +8,65 @@ app.factory('mapCodeService', ['mapOptionsService', function(mapOptionsService) 
         '    <title>Simple Map</title>\n' +
         '    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">\n' +
         '    <meta charset="utf-8">\n' +
-        '    <style>html, body, #map-canvas { height: 100%; margin: 0px; padding: 0px }</style>\n' +
-        '    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>\n' +
+        '    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />\n' +
+        '    <style>html, body, #map { height: 100%; margin: 0; padding: 0 }</style>\n' +
+        '    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>\n' +
+        '  </head>\n' +
+        '  <body>\n' +
+        '    <div id="map"></div>\n' +
         '    <script>\n';
 
     var staticEndHtml = '' +
         '    </script>\n' +
-        '  </head>\n' +
-        '  <body>\n' +
-        '    <div id="map-canvas"></div>\n' +
         '  </body>\n' +
         '</html>\n';
     //endregion
 
     var getMapJS = function() {
+        var options = mapOptionsService.getAllModified(),
+            js = '      var map;\n' +
+                 '      function initialize() {\n' +
+                 '          var options = {\n';
 
-        var js = '\n' +
-            '      var map;\n' +
-            '      function initialize() {\n' +
-            '      var mapOptions = {\n';
+        _.forIn(options, function(option, key) {
+            js += "              ";
 
-        angular.forEach(mapOptionsService.getAll(), function(option, index) {
-
-            if (option.type == "object")
-            {
-                js += "        " + index + ": " + option.value.toString();
-            } else {
-                js += "        " + index + ": " + option.value;
+            switch (option.type) {
+                case "object":
+                    js += option.name + ": " + option.value.toString();
+                    break;
+                case "array":
+                    js += option.name + ": [" + option.value + "]";
+                    break;
+                case "number":
+                    js += option.name + ": " + option.value;
+                    break;
+                case "boolean":
+                    js += option.name + ": " + option.value;
+                    break;
+                default:
+                    js += option.name + ": '" + option.value + "'";
+                    break;
             }
 
-            js += ",\n";
-//            if (index !== usedOptions.length - 1) {
-//                js += ",";
-//            }
+            if (parseInt(key) < options.length - 1) {
+                js += ",\n";
+            } else {
+                js += "\n";
+            }
+        });
 
-            });
-
-
-
-        js +=
-            '      };\n' +
-            '      map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);\n' +
-            '      }\n' +
-            '      google.maps.event.addDomListener(window, "load", initialize);\n' +
-            '\n';
+        js += '          };\n' +
+              '          map = new L.Map("map", options);\n' +
+              '          var osm = new L.TileLayer(options.url, options);\n' +
+              '          map.addLayer(osm);\n' +
+              '      }\n' +
+              '      initialize();\n';
 
         return js;
     };
 
-    var getMapMarkup = function() {
-        // TODO Need to do some beautifying here at some point: https://github.com/einars/js-beautify
+    var getCodeView = function() {
         var sections = [];
         sections.push(staticBeginHtml);
         sections.push(getMapJS());
@@ -66,6 +75,6 @@ app.factory('mapCodeService', ['mapOptionsService', function(mapOptionsService) 
     };
 
     return {
-        generateHtml: getMapMarkup
+        getCodeView: getCodeView
     };
 }]);

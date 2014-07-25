@@ -1,40 +1,68 @@
 app.controller("MapViewController", ['$scope', 'mapOptionsService', function($scope, mapOptionsService) {
 
     var getMapOptionsObject = function() {
-        return mapOptionsService.getMapOptionsObject();
+        var optionsObject = {};
+        _.forIn(mapOptionsService.getAllModified(), function(option) {
+            optionsObject[option.name] = option.value;
+        });
+        return optionsObject;
     };
 
     var options = getMapOptionsObject();
-    var map = new L.Map('map', options);
+    map = new L.Map('map', options);
 
     // create the tile layer with correct attribution
     var osm = new L.TileLayer(options.url, options);
 
     map.addLayer(osm);
 
-    var updateMap = function(option) {
-        switch(option.label) {
-            case "Zoom Control":
-                if (option.value) {
-                    map.zoomControl.addTo(map)
-                } else {
-                    map.zoomControl.removeFrom(map);
-                }
+    var setOption = function(option) {
+        switch(option.updateMethod) {
+            case "mapProperty":
+                toggleMapProperty(option);
                 break;
-            case "Zoom":
-                map.setZoom(option.value);
+            case "control":
+                toggleControl(option);
+                break;
+            default:
+                console.log('could not update');
+                break;
+        }
+//        map._layersMinZoom = 11
+//        map._layersMaxZoom = 13
+    };
+
+    var toggleMapProperty = function(option) {
+        if (option.value) {
+            map[option.name].enable();
+        } else {
+            map[option.name].disable();
         }
     };
 
+    var toggleControl = function(option) {
+        if (option.value) {
+            map[option.name].addTo(map)
+        } else {
+            map[option.name].removeFrom(map);
+        }
+    };
+
+    var updateMap = function() {
+        var options = mapOptionsService.getState();
+
+        _.forIn(options, function(option) {
+            mapOptionsService.set(option.name, map[option.stateMethod]());
+        });
+    };
+
     $scope.$on('mapOptionChange', function() {
-
-            updateMap(mapOptionsService.lastUpdatedOption());
-
+        var option = mapOptionsService.lastUpdatedOption();
+        setOption(option);
     });
 
     map.on('moveend', function(e) {
-        var options = { zoom: map.getZoom(), zoomControl: map.zoomControl.getContainer() ? true : false }
-
+        updateMap();
         mapOptionsService.broadcastChangedMap(options);
     });
 }]);

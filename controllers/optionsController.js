@@ -1,6 +1,6 @@
 app.controller('OptionsController', ['$scope', 'mapOptionsService', function($scope, mapOptionsService) {
     $scope.getSideBarOptionsAll = function() {
-        return mapOptionsService.getSideBarOptions();
+        return mapOptionsService.getSideBar();
     };
 
     $scope.initOptions = function() {

@@ -8,46 +8,154 @@ app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
      * @type {{zoom: {value: number, min: number, max: number, type: string, label: string, required: boolean, default: number, inputType: string}, center: {value: number[], type: string, label: string, required: boolean, default: number[], inputType: string}, layers: {value: *, type: string, required: boolean, inputType: string}}}
      */
     var lastUpdatedOption = {},
-        leafletOsmOptions = {
-            zoom: {
-                value: 8,
-                min: 1,
-                max: 21,
-                type: "number",
-                label: "Zoom",
-                required: true,
-                default: 8,
-                inputType: false
-            },
-            zoomControl: {
+        leafletOsmOptions = [
+            {
+                name: "zoomControl",
                 value: true,
+                updateMethod: "control",
                 type: "boolean",
                 label: "Zoom Control",
-                required: "false",
+                tooltip: "Whether the zoom control is added to the map by default.",
+                required: false,
                 default: true,
                 inputType: "checkbox"
             },
-            center: {
+            {
+                name: "attributionControl",
+                value: true,
+                updateMethod: "control",
+                type: "boolean",
+                label: "Attribution Control",
+                tooltip: "Whether the attribution control is added to the map by default.",
+                required: false,
+                default: true,
+                inputType: "checkbox"
+            },
+            {
+                name: "center",
                 value: [-34.397, 150.644],
                 type: "array",
-                label: "Map Center",
+                updateMethod: "",
+                label: "Set View",
+                tooltip: "Initial geographical center of the map.",
                 required: true,
                 default: [-34.397, 150.644],
-                inputType: false
+                inputType: false,
+                stateMethod: "getCenter"
             },
-            url: {
+            {
+                name: "zoom",
+                value: 8,
+                updateMethod: "",
+                type: "number",
+                label: "Set Zoom",
+                tooltip: "Initial map zoom.",
+                required: true,
+                default: 8,
+                inputType: false,
+                stateMethod: "getZoom"
+            },
+            {
+                name: "minZoom",
+                label: "Minimum Zoom Level",
+                tooltip: "Minimum zoom level of the map. Overrides any minZoom set on map layers.",
+                value: 0,
+                min: 0,
+                max: 18,
+                updateMethod: "",
+                type: "number",
+                required: false,
+                default: 0,
+                inputType: "range",
+                stateMethod: "getMinZoom"
+
+            },
+            {
+                name: "maxZoom",
+                label: "Max Zoom Level",
+                tooltip: "Maximum zoom level of the map. This overrides any maxZoom set on map layers.",
+                value: 18,
+                min: 0,
+                max: 18,
+                updateMethod: "",
+                type: "number",
+                required: false,
+                default: 18,
+                inputType: "range",
+                stateMethod: "getMaxZoom"
+            },
+            {
+                name: "dragging",
+                value: true,
+                type: "boolean",
+                updateMethod: "mapProperty",
+                label: "Dragging",
+                tooltip: "Whether the map be draggable with mouse/touch or not.",
+                required: false,
+                default: true,
+                inputType: "checkbox"
+            },
+            {
+                name: "touchZoom",
+                value: true,
+                type: "boolean",
+                updateMethod: "mapProperty",
+                label: "Touch Zoom",
+                tooltip: "Whether the map can be zoomed by touch-dragging with two fingers.",
+                required: false,
+                default: true,
+                inputType: "checkbox"
+            },
+            {
+                name: "scrollWheelZoom",
+                value: true,
+                type: "boolean",
+                updateMethod: "mapProperty",
+                label: "Scroll Wheel Zoom",
+                tooltip: "Whether the map can be zoomed by using the mouse wheel. If passed 'center', it will zoom to the center of the view regardless of where the mouse was.",
+                required: false,
+                default: true,
+                inputType: "checkbox"
+            },
+            {
+                name: "doubleClickZoom",
+                value: true,
+                type: "boolean",
+                updateMethod: "mapProperty",
+                label: "Double Click Zoom",
+                tooltip: "Whether the map can be zoomed in by double clicking on it and zoomed out by double clicking while holding shift. If passed 'center', double-click zoom will zoom to the center of the view regardless of where the mouse was.",
+                required: false,
+                default: true,
+                inputType: "checkbox"
+            },
+//            {
+//                name: "inertia",
+//                value: true,
+//                type: "boolean",
+//                updateMethod: "",
+//                label: "Panning inertia",
+//                tooltip: "If enabled, panning of the map will have an inertia effect where the map builds momentum while dragging and continues moving in the same direction for some time. Feels especially nice on touch devices.",
+//                required: false,
+//                default: true,
+//                inputType: "checkbox"
+//            },
+            {
+                name: "url",
+                updateMethod: "",
                 value: "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                 type: "string",
                 required: true,
                 inputType: false
             },
-            attribution: {
+            {
+                name: "attribution",
+                updateMethod: "",
                 value: "Map data © OpenStreetMap contributors",
                 type: "string",
                 required: true,
                 inputType: false
             }
-        },
+        ],
         mapOptions = {};
 
         mapOptions.data = leafletOsmOptions;
@@ -72,14 +180,41 @@ app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
     };
 
     /**
+     * Returns all map options that are required for map creation as well as any options that have been modified
+     * @returns {object}
+     */
+    var getAllModified = function () {
+        return _.filter(getAll(), function(option) { return option.required || (option.value != option.default) });
+    };
+
+    /**
+     * Returns all map state options (e.g. zoom, center, minZoom, etc.)
+     * @returns {object}
+     */
+    var getState = function () {
+        return _.filter(getAll(), function(option) { return option.hasOwnProperty("stateMethod") });
+    };
+    /**
+     * Gets all options that can be used in the sidebar
+     */
+    var getSidebar = function() {
+        return _.filter(getAll(), function(opt) { return opt.inputType != false });
+    };
+
+    /**
      * Sets a value in the map options object. This is the one true way to set the value of map options.
      * @param {string} key The map option to set.
      * @param {object} value the map options new value.
      */
     var set = function(option, value) {
-        if (mapOptions.data.hasOwnProperty(option)) {
-            mapOptions.data[option].value = value;
+        if (value instanceof L.LatLng) {
+            value = [value.lat, value.lng];
         }
+
+        try {
+            _.find(getAll(), { name: option }).value = value;
+
+        } catch (e) {}
     };
 
     /**
@@ -92,61 +227,24 @@ app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
         }
     };
 
-    /**
-     * Gets all options that can be used in the sidebar
-     */
-    var getSidebarOptions = function() {
-        return _.filter(getAll(), function(opt) { return opt.inputType != false });
-    };
-
-    /**
-     * Returns an options object that can be used in a maps creation.
-     * @returns {object}
-     */
-    var getMapOptionsObject = function() {
-        var optionsObject = {};
-        angular.forEach(mapOptions.data, function(value, key) {
-            if (value.type == "number") {
-                optionsObject[key] = parseInt(value.value);
-            } else {
-                optionsObject[key] = value.value;
-            }
-        });
-        return optionsObject;
-    };
-
-    /**
-     * Returns all options that have been modified via the UI in an object that can be used in a maps creation.
-     * @returns {object}
-     */
-    var getUsedMapOptionsObject = function() {
-        return Enumerable.From(mapOptions).Where(function(o) { return o.Value.value != o.Value.default || o.Value.required == true }).ToArray()
-    };
-
     var broadcastChangedItem = function(item) {
         lastUpdatedOption = item;                   // Sidebar has changed, store it.
         $rootScope.$broadcast('mapOptionChange');   //
     };
 
     var broadCastChangedMap = function(options) {
-        setMany(options);                       // Map has changed, update the options object with updated values.
         $rootScope.$broadcast('mapChange');     // Let everyone know.
     };
 
     return {
         get: get,
-        getAll: getAll,
-        getSideBarOptions: getSidebarOptions,
+        getAllModified: getAllModified,
+        getSideBar: getSidebar,
+        getState: getState,
         set: set,
         broadcastChangedItem: broadcastChangedItem,
         broadcastChangedMap: broadCastChangedMap,
-        lastUpdatedOption: function() { return lastUpdatedOption },
-        getMapOptionsObject: function() {
-            return getMapOptionsObject();
-        },
-        getUsedMapOptionsObject: function() {
-            return getUsedMapOptionsObject();
-        }
+        lastUpdatedOption: function() { return lastUpdatedOption }
     }
 }]);
 
