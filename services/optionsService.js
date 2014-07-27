@@ -191,7 +191,7 @@ app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
      * Returns all map state options (e.g. zoom, center, minZoom, etc.)
      * @returns {object}
      */
-    var getState = function () {
+    var getAllWithStateMethod = function () {
         return _.filter(getAll(), function(option) { return option.hasOwnProperty("stateMethod") });
     };
     /**
@@ -227,23 +227,18 @@ app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
         }
     };
 
-    var broadcastChangedItem = function(item) {
-        lastUpdatedOption = item;                   // Sidebar has changed, store it.
-        $rootScope.$broadcast('mapOptionChange');   //
-    };
-
-    var broadCastChangedMap = function(options) {
-        $rootScope.$broadcast('mapChange');     // Let everyone know.
+    var broadcastChangedOption = function(option) {
+        lastUpdatedOption = option;                   // Sidebar has changed, store it.
+        $rootScope.$broadcast('mapOptionChange');
     };
 
     return {
         get: get,
         getAllModified: getAllModified,
         getSideBar: getSidebar,
-        getState: getState,
+        getAllWithStateMethod: getAllWithStateMethod,
         set: set,
-        broadcastChangedItem: broadcastChangedItem,
-        broadcastChangedMap: broadCastChangedMap,
+        broadcastChangedOption: broadcastChangedOption,
         lastUpdatedOption: function() { return lastUpdatedOption }
     }
 }]);
