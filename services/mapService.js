@@ -38,6 +38,10 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
         }
     };
 
+    var updatePropertyOfOptions = function(option) {
+        map.options[option.name] = option.value;
+    };
+
     var setOption = function(option) {
         switch (option.updateMethod) {
             case "mapProperty":
@@ -46,12 +50,13 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
             case "control":
                 toggleControl(option);
                 break;
+            case "propertyOfMapDotOptions":
+                updatePropertyOfOptions(option);
+                break;
             default:
-                console.log('could not update');
+                console.log('could not update: ' + option.name);
                 break;
         }
-//        map._layersMinZoom = 11
-//        map._layersMaxZoom = 13
     };
 
     return {
