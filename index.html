@@ -41,22 +41,8 @@
 </nav>
 <!-- END Header / Navigation-->
 <div class="container-fluid">
-    <!-- Tabs -->
-    <!--http://getbootstrap.com/css/#grid-->
+    <!-- http://getbootstrap.com/css/#grid -->
     <div class="row" ng-controller="NavController as nc">
-        <div class="col-sm-2"></div>
-        <div class="col-sm-10">
-            <!-- Tab panes -->
-            <!-- Nav tabs -->
-            <ul class="nav nav-tabs" role="tablist">
-                <li ng-class="{ active: nc.isSelected(1) }"><a ng-click="nc.selectTab(1)" href="#/map" role="tab" data-toggle="tab">Map</a></li>
-                <li ng-class="{ active: nc.isSelected(2) }"><a ng-click="nc.selectTab(2)" href="#/code" role="tab" data-toggle="tab">HTML + JavaScript</a></li>
-            </ul>
-        </div>
-    </div>
-    <!-- END Tabs -->
-    <!-- Options & Map -->
-    <div class="row ">
         <div class="col-sm-2" ng-controller="OptionsController as oc">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -83,10 +69,19 @@
             </div>
         </div>
         <div class="col-sm-10">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li ng-class="{ active: nc.isSelected(1) }"><a ng-click="nc.selectTab(1)" href="#/map" role="tab" data-toggle="tab">Map</a></li>
+                <li ng-class="{ active: nc.isSelected(2) }"><a ng-click="nc.selectTab(2)" href="#/code" role="tab" data-toggle="tab">HTML + JavaScript</a></li>
+            </ul>
+            <!-- END Tabs -->
+        </div>
+        <div class="col-sm-10">
             <div ng-view></div>
         </div>
     </div>
-    <!-- END Options & Map -->
+
+
 </div>
 <script src="js/angular.js"></script>
 <script src="js/angular-route.min.js"></script>
