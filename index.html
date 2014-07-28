@@ -44,7 +44,7 @@
     <!-- Tabs -->
     <!--http://getbootstrap.com/css/#grid-->
     <div class="row" ng-controller="NavController as nc">
-        <div class="col-sm-2"><h4>Map Options</h4></div>
+        <div class="col-sm-2"></div>
         <div class="col-sm-10">
             <!-- Tab panes -->
             <!-- Nav tabs -->
@@ -58,14 +58,29 @@
     <!-- Options & Map -->
     <div class="row ">
         <div class="col-sm-2" ng-controller="OptionsController as oc">
-            <form role="form" class="">
-                <div class="form-group" ng-repeat="option in options">
-                    <div ng-if="option.inputType == 'range'" option-range="option"></div>
-                    <div ng-if="option.inputType == 'checkbox'" option-checkbox="option"></div>
-                    <!--<pre>{{option}}</pre>-->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Map Options</h3>
                 </div>
-            </form>
-            <div class="alert alert-info" role="alert">There are many more options in <a target="_blank" href="http://leafletjs.com/reference.html#map-options">Leaflet's official documentation</a>.</div>
+                <div class="panel-body">
+                    <form role="form" class="">
+                        <div class="form-group" ng-repeat="option in options">
+                            <div ng-if="option.inputType == 'range'" option-range="option"></div>
+                            <div ng-if="option.inputType == 'checkbox'" option-checkbox="option"></div>
+                            <!--<pre>{{option}}</pre>-->
+                        </div>
+                    </form>
+                    <div class="alert alert-info" role="alert">There are many more options in <a target="_blank" href="http://leafletjs.com/reference.html#map-options">Leaflet's official documentation</a>.</div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Add Cool Stuff</h3>
+                </div>
+                <div class="panel-body">
+                    This is where cool stuff will go...
+                </div>
+            </div>
         </div>
         <div class="col-sm-10">
             <div ng-view></div>
