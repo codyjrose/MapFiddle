@@ -2,24 +2,24 @@
 app.factory('mapCodeService', ['mapOptionsService', function(mapOptionsService) {
     //region Static HTML
     var staticBeginHtml = '' +
-        '<!DOCTYPE html>\n' +
-        '<html>\n' +
-        '  <head>\n' +
-        '    <title>Simple Map</title>\n' +
-        '    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">\n' +
-        '    <meta charset="utf-8">\n' +
-        '    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />\n' +
-        '    <style>html, body, #map { height: 100%; margin: 0; padding: 0 }</style>\n' +
-        '    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>\n' +
-        '  </head>\n' +
-        '  <body>\n' +
-        '    <div id="map"></div>\n' +
-        '    <script>\n';
+        '&lt;!DOCTYPE html&gt;\n' +
+        '&lt;html&gt;\n' +
+        '  &lt;head&gt;\n' +
+        '    &lt;title&gt;Simple Map&lt;/title&gt;\n' +
+        '    &lt;meta name="viewport" content="initial-scale=1.0, user-scalable=no"&gt;\n' +
+        '    &lt;meta charset="utf-8"&gt;\n' +
+        '    &lt;link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" /&gt;\n' +
+        '    &lt;style&gt;html, body, #map { height: 100%; margin: 0; padding: 0 }&lt;/style&gt;\n' +
+        '    &lt;script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"&gt;&lt;/script&gt;\n' +
+        '  &lt;/head&gt;\n' +
+        '  &lt;body&gt;\n' +
+        '    &lt;div id="map"&gt;&lt;/div&gt;\n' +
+        '    &lt;script&gt;\n';
 
     var staticEndHtml = '' +
-        '    </script>\n' +
-        '  </body>\n' +
-        '</html>\n';
+        '    &lt;/script&gt;\n' +
+        '  &lt;/body&gt;\n' +
+        '&lt;/html&gt;\n';
     //endregion
 
     var getMapJS = function() {
@@ -67,11 +67,11 @@ app.factory('mapCodeService', ['mapOptionsService', function(mapOptionsService) 
     };
 
     var getCodeView = function() {
-        var sections = [];
-        sections.push(staticBeginHtml);
-        sections.push(getMapJS());
-        sections.push(staticEndHtml);
-        return sections;
+        var html = "";
+        html += staticBeginHtml;
+        html += getMapJS();
+        html += staticEndHtml;
+        return html;
     };
 
     return {

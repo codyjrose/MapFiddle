@@ -10,6 +10,7 @@ app.config(['$routeProvider',
             when('/code', {
                 templateUrl: 'partials/code-view.html',
                 controller: 'CodeViewController'
+
             }).
             otherwise({
                 redirectTo: '/map'

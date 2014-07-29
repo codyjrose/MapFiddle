@@ -1,9 +1,11 @@
-app.controller("CodeViewController", ['$scope', 'mapCodeService', function($scope, mapCodeService) {
-    $scope.sections = mapCodeService.getCodeView();
-    //$scope.js = mapCodeService.getJS();
-
+app.controller("CodeViewController", ['$scope', '$rootScope', '$timeout', 'mapCodeService', function($scope, $rootScope, $timeout, mapCodeService) {
+    var setMarkup = function() {
+        $scope.markup = mapCodeService.getCodeView();
+    };
 
     $scope.$on('mapOptionChange', function() {
-        $scope.sections = mapCodeService.getCodeView();
+        setMarkup();
     });
+
+    setMarkup();
 }]);
