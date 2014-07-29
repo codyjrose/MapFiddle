@@ -28,13 +28,30 @@
                 height: 786px;
             }
         }
+        body {
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+        #map {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            overflow: hidden;
+            transform: translate3d(0,0,0);
+            -webkit-transform: translate3d(0,0,0);
+        }
+        .appfront {
+            z-index: 1001;
+        }
     </style>
 </head>
 
 <body>
 <!--Header / Navigation-->
 <!--http://getbootstrap.com/components/#navbar-->
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-inverse appfront" role="navigation">
     <div class="navbar-header">
         <a class="navbar-brand" href="#">MapFiddle</a>
     </div>
@@ -51,7 +68,7 @@
 <div class="container-fluid">
     <!-- http://getbootstrap.com/css/#grid -->
     <div class="row" >
-        <div class="col-sm-2" ng-controller="OptionsController as oc">
+        <div class="col-sm-2 appfront" ng-controller="OptionsController as oc">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Map Options</h3>
@@ -77,25 +94,16 @@
             </div>
         </div>
         <div class="col-sm-10">
-            <!--&lt;!&ndash; Nav pills &ndash;&gt;-->
-            <!--<ul ng-controller="NavController as nc" class="nav nav-pills" role="tablist">-->
-                <!--<li ng-class="{ active: nc.isSelected(1) }"><a ng-click="nc.selectTab(1)" href="#/map" role="tab" data-toggle="tab">Map</a></li>-->
-                <!--<li ng-class="{ active: nc.isSelected(2) }"><a ng-click="nc.selectTab(2)" href="#/code" role="tab" data-toggle="tab">HTML + JavaScript</a></li>-->
-            <!--</ul>-->
-            <!--&lt;!&ndash; END pills &ndash;&gt;-->
-        </div>
-        <div class="col-sm-10">
             <div ng-view></div>
         </div>
     </div>
-
-
 </div>
 <script src="js/angular.js"></script>
 <script src="js/angular-route.min.js"></script>
 <script src="js/lodash.js"></script>
 <script src="js/utility.js"></script>
 <script src="js/leaflet.js"></script>
+
 <script src="app.js"></script>
 <script src="controllers/navController.js"></script>
 <script src="controllers/optionsController.js"></script>
