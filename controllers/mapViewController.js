@@ -13,7 +13,6 @@ app.controller("MapViewController", ['$scope', 'mapOptionsService', 'mapService'
         mapService.setMapOption(option);
     });
 
-
     // The map has changed, update the options via the mapOptionsService
     $scope.$on('moveend', function() {
         var options = mapOptionsService.getAllWithStateMethod();

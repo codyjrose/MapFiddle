@@ -38,11 +38,19 @@
     <div class="navbar-header">
         <a class="navbar-brand" href="#">MapFiddle</a>
     </div>
+    <!-- Nav pills -->
+    <div class="collapse navbar-collapse">
+        <ul ng-controller="NavController as nc" class="nav navbar-nav">
+            <li ng-class="{ active: nc.isSelected(1) }"><a ng-click="nc.selectTab(1)" href="#/map" role="tab" data-toggle="tab">Map</a></li>
+            <li ng-class="{ active: nc.isSelected(2) }"><a ng-click="nc.selectTab(2)" href="#/code" role="tab" data-toggle="tab">HTML + JavaScript</a></li>
+        </ul>
+    </div>
+    <!-- END pills -->
 </nav>
 <!-- END Header / Navigation-->
 <div class="container-fluid">
     <!-- http://getbootstrap.com/css/#grid -->
-    <div class="row" ng-controller="NavController as nc">
+    <div class="row" >
         <div class="col-sm-2" ng-controller="OptionsController as oc">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -69,12 +77,12 @@
             </div>
         </div>
         <div class="col-sm-10">
-            <!-- Nav tabs -->
-            <ul class="nav nav-tabs" role="tablist">
-                <li ng-class="{ active: nc.isSelected(1) }"><a ng-click="nc.selectTab(1)" href="#/map" role="tab" data-toggle="tab">Map</a></li>
-                <li ng-class="{ active: nc.isSelected(2) }"><a ng-click="nc.selectTab(2)" href="#/code" role="tab" data-toggle="tab">HTML + JavaScript</a></li>
-            </ul>
-            <!-- END Tabs -->
+            <!--&lt;!&ndash; Nav pills &ndash;&gt;-->
+            <!--<ul ng-controller="NavController as nc" class="nav nav-pills" role="tablist">-->
+                <!--<li ng-class="{ active: nc.isSelected(1) }"><a ng-click="nc.selectTab(1)" href="#/map" role="tab" data-toggle="tab">Map</a></li>-->
+                <!--<li ng-class="{ active: nc.isSelected(2) }"><a ng-click="nc.selectTab(2)" href="#/code" role="tab" data-toggle="tab">HTML + JavaScript</a></li>-->
+            <!--</ul>-->
+            <!--&lt;!&ndash; END pills &ndash;&gt;-->
         </div>
         <div class="col-sm-10">
             <div ng-view></div>

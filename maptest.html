@@ -11,23 +11,28 @@
 <body>
 <div id="map"></div>
 <script>
-    var map;
-    function initialize() {
-        var options = {
-            zoom: 8,
-            dragging: false,
-            touchZoom: false,
-            scrollWheelZoom: false,
-            doubleClickZoom: false,
-            center: [-34.397,150.644],
-            url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            attribution: 'Map data © OpenStreetMap contributors'
-        };
-        map = new L.Map("map", options);
-        var osm = new L.TileLayer(options.url, options);
-        map.addLayer(osm);
-    }
-    initialize();
+    (function() {
+        var map;
+        function initialize() {
+            var options = {
+                zoomControl: false,
+                attributionControl: false,
+                center: [51.60693037835708,0.10883331298828125],
+                zoom: 12,
+                minZoom: 8,
+                maxZoom: 13,
+                scrollWheelZoom: false,
+                doubleClickZoom: false,
+                url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                attribution: 'Map data © OpenStreetMap contributors'
+            };
+            map = new L.Map("map", options);
+            var osm = new L.TileLayer(options.url, options);
+            map.addLayer(osm);
+        }
+
+        initialize();
+    }());
 </script>
 </body>
 </html>
