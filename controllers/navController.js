@@ -14,7 +14,7 @@ app.controller('NavController', ['$scope', '$location', 'mapCodeService', functi
     };
 
     // Make initial selection.
-    this.selectTab(path[$location.path()]);
+    this.selectTab($location.path() ? path[$location.path()]: 1 );
 
     this.toggleShowCode = function() {
         mapCodeService.toggleShowCode();
