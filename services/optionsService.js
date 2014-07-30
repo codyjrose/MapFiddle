@@ -242,38 +242,3 @@ app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
         lastUpdatedOption: function() { return lastUpdatedOption }
     }
 }]);
-
-
-// Future Map Options
-//{
-//    "attribution": "Map data © OpenStreetMap contributors",
-//    "attributionControl": true,
-//    "bounceAtZoomLimits": true,
-//    "boxZoom": true,
-//    "center": Array[2],
-//    "closePopupOnClick": true,
-//    "crs": Object,
-//    "doubleClickZoom": true,
-//    "dragging": true,
-//    "easeLinearity": 0.25,
-//    "fadeAnimation": true,
-//    "inertia": true,
-//    "inertiaDeceleration": 3400,
-//    "inertiaMaxSpeed": Infinity,
-//    "inertiaThreshold": 18,
-//    "keyboard": true,
-//    "keyboardPanOffset": 80,
-//    "keyboardZoomOffset": 1,
-//    "markerZoomAnimation": true,
-//    "scrollWheelZoom": true,
-//    "tap": true,
-//    "tapTolerance": 15,
-//    "touchZoom": false,
-//    "trackResize": true,
-//    "url": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-//    "worldCopyJump": false,
-//    "zoom": 8,
-//    "zoomAnimation": true,
-//    "zoomAnimationThreshold": 4,
-//    "zoomControl": true
-//}

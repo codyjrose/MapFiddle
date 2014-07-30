@@ -1,4 +1,4 @@
-app.controller('NavController', ['$scope', '$location', function($scope, $location) {
+app.controller('NavController', ['$scope', '$location', 'mapCodeService', function($scope, $location, mapCodeService) {
     var path = {
         '/options': 1,
         '/data': 2,
@@ -15,4 +15,8 @@ app.controller('NavController', ['$scope', '$location', function($scope, $locati
 
     // Make initial selection.
     this.selectTab(path[$location.path()]);
+
+    this.toggleShowCode = function() {
+        mapCodeService.toggleShowCode();
+    };
 }]);

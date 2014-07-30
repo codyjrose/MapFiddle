@@ -1,4 +1,10 @@
 app.controller("CodeViewController", ['$scope', '$rootScope', '$timeout', 'mapCodeService', function($scope, $rootScope, $timeout, mapCodeService) {
+    //$scope.showCode = mapCodeService.showCode();
+
+    $scope.showCode = function() {
+        return mapCodeService.showCode();
+    };
+
     var setMarkup = function() {
         $scope.markup = mapCodeService.getCodeView();
     };
@@ -6,6 +12,5 @@ app.controller("CodeViewController", ['$scope', '$rootScope', '$timeout', 'mapCo
     $scope.$on('mapOptionChange', function() {
         setMarkup();
     });
-
     setMarkup();
 }]);

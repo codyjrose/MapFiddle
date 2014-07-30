@@ -1,5 +1,7 @@
 // Responsible for outputting map HTML + Javascript
 app.factory('mapCodeService', ['mapOptionsService', function(mapOptionsService) {
+    var showCode = false;
+
     //region Static HTML
     var staticBeginHtml = '' +
         '&lt;!DOCTYPE html&gt;\n' +
@@ -77,7 +79,14 @@ app.factory('mapCodeService', ['mapOptionsService', function(mapOptionsService) 
         return html;
     };
 
+    var toggleShowCode = function() {
+        showCode = !showCode;
+        return showCode;
+    };
+
     return {
-        getCodeView: getCodeView
+        getCodeView: getCodeView,
+        showCode: function() { return showCode },
+        toggleShowCode: toggleShowCode
     };
 }]);
