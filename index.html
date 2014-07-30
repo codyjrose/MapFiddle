@@ -5,11 +5,8 @@
     <meta charset="utf-8">
     <title>Map Fiddle</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <link rel="stylesheet" href="css/bs/bootstrap.css">
     <link rel="stylesheet" href="css/leaflet.css" />
-    <!--<link rel="stylesheet" href="css/prettify-theme-desert.css" />-->
-    <!--<link rel="stylesheet" href="css/prettify.css" />-->
     <style>
         body {
             padding-top: 20px;
@@ -23,8 +20,9 @@
             left: 0;
             bottom: 0;
             overflow: hidden;
-            /*transform: translate3d(0,0,0);*/
-            /*-webkit-transform: translate3d(0,0,0);*/
+        }
+        #code {
+            margin: 40px 0 20px 0;
         }
         .appfront {
             z-index: 1001;
@@ -60,7 +58,7 @@
         </div>
         <div ng-controller="CodeViewController as cv">
             <div class="col-sm-10 appfront" ng-show="showCode()">
-                <pre class="prettyprintd appfront force-square">{{ markup }}</pre>
+                <pre id="code" class="prettyprintd appfront force-square">{{ markup }}</pre>
             </div>
         </div>
     </div>
