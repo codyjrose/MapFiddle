@@ -7,7 +7,6 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
     };
 
     var initMap = function (options) {
-        var options = options;
         map = new L.Map('map', options);
 
         // create the tile layer with correct attribution
