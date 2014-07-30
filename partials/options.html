@@ -1,0 +1,13 @@
+<div class="panel panel-primary">
+    <div class="panel-body">
+        <form role="form" class="">
+            <div class="form-group" ng-repeat="option in options">
+                <div ng-if="option.inputType == 'range'" option-range="option"></div>
+                <div ng-if="option.inputType == 'checkbox'" option-checkbox="option"></div>
+                <!-- Use this to show option data -->
+                <!--<pre>{{option}}</pre>-->
+            </div>
+        </form>
+        <div class="alert alert-info" role="alert">There are many more options in <a target="_blank" href="http://leafletjs.com/reference.html#map-options">Leaflet's official documentation</a>.</div>
+    </div>
+</div>

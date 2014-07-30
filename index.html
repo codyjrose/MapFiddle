@@ -11,97 +11,48 @@
     <!--<link rel="stylesheet" href="css/prettify-theme-desert.css" />-->
     <!--<link rel="stylesheet" href="css/prettify.css" />-->
     <style>
-        /* TODO replace with some JS to resize the map */
-        @media (min-height:570px) { /* 768 */
-            #map {
-                height: 456px;
-            }
-        }
-        @media (min-height:870px) { /* 1050 */
-            #map {
-                height: 756px;
-            }
-        }
-
-        @media (min-height:900px) { /* 1080 */
-            #map {
-                height: 786px;
-            }
-        }
         body {
             padding-top: 20px;
             padding-bottom: 20px;
         }
         #map {
+            height: 100%;
             position: fixed;
             top: 0;
             right: 0;
             left: 0;
             bottom: 0;
             overflow: hidden;
-            transform: translate3d(0,0,0);
-            -webkit-transform: translate3d(0,0,0);
+            /*transform: translate3d(0,0,0);*/
+            /*-webkit-transform: translate3d(0,0,0);*/
         }
         .appfront {
             z-index: 1001;
-        }
-
-        .leaflet-top .leaflet-control {
-            margin-top: 95px;
-        }
-        .leaflet-left .leaflet-control {
-            margin-left: 180px;
         }
     </style>
 </head>
 
 <body>
-<!--Header / Navigation-->
-<!--http://getbootstrap.com/components/#navbar-->
-<nav class="navbar navbar-inverse appfront" role="navigation">
-    <div class="navbar-header">
-        <a class="navbar-brand" href="#">MapFiddle</a>
-    </div>
-    <!-- Nav pills -->
-    <div class="collapse navbar-collapse">
-        <ul ng-controller="NavController as nc" class="nav navbar-nav">
-            <li ng-class="{ active: nc.isSelected(1) }"><a ng-click="nc.selectTab(1)" href="#/map" role="tab" data-toggle="tab">Map</a></li>
-            <li ng-class="{ active: nc.isSelected(2) }"><a ng-click="nc.selectTab(2)" href="#/code" role="tab" data-toggle="tab">HTML + JavaScript</a></li>
-        </ul>
-    </div>
-    <!-- END pills -->
-</nav>
-<!-- END Header / Navigation-->
 <div class="container-fluid">
+    <div ng-controller="MapViewController as mv">
+        <div id="map"></div>
+    </div>
     <!-- http://getbootstrap.com/css/#grid -->
     <div class="row" >
-        <div class="col-sm-2 appfront" ng-controller="OptionsController as oc">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Map Options</h3>
-                </div>
-                <div class="panel-body">
-                    <form role="form" class="">
-                        <div class="form-group" ng-repeat="option in options">
-                            <div ng-if="option.inputType == 'range'" option-range="option"></div>
-                            <div ng-if="option.inputType == 'checkbox'" option-checkbox="option"></div>
-                            <!--<pre>{{option}}</pre>-->
-                        </div>
-                    </form>
-                    <div class="alert alert-info" role="alert">There are many more options in <a target="_blank" href="http://leafletjs.com/reference.html#map-options">Leaflet's official documentation</a>.</div>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Add Cool Stuff</h3>
-                </div>
-                <div class="panel-body">
-                    Add Markers, circles, polygons, popups and events....soon.
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-10">
+        <div class="col-sm-2 appfront pull-right">
+            <ul ng-controller="NavController as nc" class="nav nav-pills nav-justified">
+                <li ng-class="{ active: nc.isSelected(1) }"><a ng-click="nc.selectTab(1)" href="#/options"  >Options</a></li>
+                <li ng-class="{ active: nc.isSelected(2) }"><a ng-click="nc.selectTab(2)" href="#/data" >Data</a></li>
+                <li ng-class="{ active: nc.isSelected(3) }"><a ng-click="nc.selectTab(3)" href="#/events"  >Events</a></li>
+            </ul>
+
+            <!--This is where the options, data and events panels will appear.-->
             <div ng-view></div>
+        </div>
+        <div ng-controller="CodeViewController as cv">
+            <div class="col-sm-10" ng-show="false">
+                <pre class="prettyprintd">{{ markup }}</pre>
+            </div>
         </div>
     </div>
 </div>
@@ -114,6 +65,8 @@
 <script src="app.js"></script>
 <script src="controllers/navController.js"></script>
 <script src="controllers/optionsController.js"></script>
+<script src="controllers/optionsDataController.js"></script>
+<script src="controllers/optionsEventController.js"></script>
 <script src="controllers/mapViewController.js"></script>
 <script src="controllers/codeViewController.js"></script>
 <script src="directives/directives.js"></script>

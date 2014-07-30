@@ -3,16 +3,19 @@ var app = angular.module('app', ['ngRoute']);
 app.config(['$routeProvider',
     function($routeProvider) {
         $routeProvider.
-            when('/map', {
-                templateUrl: 'partials/map-view.html',
-                controller: 'MapViewController'
+            when('/options', {
+                templateUrl: 'partials/options.html',
+                controller: 'OptionsController'
             }).
-            when('/code', {
-                templateUrl: 'partials/code-view.html',
-                controller: 'CodeViewController'
-
+            when('/data', {
+                templateUrl: 'partials/data.html',
+                controller: 'OptionsDataController'
+            }).
+            when('/events', {
+                templateUrl: 'partials/events.html',
+                controller: 'OptionsEventController'
             }).
             otherwise({
-                redirectTo: '/map'
+                redirectTo: '/options'
             });
     }]);

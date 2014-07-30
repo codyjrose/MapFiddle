@@ -1,4 +1,10 @@
-app.controller('NavController', ['$location', function($location) {
+app.controller('NavController', ['$scope', '$location', function($scope, $location) {
+    var path = {
+        '/options': 1,
+        '/data': 2,
+        '/events': 3
+    };
+
     this.selectTab = function(setTab) {
         this.tab = setTab;
     };
@@ -7,5 +13,6 @@ app.controller('NavController', ['$location', function($location) {
         return this.tab === checkTab;
     };
 
-    this.selectTab($location.path() === '/code' ? 2 : 1)
+    // Make initial selection.
+    this.selectTab(path[$location.path()]);
 }]);
