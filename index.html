@@ -43,7 +43,7 @@
     </div>
     <!-- http://getbootstrap.com/css/#grid -->
     <div class="row" >
-        <div ng-controller="NavController as nc" class="col-sm-2 appfront pull-right">
+        <div ng-controller="NavController as nc" class="col-sm-3 appfront pull-right">
             <ul class="nav nav-pills navbar-default nav-justified">
                 <li ng-class="{ active: nc.isSelected(1) }"><a class="force-square" ng-click="nc.selectTab(1)" href="#/options">Options</a></li>
                 <li ng-class="{ active: nc.isSelected(2) }"><a class="force-square" ng-click="nc.selectTab(2)" href="#/data">Data</a></li>
@@ -57,7 +57,7 @@
             <button class="btn btn-primary btn-full-width appfront force-square" ng-click="nc.toggleShowCode()">Show HTML + Javascript</button>
         </div>
         <div ng-controller="CodeViewController as cv">
-            <div class="col-sm-10 appfront" ng-show="showCode()">
+            <div class="col-sm-6 appfront pull-right" ng-show="showCode()">
                 <pre id="code" class="prettyprintd appfront force-square">{{ markup }}</pre>
             </div>
         </div>
