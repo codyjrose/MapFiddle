@@ -1,7 +1,3 @@
-/**
- * Created by Cody on 3/15/14.
- * Service responsible for holding map options.
- */
 app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
     /**
      * Leaflet map options
