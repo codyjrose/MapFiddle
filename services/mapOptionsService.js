@@ -212,7 +212,7 @@ app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
     };
 
     var broadcastChangedOption = function(option) {
-        lastUpdatedOption = option;                   // Sidebar has changed, store it.
+        lastUpdatedOption = option;
         $rootScope.$broadcast('mapOptionChange');
     };
 

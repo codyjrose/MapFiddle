@@ -2,7 +2,7 @@
 app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', function(mapOptionsService, mapFeatureService) {
     var showCode = false;
 
-    //region Static HTML
+    //region Static Code
     var staticBeginHtml = '' +
         '&lt;!DOCTYPE html&gt;\n' +
         '&lt;html&gt;\n' +
@@ -25,21 +25,20 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', functio
 
     var staticBeginJs = '(function() {\n' +
                         '    var map;\n' +
-                        '    function initialize() {\n' +
-                        '        var options = {\n';
+                        '    function initialize() {\n';
 
-    var staticEndJs =   '        };\n' +
-                        '        map = new L.Map("map", options);\n' +
+    var staticInitMapJs =     '        map = new L.Map("map", options);\n' +
                         '        var osm = new L.TileLayer(options.url, options);\n' +
-                        '        map.addLayer(osm);\n' +
-                        '    }\n' +
+                        '        map.addLayer(osm);\n';
+
+    var staticEndJs =   '    }\n' +
                         '    initialize();\n' +
                         '}());\n';
 
     //endregion
 
     var getMapOptions = function() {
-        var js = "",
+        var js = '        var options = {\n',
             options = mapOptionsService.getAllModified();
 
         _.forIn(options, function(option, key) {
@@ -69,23 +68,31 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', functio
                 js += "\n";
             }
         });
+        js += '        };\n';
         return js;
     };
 
     var getMapFeatures = function() {
-        var features = mapFeatureService.getAllUsed();
+        var js = "\n",
+            features = mapFeatureService.getAllUsed();
 
-        switch (feature.name) {
-            case "marker":
+        _.forIn(features, function(feature) {
+            js += "        ";
+            var options = feature.options();
+            js += "L." + feature.name + "(";
 
-                break;
-            case "circle":
+            var index = 0;
+            _.forIn(options, function(option, key) {
+                js += JSON.stringify(option);
+                index += 1;
 
-                break;
-            case "polygon":
-
-                break;
-        }
+                if (parseInt(key) < options.length - 1) {
+                    js += ", ";
+                }
+            });
+            js += ").addTo(map);\n";
+        });
+        return js;
     };
 
     var getCodeView = function() {
@@ -93,6 +100,8 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', functio
         html += staticBeginHtml;
         html += staticBeginJs;
         html += getMapOptions();
+        html += staticInitMapJs;
+        html += getMapFeatures();
         html += staticEndJs;
         html += staticEndHtml;
         return html;

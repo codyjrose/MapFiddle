@@ -1,50 +1,37 @@
 app.factory('mapFeatureService', ['$rootScope', 'mapService', function($rootScope, mapService) {
 
-    var features = {
-        marker: {
-            name: 'marker',
-            obj: null,
-            options: function () {
-                return [ mapService.getMapCenter() ];
-            }
-        },
-        circle: {
-            name: 'circle',
-            obj: null,
-            options: function() {
-                var radius = 500;
+    var lastUpdatedFeature = {},
+        features = {
+            marker: {
+                name: 'marker',
+                obj: null,
+                options: function () {
+                    return [ mapService.getMapCenter() ];
+                }
+            },
+            circle: {
+                name: 'circle',
+                obj: null,
+                options: function() {
+                    var radius = 500;
 
-                return [ mapService.getMapCenter(), radius, { color: 'red', fillColor: '#f03', fillOpacity: 0.5 } ]
+                    return [ mapService.getMapCenter(), radius, { color: 'red', fillColor: '#f03', fillOpacity: 0.5 } ]
+                }
+            },
+            polygon: {
+                name: 'polygon',
+                obj: null,
+                options: function () {
+                    return [[ mapService.getMapCenter(), [51.503, -0.06], [51.51, -0.047] ]]
+                }
             }
-        },
-        polygon: {
-            name: 'polygon',
-            obj: null,
-            options: function () {
-                return [[ mapService.getMapCenter(), [51.503, -0.06], [51.51, -0.047] ]]
-            }
+        };
+
+    var get = function (feature) {
+        if (features.hasOwnProperty(feature)) {
+            return features[feature];
         }
-    };
-
-    var addFeature = function(feature) {
-        feature.obj = L[feature.name]
-            .apply(null, feature.options())
-            .addTo(mapService.getMap());
-    };
-
-    var removeFeature = function(feature) {
-        mapService.getMap().removeLayer(feature.obj);
-        feature.obj = null;
-    };
-
-    var toggleFeature = function(featureType) {
-        var feature = features[featureType];
-
-        if (feature.obj) {
-            removeFeature(feature);
-        }  else {
-            addFeature(feature);
-        }
+        return false;
     };
 
     var getAll = function () {
@@ -55,8 +42,14 @@ app.factory('mapFeatureService', ['$rootScope', 'mapService', function($rootScop
         return _.filter(getAll(), function(feature) { return feature.obj != null });
     };
 
+    var broadcastChangedFeature = function(feature) {
+        lastUpdatedFeature = get(feature);
+        $rootScope.$broadcast('mapFeatureChange');
+    };
+
     return {
-        toggleFeature: toggleFeature,
-        getAllUsed: getAllUsed
+        getAllUsed: getAllUsed,
+        broadcastChangedFeature: broadcastChangedFeature,
+        lastUpdatedFeature: function() { return lastUpdatedFeature }
     }
 }]);

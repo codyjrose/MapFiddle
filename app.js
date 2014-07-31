@@ -8,7 +8,7 @@ app.config(['$routeProvider',
                 controller: 'MapOptionsController'
             }).
             when('/features', {
-                templateUrl: 'partials/data.html',
+                templateUrl: 'partials/features.html',
                 controller: 'MapFeaturesController'
             }).
             when('/events', {

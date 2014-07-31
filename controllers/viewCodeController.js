@@ -10,5 +10,9 @@ app.controller("ViewCodeController", ['$scope', '$rootScope', '$timeout', 'mapCo
     $scope.$on('mapOptionChange', function() {
         setMarkup();
     });
+    $scope.$on('mapFeatureChange', function() {
+        setMarkup();
+    });
+
     setMarkup();
 }]);

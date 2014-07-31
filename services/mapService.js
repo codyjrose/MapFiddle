@@ -63,10 +63,32 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
         }
     };
 
+    var addFeature = function(feature) {
+        feature.obj = L[feature.name]
+            .apply(null, feature.options())
+            .addTo(map);
+    };
+
+    var removeFeature = function(feature) {
+        map.removeLayer(feature.obj);
+        feature.obj = null;
+    };
+
+    var toggleMapFeature = function(feature) {
+        if (feature.obj) {
+            removeFeature(feature);
+        }  else {
+            addFeature(feature);
+        }
+        return feature;
+    };
+
+
     return {
         getMap: getMap,
         getMapCenter: getMapCenter,
         initMap: initMap,
-        setMapOption: setOption
+        setMapOption: setOption,
+        toggleMapFeature: toggleMapFeature
     }
 }]);

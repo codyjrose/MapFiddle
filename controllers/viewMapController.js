@@ -1,4 +1,4 @@
-app.controller("ViewMapController", ['$scope', 'mapOptionsService', 'mapService', function($scope, mapOptionsService, mapService) {
+app.controller("ViewMapController", ['$scope', 'mapOptionsService', 'mapFeatureService', 'mapService', function($scope, mapOptionsService, mapFeatureService, mapService) {
     // Get map options object to create the map
     var optionsObject = {};
     _.forIn(mapOptionsService.getAllModified(), function(option) {
@@ -10,6 +10,11 @@ app.controller("ViewMapController", ['$scope', 'mapOptionsService', 'mapService'
     $scope.$on('mapOptionChange', function() {
         var option = mapOptionsService.lastUpdatedOption();
         mapService.setMapOption(option);
+    });
+
+    $scope.$on('mapFeatureChange', function() {
+        var feature = mapFeatureService.lastUpdatedFeature();
+        mapService.toggleMapFeature(feature);
     });
 
     // The map has changed, update the options via the mapOptionsService
