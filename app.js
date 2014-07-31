@@ -15,6 +15,9 @@ app.config(['$routeProvider',
                 templateUrl: 'partials/events.html',
                 controller: 'OptionsEventController'
             }).
+            when('/about', {
+                templateUrl: 'partials/about.html'
+            }).
             otherwise({
                 redirectTo: '/options'
             });

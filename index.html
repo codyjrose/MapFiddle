@@ -21,9 +21,6 @@
             bottom: 0;
             overflow: hidden;
         }
-        /*#code {*/
-            /*margin: 40px 0 20px 0;*/
-        /*}*/
         .appfront {
             z-index: 1001;
         }
@@ -48,6 +45,7 @@
                 <li ng-class="{ active: nc.isSelected(1) }"><a class="force-square" ng-click="nc.selectTab(1)" href="#/options">Options</a></li>
                 <li ng-class="{ active: nc.isSelected(2) }"><a class="force-square" ng-click="nc.selectTab(2)" href="#/data">Data</a></li>
                 <li ng-class="{ active: nc.isSelected(3) }"><a class="force-square" ng-click="nc.selectTab(3)" href="#/events">Events</a></li>
+                <li ng-class="{ active: nc.isSelected(4) }"><a class="force-square" ng-click="nc.selectTab(4)" href="#/about">?</a></li>
             </ul>
             <!--This is where the options, data and events panels will appear.-->
             <div class="panel force-square">

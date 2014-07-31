@@ -2,7 +2,8 @@ app.controller('NavController', ['$scope', '$location', 'mapCodeService', functi
     var path = {
         '/options': 1,
         '/data': 2,
-        '/events': 3
+        '/events': 3,
+        '/about': 4
     };
 
     $scope.showHideText = mapCodeService.showCode() ? "Hide " : "Show ";
