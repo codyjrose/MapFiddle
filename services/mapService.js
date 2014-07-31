@@ -20,7 +20,7 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
         map.addLayer(osm);
 
         map.on('moveend', function() {
-            $rootScope.$broadcast('moveend');
+            $rootScope.$broadcast('mapMoveEnd');
         });
     };
 

@@ -18,7 +18,7 @@ app.controller("ViewMapController", ['$scope', 'mapOptionsService', 'mapFeatureS
     });
 
     // The map has changed, update the options via the mapOptionsService
-    $scope.$on('moveend', function() {
+    $scope.$on('mapMoveEnd', function() {
         var options = mapOptionsService.getAllWithStateMethod();
 
         _.forIn(options, function(option) {
