@@ -22,15 +22,25 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapDataService', function(m
         '&lt;/script&gt;\n' +
         '&lt;/body&gt;\n' +
         '&lt;/html&gt;\n';
+
+    var staticBeginJs = '(function() {\n' +
+                        '    var map;\n' +
+                        '    function initialize() {\n' +
+                        '        var options = {\n';
+
+    var staticEndJs = '        };\n' +
+                      '        map = new L.Map("map", options);\n' +
+                      '        var osm = new L.TileLayer(options.url, options);\n' +
+                      '        map.addLayer(osm);\n' +
+                      '    }\n' +
+                      '    initialize();\n' +
+                      '}());\n';
+
     //endregion
 
-    var getMapJS = function() {
-        var options = mapOptionsService.getAllModified(),
-
-            js = '(function() {\n' +
-                 '    var map;\n' +
-                 '    function initialize() {\n' +
-                 '        var options = {\n';
+    var getMapOptions = function() {
+        var js = "",
+            options = mapOptionsService.getAllModified();
 
         _.forIn(options, function(option, key) {
             js += "            ";
@@ -59,22 +69,15 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapDataService', function(m
                 js += "\n";
             }
         });
-
-        js += '        };\n' +
-              '        map = new L.Map("map", options);\n' +
-              '        var osm = new L.TileLayer(options.url, options);\n' +
-              '        map.addLayer(osm);\n' +
-              '    }\n' +
-              '    initialize();\n' +
-              '}());\n';
-
         return js;
     };
 
     var getCodeView = function() {
         var html = "";
         html += staticBeginHtml;
-        html += getMapJS();
+        html += staticBeginJs;
+        html += getMapOptions();
+        html += staticEndJs;
         html += staticEndHtml;
         return html;
     };
