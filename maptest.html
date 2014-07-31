@@ -15,14 +15,8 @@
         var map;
         function initialize() {
             var options = {
-                zoomControl: false,
-                attributionControl: false,
-                center: [51.60693037835708,0.10883331298828125],
-                zoom: 12,
-                minZoom: 8,
-                maxZoom: 13,
-                scrollWheelZoom: false,
-                doubleClickZoom: false,
+                center: [51.505,-0.09],
+                zoom: 13,
                 url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 attribution: 'Map data © OpenStreetMap contributors'
             };
@@ -30,7 +24,6 @@
             var osm = new L.TileLayer(options.url, options);
             map.addLayer(osm);
         }
-
         initialize();
     }());
 </script>

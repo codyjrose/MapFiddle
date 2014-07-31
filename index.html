@@ -21,13 +21,13 @@
             bottom: 0;
             overflow: hidden;
         }
-        #code {
-            margin: 40px 0 20px 0;
-        }
+        /*#code {*/
+            /*margin: 40px 0 20px 0;*/
+        /*}*/
         .appfront {
             z-index: 1001;
         }
-        button.btn-full-width {
+        .btn.btn-full-width {
             width:100%;
         }
         .force-square {
@@ -53,12 +53,16 @@
             <div class="panel force-square">
                 <div ng-view></div>
             </div>
-
-            <button class="btn btn-primary btn-full-width appfront force-square" ng-click="nc.toggleShowCode()">Show HTML + Javascript</button>
+            <button class="btn btn-full-width appfront force-square" ng-class="{ 'btn-success': btnSuccess, 'btn-danger': !btnSuccess }" ng-click="nc.toggleShowCode()">{{ showHideText }} HTML + Javascript</button>
         </div>
         <div ng-controller="CodeViewController as cv">
             <div class="col-sm-6 appfront pull-right" ng-show="showCode()">
-                <pre id="code" class="prettyprintd appfront force-square">{{ markup }}</pre>
+                <div class="panel force-square">
+                    <div class="panel-body">
+                        <pre id="code" class="prettyprintd appfront force-square">{{ markup }}</pre>
+                        <button class="btn btn-success btn-full-width">Raw</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -78,7 +82,9 @@
 <script src="controllers/codeViewController.js"></script>
 <script src="directives/directives.js"></script>
 <script src="services/mapService.js"></script>
-<script src="services/optionsService.js"></script>
+<script src="services/mapOptionsService.js"></script>
+<script src="services/mapDataService.js"></script>
+
 <script src="services/codeService.js"></script>
 
 <script src="js/prettify/run_prettify.js"></script>

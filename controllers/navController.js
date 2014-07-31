@@ -5,6 +5,9 @@ app.controller('NavController', ['$scope', '$location', 'mapCodeService', functi
         '/events': 3
     };
 
+    $scope.showHideText = mapCodeService.showCode() ? "Hide " : "Show ";
+    $scope.btnSuccess = true;
+
     this.selectTab = function(setTab) {
         this.tab = setTab;
     };
@@ -17,6 +20,8 @@ app.controller('NavController', ['$scope', '$location', 'mapCodeService', functi
     this.selectTab($location.path() ? path[$location.path()]: 1 );
 
     this.toggleShowCode = function() {
-        mapCodeService.toggleShowCode();
+        var toggleShowHideText = mapCodeService.toggleShowCode();
+        $scope.btnSuccess = !toggleShowHideText;
+        $scope.showHideText = toggleShowHideText ? "Hide " : "Show "
     };
 }]);

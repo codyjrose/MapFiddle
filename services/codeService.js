@@ -1,5 +1,5 @@
 // Responsible for outputting map HTML + Javascript
-app.factory('mapCodeService', ['mapOptionsService', function(mapOptionsService) {
+app.factory('mapCodeService', ['mapOptionsService', 'mapDataService', function(mapOptionsService, mapDataService) {
     var showCode = false;
 
     //region Static HTML
