@@ -33,7 +33,7 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapDataService', function(m
                  '        var options = {\n';
 
         _.forIn(options, function(option, key) {
-            js += "        ";
+            js += "            ";
 
             switch (option.type) {
                 case "object":

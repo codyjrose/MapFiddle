@@ -6,6 +6,11 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
         return map
     };
 
+    var getMapCenter = function() {
+        var center = map.getCenter();
+        return [ center.lat, center.lng ];
+    };
+
     var initMap = function (options) {
         map = new L.Map('map', options);
 
@@ -60,6 +65,7 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
 
     return {
         getMap: getMap,
+        getMapCenter: getMapCenter,
         initMap: initMap,
         setMapOption: setOption
     }

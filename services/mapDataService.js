@@ -5,27 +5,23 @@ app.factory('mapDataService', ['$rootScope', 'mapService', function($rootScope, 
             name: 'marker',
             obj: null,
             options: function () {
-                var center = mapService.getMap().getCenter();
-                return [ [ center.lat, center.lng ] ]
+                return [ mapService.getMapCenter() ];
             }
         },
         circle: {
             name: 'circle',
             obj: null,
             options: function() {
-                var center = mapService.getMap().getCenter();
                 var radius = 500;
 
-                return [ [ center.lat, center.lng ], radius, { color: 'red', fillColor: '#f03', fillOpacity: 0.5 } ]
+                return [ mapService.getMapCenter(), radius, { color: 'red', fillColor: '#f03', fillOpacity: 0.5 } ]
             }
         },
         polygon: {
             name: 'polygon',
             obj: null,
             options: function () {
-                var center = mapService.getMap().getCenter();
-
-                return [[ [ center.lat, center.lng ], [51.503, -0.06], [51.51, -0.047] ]]
+                return [[ mapService.getMapCenter(), [51.503, -0.06], [51.51, -0.047] ]]
             }
         }
     };

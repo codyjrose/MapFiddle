@@ -124,17 +124,6 @@ app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
                 default: true,
                 inputType: "checkbox"
             },
-//            {
-//                name: "inertia",
-//                value: true,
-//                type: "boolean",
-//                updateMethod: "",
-//                label: "Panning inertia",
-//                tooltip: "If enabled, panning of the map will have an inertia effect where the map builds momentum while dragging and continues moving in the same direction for some time. Feels especially nice on touch devices.",
-//                required: false,
-//                default: true,
-//                inputType: "checkbox"
-//            },
             {
                 name: "url",
                 updateMethod: "",
@@ -209,7 +198,6 @@ app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
 
         try {
             _.find(getAll(), { name: option }).value = value;
-
         } catch (e) {}
     };
 

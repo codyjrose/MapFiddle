@@ -15,8 +15,8 @@
         <div id="map"></div>
     </div>
     <!-- http://getbootstrap.com/css/#grid -->
-    <div class="row" >
-        <div ng-controller="NavController as nc" class="col-sm-3 appfront pull-right">
+    <div class="row appfront">
+        <div ng-controller="NavController as nc" class="col-sm-3  pull-right">
             <ul class="nav nav-pills navbar-default nav-justified">
                 <li ng-class="{ active: nc.isSelected(1) }"><a class="force-square" ng-click="nc.selectTab(1)" href="#/options"><i class="fa fa-cogs"></i> Options</a></li>
                 <li ng-class="{ active: nc.isSelected(2) }"><a class="force-square" ng-click="nc.selectTab(2)" href="#/data"><i class="fa fa-map-marker"></i> Data</a></li>
@@ -27,13 +27,17 @@
             <div class="panel force-square">
                 <div ng-view></div>
             </div>
-            <button class="btn btn-full-width appfront force-square" ng-class="{ 'btn-success': btnSuccess, 'btn-danger': !btnSuccess }" ng-click="nc.toggleShowCode()"><i class="fa fa-code"></i> {{ showHideText }} HTML + Javascript</button>
+            <button class="btn btn-full-width force-square"
+                    ng-class="{ 'btn-success': btnSuccess, 'btn-danger': !btnSuccess }"
+                    ng-click="nc.toggleShowCode()">
+                <i class="fa fa-code"></i> {{ showHideText }} HTML + Javascript
+            </button>
         </div>
         <div ng-controller="CodeViewController as cv">
-            <div class="col-sm-6 appfront pull-right" ng-show="showCode()">
+            <div class="col-sm-6 pull-right" ng-show="showCode()">
                 <div class="panel force-square">
                     <div class="panel-body">
-                        <pre id="code" class="prettyprintd appfront force-square">{{ markup }}</pre>
+                        <pre id="code" class="prettyprintd force-square">{{ markup }}</pre>
                         <button class="btn btn-success btn-full-width">Raw</button>
                     </div>
                 </div>
