@@ -1,4 +1,4 @@
-app.controller("CodeViewController", ['$scope', '$rootScope', '$timeout', 'mapCodeService', function($scope, $rootScope, $timeout, mapCodeService) {
+app.controller("ViewCodeController", ['$scope', '$rootScope', '$timeout', 'mapCodeService', function($scope, $rootScope, $timeout, mapCodeService) {
     $scope.showCode = function() {
         return mapCodeService.showCode();
     };

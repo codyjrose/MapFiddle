@@ -1,7 +1,7 @@
 app.controller('NavController', ['$scope', '$location', 'mapCodeService', function($scope, $location, mapCodeService) {
     var path = {
         '/options': 1,
-        '/data': 2,
+        '/features': 2,
         '/events': 3,
         '/about': 4
     };

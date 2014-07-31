@@ -1,3 +1,3 @@
-app.controller('OptionsEventController', ['$scope', function($scope) {
+app.controller('MapEventsController', ['$scope', function($scope) {
 
 }]);

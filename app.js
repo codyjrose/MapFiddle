@@ -5,15 +5,15 @@ app.config(['$routeProvider',
         $routeProvider.
             when('/options', {
                 templateUrl: 'partials/options.html',
-                controller: 'OptionsController'
+                controller: 'MapOptionsController'
             }).
-            when('/data', {
+            when('/features', {
                 templateUrl: 'partials/data.html',
-                controller: 'OptionsDataController'
+                controller: 'MapFeaturesController'
             }).
             when('/events', {
                 templateUrl: 'partials/events.html',
-                controller: 'OptionsEventController'
+                controller: 'MapEventsController'
             }).
             when('/about', {
                 templateUrl: 'partials/about.html'

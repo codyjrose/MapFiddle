@@ -1,4 +1,4 @@
-app.controller("MapViewController", ['$scope', 'mapOptionsService', 'mapService', function($scope, mapOptionsService, mapService) {
+app.controller("ViewMapController", ['$scope', 'mapOptionsService', 'mapService', function($scope, mapOptionsService, mapService) {
     // Get map options object to create the map
     var optionsObject = {};
     _.forIn(mapOptionsService.getAllModified(), function(option) {

@@ -11,7 +11,7 @@
 </head>
 <body>
 <div class="container-fluid">
-    <div ng-controller="MapViewController as mv">
+    <div ng-controller="ViewMapController as mv">
         <div id="map"></div>
     </div>
     <!-- http://getbootstrap.com/css/#grid -->
@@ -19,7 +19,7 @@
         <div ng-controller="NavController as nc" class="col-sm-3  pull-right">
             <ul class="nav nav-pills navbar-default nav-justified">
                 <li ng-class="{ active: nc.isSelected(1) }"><a class="force-square" ng-click="nc.selectTab(1)" href="#/options"><i class="fa fa-cogs"></i> Options</a></li>
-                <li ng-class="{ active: nc.isSelected(2) }"><a class="force-square" ng-click="nc.selectTab(2)" href="#/data"><i class="fa fa-map-marker"></i> Features</a></li>
+                <li ng-class="{ active: nc.isSelected(2) }"><a class="force-square" ng-click="nc.selectTab(2)" href="#/features"><i class="fa fa-map-marker"></i> Features</a></li>
                 <li ng-class="{ active: nc.isSelected(3) }"><a class="force-square" ng-click="nc.selectTab(3)" href="#/events"><i class="fa fa-bolt"></i> Events</a></li>
                 <li ng-class="{ active: nc.isSelected(4) }"><a class="force-square" ng-click="nc.selectTab(4)" href="#/about"><i class="fa fa-question-circle"></i></a></li>
             </ul>
@@ -33,7 +33,7 @@
                 <i class="fa fa-code"></i> {{ showHideText }} HTML + Javascript
             </button>
         </div>
-        <div ng-controller="CodeViewController as cv">
+        <div ng-controller="ViewCodeController as cv">
             <div class="col-sm-6 pull-right" ng-show="showCode()">
                 <div class="panel force-square">
                     <div class="panel-body">
@@ -54,11 +54,11 @@
 
 <script src="app.js"></script>
 <script src="controllers/navController.js"></script>
-<script src="controllers/mapOptionsController.js"></script>
-<script src="controllers/mapFeaturesController.js"></script>
-<script src="controllers/mapEventsController.js"></script>
+<script src="controllers/MapOptionsController.js"></script>
+<script src="controllers/MapFeaturesController.js"></script>
+<script src="controllers/MapEventsController.js"></script>
 <script src="controllers/viewMapController.js"></script>
-<script src="controllers/viewCodeController.js"></script>
+<script src="controllers/ViewCodeController.js"></script>
 <script src="directives/directives.js"></script>
 <script src="services/mapService.js"></script>
 <script src="services/mapOptionsService.js"></script>
