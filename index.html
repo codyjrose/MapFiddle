@@ -19,7 +19,7 @@
         <div ng-controller="NavController as nc" class="col-sm-3  pull-right">
             <ul class="nav nav-pills navbar-default nav-justified">
                 <li ng-class="{ active: nc.isSelected(1) }"><a class="force-square" ng-click="nc.selectTab(1)" href="#/options"><i class="fa fa-cogs"></i> Options</a></li>
-                <li ng-class="{ active: nc.isSelected(2) }"><a class="force-square" ng-click="nc.selectTab(2)" href="#/data"><i class="fa fa-map-marker"></i> Data</a></li>
+                <li ng-class="{ active: nc.isSelected(2) }"><a class="force-square" ng-click="nc.selectTab(2)" href="#/data"><i class="fa fa-map-marker"></i> Features</a></li>
                 <li ng-class="{ active: nc.isSelected(3) }"><a class="force-square" ng-click="nc.selectTab(3)" href="#/events"><i class="fa fa-bolt"></i> Events</a></li>
                 <li ng-class="{ active: nc.isSelected(4) }"><a class="force-square" ng-click="nc.selectTab(4)" href="#/about"><i class="fa fa-question-circle"></i></a></li>
             </ul>
@@ -54,15 +54,15 @@
 
 <script src="app.js"></script>
 <script src="controllers/navController.js"></script>
-<script src="controllers/optionsController.js"></script>
-<script src="controllers/optionsDataController.js"></script>
-<script src="controllers/optionsEventController.js"></script>
-<script src="controllers/mapViewController.js"></script>
-<script src="controllers/codeViewController.js"></script>
+<script src="controllers/mapOptionsController.js"></script>
+<script src="controllers/mapFeaturesController.js"></script>
+<script src="controllers/mapEventsController.js"></script>
+<script src="controllers/viewMapController.js"></script>
+<script src="controllers/viewCodeController.js"></script>
 <script src="directives/directives.js"></script>
 <script src="services/mapService.js"></script>
 <script src="services/mapOptionsService.js"></script>
-<script src="services/mapDataService.js"></script>
+<script src="services/mapFeatureService.js"></script>
 <script src="services/codeService.js"></script>
 
 <script src="js/prettify/run_prettify.js"></script>

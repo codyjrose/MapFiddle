@@ -1,4 +1,4 @@
-app.factory('mapDataService', ['$rootScope', 'mapService', function($rootScope, mapService) {
+app.factory('mapFeatureService', ['$rootScope', 'mapService', function($rootScope, mapService) {
 
     var features = {
         marker: {
@@ -47,7 +47,16 @@ app.factory('mapDataService', ['$rootScope', 'mapService', function($rootScope, 
         }
     };
 
+    var getAll = function () {
+        return features;
+    };
+
+    var getAllUsed = function () {
+        return _.filter(getAll(), function(feature) { return feature.obj != null });
+    };
+
     return {
-        toggleFeature: toggleFeature
+        toggleFeature: toggleFeature,
+        getAllUsed: getAllUsed
     }
 }]);

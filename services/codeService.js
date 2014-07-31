@@ -1,5 +1,5 @@
 // Responsible for outputting map HTML + Javascript
-app.factory('mapCodeService', ['mapOptionsService', 'mapDataService', function(mapOptionsService, mapDataService) {
+app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', function(mapOptionsService, mapFeatureService) {
     var showCode = false;
 
     //region Static HTML
@@ -28,13 +28,13 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapDataService', function(m
                         '    function initialize() {\n' +
                         '        var options = {\n';
 
-    var staticEndJs = '        };\n' +
-                      '        map = new L.Map("map", options);\n' +
-                      '        var osm = new L.TileLayer(options.url, options);\n' +
-                      '        map.addLayer(osm);\n' +
-                      '    }\n' +
-                      '    initialize();\n' +
-                      '}());\n';
+    var staticEndJs =   '        };\n' +
+                        '        map = new L.Map("map", options);\n' +
+                        '        var osm = new L.TileLayer(options.url, options);\n' +
+                        '        map.addLayer(osm);\n' +
+                        '    }\n' +
+                        '    initialize();\n' +
+                        '}());\n';
 
     //endregion
 
@@ -70,6 +70,22 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapDataService', function(m
             }
         });
         return js;
+    };
+
+    var getMapFeatures = function() {
+        var features = mapFeatureService.getAllUsed();
+
+        switch (feature.name) {
+            case "marker":
+
+                break;
+            case "circle":
+
+                break;
+            case "polygon":
+
+                break;
+        }
     };
 
     var getCodeView = function() {

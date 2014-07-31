@@ -1,6 +1,4 @@
 app.controller("CodeViewController", ['$scope', '$rootScope', '$timeout', 'mapCodeService', function($scope, $rootScope, $timeout, mapCodeService) {
-    //$scope.showCode = mapCodeService.showCode();
-
     $scope.showCode = function() {
         return mapCodeService.showCode();
     };
