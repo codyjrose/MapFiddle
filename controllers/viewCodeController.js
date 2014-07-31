@@ -13,6 +13,9 @@ app.controller("ViewCodeController", ['$scope', '$rootScope', '$timeout', 'mapCo
     $scope.$on('mapFeatureChange', function() {
         setMarkup();
     });
+    $scope.$on('moveend', function() {
+        setMarkup();
+    });
 
     setMarkup();
 }]);
