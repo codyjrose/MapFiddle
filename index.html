@@ -1,38 +1,14 @@
 <!DOCTYPE html>
 <html ng-app="app">
-
 <head>
     <meta charset="utf-8">
     <title>Map Fiddle</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/bs/bootstrap.css">
-    <link rel="stylesheet" href="css/leaflet.css" />
-    <style>
-        body {
-            padding-top: 20px;
-            padding-bottom: 20px;
-        }
-        #map {
-            height: 100%;
-            position: fixed;
-            top: 0;
-            right: 0;
-            left: 0;
-            bottom: 0;
-            overflow: hidden;
-        }
-        .appfront {
-            z-index: 1001;
-        }
-        .btn.btn-full-width {
-            width:100%;
-        }
-        .force-square {
-            border-radius: 0 !important;
-        }
-    </style>
+    <link rel="stylesheet" href="css/leaflet.css"/>
+    <link rel="stylesheet" href="css/fa/css/font-awesome.css"/>
+    <link rel="stylesheet" href="css/main.css"/>
 </head>
-
 <body>
 <div class="container-fluid">
     <div ng-controller="MapViewController as mv">
@@ -42,16 +18,16 @@
     <div class="row" >
         <div ng-controller="NavController as nc" class="col-sm-3 appfront pull-right">
             <ul class="nav nav-pills navbar-default nav-justified">
-                <li ng-class="{ active: nc.isSelected(1) }"><a class="force-square" ng-click="nc.selectTab(1)" href="#/options">Options</a></li>
-                <li ng-class="{ active: nc.isSelected(2) }"><a class="force-square" ng-click="nc.selectTab(2)" href="#/data">Data</a></li>
-                <li ng-class="{ active: nc.isSelected(3) }"><a class="force-square" ng-click="nc.selectTab(3)" href="#/events">Events</a></li>
-                <li ng-class="{ active: nc.isSelected(4) }"><a class="force-square" ng-click="nc.selectTab(4)" href="#/about">?</a></li>
+                <li ng-class="{ active: nc.isSelected(1) }"><a class="force-square" ng-click="nc.selectTab(1)" href="#/options"><i class="fa fa-cogs"></i> Options</a></li>
+                <li ng-class="{ active: nc.isSelected(2) }"><a class="force-square" ng-click="nc.selectTab(2)" href="#/data"><i class="fa fa-map-marker"></i> Data</a></li>
+                <li ng-class="{ active: nc.isSelected(3) }"><a class="force-square" ng-click="nc.selectTab(3)" href="#/events"><i class="fa fa-bolt"></i> Events</a></li>
+                <li ng-class="{ active: nc.isSelected(4) }"><a class="force-square" ng-click="nc.selectTab(4)" href="#/about"><i class="fa fa-question-circle"></i></a></li>
             </ul>
             <!--This is where the options, data and events panels will appear.-->
             <div class="panel force-square">
                 <div ng-view></div>
             </div>
-            <button class="btn btn-full-width appfront force-square" ng-class="{ 'btn-success': btnSuccess, 'btn-danger': !btnSuccess }" ng-click="nc.toggleShowCode()">{{ showHideText }} HTML + Javascript</button>
+            <button class="btn btn-full-width appfront force-square" ng-class="{ 'btn-success': btnSuccess, 'btn-danger': !btnSuccess }" ng-click="nc.toggleShowCode()"><i class="fa fa-code"></i> {{ showHideText }} HTML + Javascript</button>
         </div>
         <div ng-controller="CodeViewController as cv">
             <div class="col-sm-6 appfront pull-right" ng-show="showCode()">

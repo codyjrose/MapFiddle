@@ -1,0 +1,22 @@
+body {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+#map {
+    height: 100%;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+.appfront {
+    z-index: 1001;
+}
+.btn.btn-full-width {
+    width:100%;
+}
+.force-square {
+    border-radius: 0 !important;
+}
