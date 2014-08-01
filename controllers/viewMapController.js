@@ -6,18 +6,19 @@ app.controller("ViewMapController", ['$scope', 'mapOptionsService', 'mapFeatureS
     });
     mapService.initMap(optionsObject);
 
-    // Options have been changed via the sidebar, update the map!
+    // Options have been changed via the sidebar, update the map.
     $scope.$on('mapOptionChange', function() {
         var option = mapOptionsService.lastUpdatedOption();
         mapService.setMapOption(option);
     });
 
+    // Marker, circle, polygon has been added or removed, let everyone know.
     $scope.$on('mapFeatureChange', function() {
         var feature = mapFeatureService.lastUpdatedFeature();
         mapService.toggleMapFeature(feature);
     });
 
-    // The map has changed, update the options via the mapOptionsService
+    // The map has changed, update the options values (such as center and zoom level).
     $scope.$on('mapMoveEnd', function() {
         var options = mapOptionsService.getAllWithStateMethod();
 

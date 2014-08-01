@@ -23,15 +23,18 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', functio
         '&lt;/body&gt;\n' +
         '&lt;/html&gt;\n';
 
-    var staticBeginJs = '(function() {\n' +
+    var staticBeginJs = '' +
+                        '(function() {\n' +
                         '    var map;\n' +
                         '    function initialize() {\n';
 
-    var staticInitMapJs =     '        map = new L.Map("map", options);\n' +
+    var staticInitMapJs ='' +
+                        '        map = new L.Map("map", options);\n' +
                         '        var osm = new L.TileLayer(options.url, options);\n' +
                         '        map.addLayer(osm);\n';
 
-    var staticEndJs =   '    }\n' +
+    var staticEndJs =   '' +
+                        '    }\n' +
                         '    initialize();\n' +
                         '}());\n';
 
