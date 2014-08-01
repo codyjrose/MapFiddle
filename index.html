@@ -16,7 +16,7 @@
     </div>
     <!-- http://getbootstrap.com/css/#grid -->
     <div class="row appfront">
-        <div ng-controller="NavController as nc" class="col-sm-3  pull-right">
+        <div id="theNav" ng-controller="NavController as nc" class="col-sm-3  pull-right">
             <ul class="nav nav-pills navbar-default nav-justified">
                 <li ng-class="{ active: nc.isSelected(1) }"><a class="force-square" ng-click="nc.selectTab(1)" href="#/options"><i class="fa fa-cogs"></i> Options</a></li>
                 <li ng-class="{ active: nc.isSelected(2) }"><a class="force-square" ng-click="nc.selectTab(2)" href="#/features"><i class="fa fa-map-marker"></i> Features</a></li>

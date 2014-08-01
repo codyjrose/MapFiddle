@@ -1,6 +1,6 @@
 app.factory('mapService', ['$rootScope', function($rootScope) {
 
-    var map;
+    var map, legend;
 
     var getMap = function() {
         return map
@@ -22,6 +22,17 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
         map.on('moveend', function() {
             $rootScope.$broadcast('mapMoveEnd');
         });
+
+        var legend = L.control({position: 'topright'});
+
+        legend.onAdd = function (map) {
+            var branding = L.DomUtil.create('h3', 'brand legend')
+
+            branding.innerHTML = "MapFiddle";
+            return branding;
+        };
+
+        legend.addTo(map);
     };
 
     // For options that are properties of the map. Ref: http://leafletjs.com/reference.html#map-properties

@@ -11,6 +11,10 @@ body {
     bottom: 0;
     overflow: hidden;
 }
+#theNav {
+    padding-top: 100px;
+}
+
 .appfront {
     z-index: 1001;
 }
