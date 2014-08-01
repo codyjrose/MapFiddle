@@ -18,6 +18,12 @@ app.controller("ViewMapController", ['$scope', 'mapOptionsService', 'mapFeatureS
         mapService.toggleMapFeature(feature);
     });
 
+    // Marker, circle, polygon has been added or removed, let everyone know.
+    $scope.$on('mapFeaturePopupChange', function() {
+        var feature = mapFeatureService.lastUpdatedFeature();
+        mapService.toggleBindPopupToFeature(feature);
+    });
+
     // The map has changed, update the options values (such as center and zoom level).
     $scope.$on('mapMoveEnd', function() {
         var options = mapOptionsService.getAllWithStateMethod();

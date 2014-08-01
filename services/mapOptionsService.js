@@ -142,7 +142,7 @@ app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
 
     /**
      * Returns a map option value or false if no value is found.
-     * @param option
+     * @param optionName
      * @returns {*}
      */
     var get = function (optionName) {

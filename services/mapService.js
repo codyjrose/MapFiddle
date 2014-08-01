@@ -76,19 +76,38 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
 
     var toggleMapFeature = function(feature) {
         if (feature.obj) {
+            unbindPopupToFeature(feature);
             removeFeature(feature);
-        }  else {
+        } else {
             addFeature(feature);
         }
         return feature;
     };
 
+    var bindPopupToFeature = function(feature) {
+        feature.obj.bindPopup("<b>Hello world</b><br>I'm a popup attached to " + feature.name);
+        feature.popupEnabled = true;
+    };
+
+    var unbindPopupToFeature = function(feature) {
+        feature.obj.unbindPopup();
+        feature.popupEnabled = false;
+    };
+
+    var toggleBindPopupToFeature = function(feature) {
+        if (feature.popupEnabled) {
+            unbindPopupToFeature(feature);
+        } else {
+            bindPopupToFeature(feature);
+        }
+    };
 
     return {
+        initMap: initMap,
         getMap: getMap,
         getMapCenter: getMapCenter,
-        initMap: initMap,
         setMapOption: setOption,
-        toggleMapFeature: toggleMapFeature
+        toggleMapFeature: toggleMapFeature,
+        toggleBindPopupToFeature: toggleBindPopupToFeature
     }
 }]);

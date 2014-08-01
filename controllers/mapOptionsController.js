@@ -1,10 +1,6 @@
 app.controller('MapOptionsController', ['$scope', 'mapOptionsService', function($scope, mapOptionsService) {
-    $scope.getConfigurableOptionsAll = function() {
-        return mapOptionsService.getUserConfigurable();
-    };
-
     $scope.initOptions = function() {
-        $scope.options = $scope.getConfigurableOptionsAll();
+        $scope.options = mapOptionsService.getUserConfigurable();
     };
 
     // Option templates fire this function on click to raise event 'mapOptionChange'
