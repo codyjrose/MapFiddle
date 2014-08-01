@@ -46,7 +46,7 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
         map.options[option.name] = option.value;
     };
 
-    var setOption = function(option) {
+    var setMapOption = function(option) {
         switch (option.updateMethod) {
             case "mapProperty":
                 toggleProperty(option);
@@ -96,9 +96,10 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
 
     var toggleBindPopupToFeature = function(feature) {
         if (feature.popupEnabled) {
-            unbindPopupToFeature(feature);
-        } else {
             bindPopupToFeature(feature);
+
+        } else {
+            unbindPopupToFeature(feature);
         }
     };
 
@@ -106,7 +107,7 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
         initMap: initMap,
         getMap: getMap,
         getMapCenter: getMapCenter,
-        setMapOption: setOption,
+        setMapOption: setMapOption,
         toggleMapFeature: toggleMapFeature,
         toggleBindPopupToFeature: toggleBindPopupToFeature
     }

@@ -4,7 +4,7 @@
             <button class="btn btn-full-width" ng-click="broadcastChangedFeature(feature.name)">Add {{ feature.name }}</button>
             <div ng-show="feature.obj != null">
                 <label for="markerPopup">Include {{ feature.name }} popup</label>
-                <input id="markerPopup" type="checkbox" ng-model="popupEnabled" ng-checked="feature.popupEnabled" ng-change="broadcastChangedFeaturePopup(feature.name)">
+                <input id="markerPopup" type="checkbox" ng-model="feature.popupEnabled" ng-checked="feature.popupEnabled" ng-change="broadcastChangedFeaturePopup(feature.name)">
             </div>
         </div>
     </form>
