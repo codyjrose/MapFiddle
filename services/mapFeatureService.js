@@ -51,6 +51,10 @@ app.factory('mapFeatureService', ['$rootScope', 'mapService', function($rootScop
         return _.filter(getAll(), function(feature) { return feature.obj != null });
     };
 
+        var getAllUsedPopups = function () {
+        return _.filter(getAll(), function(feature) { return feature.popupEnabled });
+    };
+
     var broadcastChangedFeature = function(featureName) {
         lastUpdatedFeature = get(featureName);
         $rootScope.$broadcast('mapFeatureChange');
@@ -69,6 +73,7 @@ app.factory('mapFeatureService', ['$rootScope', 'mapService', function($rootScop
         set: set,
         get: get,
         getAll: getAll,
+        getAllUsedPopups: getAllUsedPopups,
         getAllUsed: getAllUsed,
         featureEnabled: featureEnabled,
         broadcastChangedFeature: broadcastChangedFeature,

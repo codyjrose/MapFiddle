@@ -13,6 +13,10 @@ app.controller("ViewCodeController", ['$scope', '$timeout', 'mapCodeService', fu
     $scope.$on('mapFeatureChange', function() {
         setMarkup();
     });
+    // Marker, circle, polygon has been added or removed, let everyone know.
+    $scope.$on('mapFeaturePopupChange', function() {
+        setMarkup();
+    });
     $scope.$on('mapMoveEnd', function() {
         setMarkup();
     });

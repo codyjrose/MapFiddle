@@ -82,7 +82,7 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', functio
         _.forIn(features, function(feature) {
             js += "        ";
             var options = feature.options();
-            js += "L." + feature.name + "(";
+            js += "var " + feature.name + " = L." + feature.name + "(";
 
             var index = 0;
             _.forIn(options, function(option, key) {
@@ -98,6 +98,17 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', functio
         return js;
     };
 
+    var getMapFeaturePopups = function() {
+        var js = "\n",
+            features = mapFeatureService.getAllUsedPopups();
+
+        _.forIn(features, function(feature) {
+            js += "        ";
+            js += feature.name + ".bindPopup(&quot;&lt;b&gt;Hello world&lt;/b&gt;&lt;br&gt;I&#39;m a popup attached to " + feature.name + "&quot;);\n";
+        });
+        return js;
+    };
+
     var getCodeView = function() {
         var html = "";
         html += staticBeginHtml;
@@ -105,6 +116,7 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', functio
         html += getMapOptions();
         html += staticInitMapJs;
         html += getMapFeatures();
+        html += getMapFeaturePopups();
         html += staticEndJs;
         html += staticEndHtml;
         return html;
