@@ -1,3 +1,7 @@
 <div class="panel-body">
-    Add events
+    <form role="form" class="">
+        <div class="form-group" ng-repeat="event in events">
+            <button class="btn btn-full-width" ng-click="broadcastChangedEvent(event.name)">Add {{ event.name }}</button>
+        </div>
+    </form>
 </div>
