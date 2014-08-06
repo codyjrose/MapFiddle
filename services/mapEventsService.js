@@ -5,7 +5,9 @@ app.factory('mapEventsService', ['$rootScope', 'mapService', function($rootScope
 
     events.data = [
         {
-            name: 'click event'
+            name: 'click event',
+            enabled: false,
+            leafletFunc: "popup"
         }
     ];
 
@@ -21,12 +23,14 @@ app.factory('mapEventsService', ['$rootScope', 'mapService', function($rootScope
 
     var broadcastChangedEvent = function(eventName) {
         lastUpdatedEvent = get(eventName);
-        $rootScope.$broadcast('mapFeaturePopupChange');
+        $rootScope.$broadcast('mapEventChange');
     };
 
     return {
         get: get,
         getAll: getAll,
-        broadcastChangedEvent: broadcastChangedEvent
+        broadcastChangedEvent: broadcastChangedEvent,
+        lastUpdatedEvent: function() { return lastUpdatedEvent }
+
     }
 }]);

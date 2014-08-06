@@ -1,4 +1,4 @@
-app.controller("ViewMapController", ['$scope', 'mapOptionsService', 'mapFeatureService', 'mapService', function($scope, mapOptionsService, mapFeatureService, mapService) {
+app.controller("ViewMapController", ['$scope', 'mapOptionsService', 'mapFeatureService','mapEventsService', 'mapService', function($scope, mapOptionsService, mapFeatureService, mapEventsService, mapService) {
     // Get map options object to create the map
     var optionsObject = {};
     _.forIn(mapOptionsService.getAllModified(), function(option) {
@@ -22,6 +22,12 @@ app.controller("ViewMapController", ['$scope', 'mapOptionsService', 'mapFeatureS
     $scope.$on('mapFeaturePopupChange', function() {
         var feature = mapFeatureService.lastUpdatedFeature();
         mapService.toggleBindPopupToFeature(feature);
+    });
+
+    // Marker, circle, polygon has been added or removed, let everyone know.
+    $scope.$on('mapEventChange', function() {
+        var event = mapEventsService.lastUpdatedEvent();
+        mapService.toggleMapEvent(event);
     });
 
     // The map has changed, update the options values (such as center and zoom level).
