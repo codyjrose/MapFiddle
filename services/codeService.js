@@ -33,7 +33,7 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEve
                         '        var osm = new L.TileLayer(options.url, options);\n' +
                         '        map.addLayer(osm);\n';
 
-    var staticEndJs =   '' +
+    var staticEndJs =
                         '    }\n' +
                         '    initialize();\n' +
                         '}());\n';
@@ -71,12 +71,12 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEve
                 js += "\n";
             }
         });
-        js += '        };\n';
+        js += "        };\n";
         return js;
     };
 
     var getMapFeatures = function() {
-        var js = "\n",
+        var js = "",
             features = mapFeatureService.getAllUsed();
 
         _.forIn(features, function(feature) {
@@ -95,18 +95,19 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEve
             });
             js += ").addTo(map);\n";
         });
-        return js;
+
+        return js == "" ? js : "\n" + js;
     };
 
     var getMapFeaturePopups = function() {
-        var js = "\n",
+        var js = "",
             features = mapFeatureService.getAllUsedPopups();
 
         _.forIn(features, function(feature) {
             js += "        ";
             js += feature.name + ".bindPopup(&quot;&lt;b&gt;Hello world&lt;/b&gt;&lt;br&gt;I&#39;m a popup attached to " + feature.name + "&quot;);\n";
         });
-        return js;
+        return js == "" ? js : "\n" + js;
     };
 
     var getMapEvents = function () {
@@ -124,7 +125,7 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEve
             js += "        map.on('click', onMapClick);\n";
 
         });
-        return js;
+        return js == "" ? js : "\n" + js;
     };
 
     var getCodeView = function() {
