@@ -21,6 +21,10 @@ app.factory('mapEventsService', ['$rootScope', 'mapService', function($rootScope
         return events.data;
     };
 
+    var getAllEnabled = function () {
+        return _.filter(getAll(), function(event) { return event.enabled });
+    };
+
     var broadcastChangedEvent = function(eventName) {
         lastUpdatedEvent = get(eventName);
         $rootScope.$broadcast('mapEventChange');
@@ -29,6 +33,7 @@ app.factory('mapEventsService', ['$rootScope', 'mapService', function($rootScope
     return {
         get: get,
         getAll: getAll,
+        getAllEnabled: getAllEnabled,
         broadcastChangedEvent: broadcastChangedEvent,
         lastUpdatedEvent: function() { return lastUpdatedEvent }
 

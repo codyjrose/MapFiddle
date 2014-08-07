@@ -21,5 +21,9 @@ app.controller("ViewCodeController", ['$scope', '$timeout', 'mapCodeService', fu
         setMarkup();
     });
 
+    $scope.$on('mapEventChange', function() {
+        setMarkup();
+    });
+
     setMarkup();
 }]);

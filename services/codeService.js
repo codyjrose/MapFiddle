@@ -1,5 +1,5 @@
 // Responsible for outputting map HTML + Javascript
-app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', function(mapOptionsService, mapFeatureService) {
+app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEventsService', function(mapOptionsService, mapFeatureService, mapEventsService) {
     var showCode = false;
 
     //region Static Code
@@ -109,6 +109,24 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', functio
         return js;
     };
 
+    var getMapEvents = function () {
+        var js = "",
+            events = mapEventsService.getAllEnabled();
+        
+        _.forIn(events, function(event) {
+            js += "        var popup = L.popup();\n";
+            js += "        function onMapClick(e) {\n";
+            js += "            popup\n";
+            js += "                .setLatLng(e.latlng)\n";
+            js += "                .setContent('You clicked the map at ' + e.latlng.toString())\n";
+            js += "                .openOn(map);\n";
+            js += "            }\n";
+            js += "        map.on('click', onMapClick);\n";
+
+        });
+        return js;
+    };
+
     var getCodeView = function() {
         var html = "";
         html += staticBeginHtml;
@@ -117,6 +135,7 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', functio
         html += staticInitMapJs;
         html += getMapFeatures();
         html += getMapFeaturePopups();
+        html += getMapEvents();
         html += staticEndJs;
         html += staticEndHtml;
         return html;
