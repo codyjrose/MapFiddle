@@ -114,16 +114,22 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEve
         var js = "",
             events = mapEventsService.getAllEnabled();
         
-        _.forIn(events, function(event) {
-            js += "        var popup = L.popup();\n";
-            js += "        function onMapClick(e) {\n";
-            js += "            popup\n";
-            js += "                .setLatLng(e.latlng)\n";
-            js += "                .setContent('You clicked the map at ' + e.latlng.toString())\n";
-            js += "                .openOn(map);\n";
-            js += "            }\n";
-            js += "        map.on('click', onMapClick);\n";
+        _.forIn(events, function(event, key) {
+            var popupName = event.name + "Popup";
+            var eventFunctionName = event.name + "Event";
 
+            js += "        var " + popupName + " = L.popup();\n";
+            js += "        function " + eventFunctionName + "(e) {\n";
+            js += "            " +  popupName + "\n";
+            js += "                .setLatLng(" + event.popupOptions.latLng + ")\n";
+            js += "                .setContent('" + event.popupOptions.content + "' + " + event.popupOptions.eventResultContent + ")\n";
+            js += "                .openOn(map);\n";
+            js += "        }\n";
+            js += "        map.on('" + event.name + "', " + eventFunctionName + ");\n";
+
+            if (parseInt(key) < events.length - 1) {
+                js += "\n";
+            }
         });
         return js == "" ? js : "\n" + js;
     };
