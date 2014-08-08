@@ -24,13 +24,6 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
         });
     };
 
-    function onMapClick(e) {
-        L.popup()
-            .setLatLng(getMapCenter())
-            .setContent("The center of the map is " + getMapCenter().toString())
-            .openOn(map);
-    }
-
     // For options that are properties of the map. Ref: http://leafletjs.com/reference.html#map-properties
     var toggleProperty = function(option) {
         if (option.value) {
@@ -110,12 +103,17 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
         }
     };
 
-    var enableEvent = function() {
-        map.on('click', onMapClick);
+    var enableEvent = function(event) {
+        map.on(event.name, function(e) {
+            L[event.method]()
+                .setLatLng(getMapCenter())
+                .setContent(event.popupOptions.content + "<b>" + "eval eventResultContent" + "</b>!")
+                .openOn(map);
+        });
     };
 
-    var disableEvent = function() {
-        map.off('click');
+    var disableEvent = function(event) {
+        map.off(event.name);
     };
 
     var toggleMapEvent = function(event) {
