@@ -9,19 +9,8 @@ app.factory('mapEventsService', ['$rootScope', 'mapService', function($rootScope
             label: "click event",
             popupOptions: {
                 content: "The \"click\" event fired. You clicked the map at ",
-                eventResultContent: "e.latlng.toString()",
+                eventResultContent: "e.latlng",
                 latLng: "e.latlng"
-            },
-            enabled: false,
-            method: "popup"
-        },
-        {
-            name: "zoomend",
-            label: "zoom end event",
-            popupOptions: {
-                content: "The \"zoomend\" event fired. The new zoom level is ",
-                eventResultContent: "e.target.getZoom()",
-                latLng: "e.target.getCenter()"
             },
             enabled: false,
             method: "popup"

@@ -105,9 +105,17 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
 
     var enableEvent = function(event) {
         map.on(event.name, function(e) {
+            var latLng;
+
+            if (event.name == "click") {
+                latLng = e.latlng;
+            } else {
+                latLng = getMapCenter();
+            }
+
             L[event.method]()
-                .setLatLng(getMapCenter())
-                .setContent(event.popupOptions.content + "<b>" + "eval eventResultContent" + "</b>!")
+                .setLatLng(latLng)
+                .setContent(event.popupOptions.content + "<b>" + latLng.lat + "," + latLng.lng + "</b>!")
                 .openOn(map);
         });
     };
