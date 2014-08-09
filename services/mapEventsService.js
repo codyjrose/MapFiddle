@@ -1,4 +1,4 @@
-app.factory('mapEventsService', ['$rootScope', 'mapService', function($rootScope, mapService) {
+app.factory('mapEventsService', ['$rootScope', function($rootScope) {
 
     var lastUpdatedEvent = {},
         events = {};
@@ -12,6 +12,9 @@ app.factory('mapEventsService', ['$rootScope', 'mapService', function($rootScope
                 eventResultContent: "e.latlng",
                 latLng: "e.latlng"
             },
+            eventLatLng: function(e) {
+                return { lat: e.latlng.lat, lng: e.latlng.lng }
+            },
             enabled: false,
             method: "popup"
         },
@@ -22,6 +25,9 @@ app.factory('mapEventsService', ['$rootScope', 'mapService', function($rootScope
                 content: "The \"moveend\" event fired. The new map center is ",
                 eventResultContent: "e.target.getCenter().toString()",
                 latLng: "e.target.getCenter()"
+            },
+            eventLatLng: function(e) {
+                return { lat: e.target.getCenter().lat, lng: e.target.getCenter().lng }
             },
             enabled: false,
             method: "popup"
