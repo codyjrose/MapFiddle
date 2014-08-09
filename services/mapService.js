@@ -6,9 +6,23 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
         return map
     };
 
+    var getZoom = function() {
+        return map.getZoom();
+    };
+
     var getMapCenter = function() {
         var center = map.getCenter();
         return [ center.lat, center.lng ];
+    };
+
+    var getLatLngInCurrentBounds = function() {
+        var ne = map.getBounds().getNorthEast();
+        var sw = map.getBounds().getSouthWest();
+
+        var lat = Math.random() * (ne.lat - sw.lat) + sw.lat;
+        var lng = Math.random() * (ne.lng - sw.lng) + sw.lng;
+
+        return [lat, lng];
     };
 
     var initMap = function (options) {
@@ -145,6 +159,8 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
         initMap: initMap,
         getMap: getMap,
         getMapCenter: getMapCenter,
+        getZoom: getZoom,
+        getLatLngInCurrentBounds: getLatLngInCurrentBounds,
         setMapOption: setMapOption,
         toggleMapFeature: toggleMapFeature,
         toggleBindPopupToFeature: toggleBindPopupToFeature,

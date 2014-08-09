@@ -16,9 +16,14 @@ app.factory('mapFeatureService', ['$rootScope', 'mapService', function($rootScop
             name: 'circle',
             obj: null,
             options: function() {
-                var radius = 500;
+                var zoom = mapService.getZoom();
+                var radius = 500000;
 
-                return [ mapService.getMapCenter(), radius, { color: 'red', fillColor: '#f03', fillOpacity: 0.5 } ]
+                if (zoom != 0) {
+                    radius = radius / Math.pow(2, (zoom * .7));
+                }
+
+                return [ mapService.getLatLngInCurrentBounds(), radius, { color: 'red', fillColor: '#f03', fillOpacity: 0.5 } ]
             },
             popupEnabled: false
         },
@@ -26,7 +31,11 @@ app.factory('mapFeatureService', ['$rootScope', 'mapService', function($rootScop
             name: 'polygon',
             obj: null,
             options: function () {
-                return [[ mapService.getMapCenter(), [51.503, -0.06], [51.51, -0.047] ]]
+                var exteriorRing = mapService.getLatLngInCurrentBounds();
+                var hole1 = mapService.getLatLngInCurrentBounds();
+                var hole2 = mapService.getLatLngInCurrentBounds();
+
+                return [[ exteriorRing, hole1, hole2 ]]
             },
             popupEnabled: false
         }
