@@ -6,7 +6,7 @@ app.factory('mapEventsService', ['$rootScope', 'mapService', function($rootScope
     events.data = [
         {
             name: "click",
-            label: "click event",
+            label: "\"click\" event",
             popupOptions: {
                 content: "The \"click\" event fired. You clicked the map at ",
                 eventResultContent: "e.latlng",
@@ -17,7 +17,7 @@ app.factory('mapEventsService', ['$rootScope', 'mapService', function($rootScope
         },
         {
             name: "moveend",
-            label: "move end event",
+            label: "\"moveend\" event",
             popupOptions: {
                 content: "The \"moveend\" event fired. The new map center is ",
                 eventResultContent: "e.target.getCenter().toString()",

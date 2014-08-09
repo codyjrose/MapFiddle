@@ -105,12 +105,18 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
 
     var enableEvent = function(event) {
         map.on(event.name, function(e) {
-            var latLng;
+            var latLng = {
+                lat: 0,
+                lng: 0
+            };
 
             if (event.name == "click") {
-                latLng = e.latlng;
+                latLng.lat = e.latlng.lat;
+                latLng.lng = e.latlng.lng;
             } else {
-                latLng = getMapCenter();
+                var center = getMapCenter();
+                latLng.lat = center[0];
+                latLng.lng = center[1];
             }
 
             L[event.method]()
