@@ -15,7 +15,7 @@
         var map;
         function initialize() {
             var options = {
-                center: [51.505,-0.09],
+                center: [51.49992720552339,-0.10419845581054688],
                 zoom: 13,
                 url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 attribution: 'Map data © OpenStreetMap contributors'
@@ -24,30 +24,13 @@
             var osm = new L.TileLayer(options.url, options);
             map.addLayer(osm);
 
-            var clickPopup = L.popup();
-            function clickEvent(e) {
-                clickPopup
-                        .setLatLng(e.latlng)
-                        .setContent('The "click" event fired. You clicked the map at ' + e.latlng.toString())
-                        .openOn(map);
-            }
-            map.on('click', clickEvent);
-            var zoomendPopup = L.popup();
-            function zoomendEvent(e) {
-                zoomendPopup
-                        .setLatLng(e.target.getCenter())
-                        .setContent('The "zoomend" event fired. The new zoom level is ' + e.target.getZoom())
-                        .openOn(map);
-            }
-            map.on('zoomend', zoomendEvent);
-            var moveendPopup = L.popup();
-            function moveendEvent(e) {
-                moveendPopup
-                        .setLatLng(e.target.getCenter())
-                        .setContent('The "moveend" event fired. The new map center is ' + e.target.getCenter().toString())
-                        .openOn(map);
-            }
-            map.on('moveend', moveendEvent);
+            var marker = L.marker([51.49992720552339,-0.10419845581054688]).addTo(map);
+            var circle = L.circle([51.52467652062278,-0.0916005134348552], 911.1650307976637, {"color":"red","fillColor":"#f03","fillOpacity":0.5}).addTo(map);
+            var polygon = L.polygon([[51.54391771938071,0.05720691290150626],[51.4781727332162,-0.2320583352434369],[51.531832770946835,-0.09744359681519654]]).addTo(map);
+
+            marker.bindPopup("<b>Hello world</b><br>I'm a popup attached to marker");
+            circle.bindPopup("<b>Hello world</b><br>I'm a popup attached to circle");
+            polygon.bindPopup("<b>Hello world</b><br>I'm a popup attached to polygon");
         }
         initialize();
     }());

@@ -24,3 +24,10 @@ body {
 .force-square {
     border-radius: 0 !important;
 }
+div.panel-body ol {
+    padding-left: 20px;
+}
+
+.no-outline:focus {
+    outline: none;
+}
