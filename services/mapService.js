@@ -15,6 +15,20 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
         return [ center.lat, center.lng ];
     };
 
+    var addLogo = function() {
+        var logo = L.control({position: 'bottomleft'});
+
+        logo.onAdd = function (map) {
+            var branding = L.DomUtil.create('h3', 'brand legend')
+
+            //branding.innerHTML = "<img src='assets/logo.jpg' height='50'/>"
+            branding.innerHTML += "<span id='logo'><i class='fa fa-map-marker'></i> MapFiddle</span>";
+            return branding;
+        };
+
+        logo.addTo(map);
+    };
+
     var getLatLngInCurrentBounds = function() {
         var ne = map.getBounds().getNorthEast();
         var sw = map.getBounds().getSouthWest();
@@ -37,17 +51,8 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
             $rootScope.$broadcast('mapMoveEnd');
         });
 
-        var legend = L.control({position: 'bottomleft'});
+        addLogo();
 
-        legend.onAdd = function (map) {
-            var branding = L.DomUtil.create('h3', 'brand legend')
-
-            //branding.innerHTML = "<img src='assets/logo.jpg' height='50'/>"
-            branding.innerHTML += "<span id='logo'><i class='fa fa-map-marker'></i> MapFiddle</span>";
-            return branding;
-        };
-
-        legend.addTo(map);
     };
 
     // For options that are properties of the map. Ref: http://leafletjs.com/reference.html#map-properties
