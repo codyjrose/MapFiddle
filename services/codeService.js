@@ -1,5 +1,5 @@
 // Responsible for outputting map HTML + Javascript
-app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', function(mapOptionsService, mapFeatureService) {
+app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEventsService', function(mapOptionsService, mapFeatureService, mapEventsService) {
     var showCode = false;
 
     //region Static Code
@@ -23,15 +23,18 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', functio
         '&lt;/body&gt;\n' +
         '&lt;/html&gt;\n';
 
-    var staticBeginJs = '(function() {\n' +
+    var staticBeginJs = '' +
+                        '(function() {\n' +
                         '    var map;\n' +
                         '    function initialize() {\n';
 
-    var staticInitMapJs =     '        map = new L.Map("map", options);\n' +
+    var staticInitMapJs ='' +
+                        '        map = new L.Map("map", options);\n' +
                         '        var osm = new L.TileLayer(options.url, options);\n' +
                         '        map.addLayer(osm);\n';
 
-    var staticEndJs =   '    }\n' +
+    var staticEndJs =
+                        '    }\n' +
                         '    initialize();\n' +
                         '}());\n';
 
@@ -68,18 +71,18 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', functio
                 js += "\n";
             }
         });
-        js += '        };\n';
+        js += "        };\n";
         return js;
     };
 
     var getMapFeatures = function() {
-        var js = "\n",
+        var js = "",
             features = mapFeatureService.getAllUsed();
 
         _.forIn(features, function(feature) {
             js += "        ";
             var options = feature.options();
-            js += "L." + feature.name + "(";
+            js += "var " + feature.name + " = L." + feature.name + "(";
 
             var index = 0;
             _.forIn(options, function(option, key) {
@@ -92,7 +95,43 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', functio
             });
             js += ").addTo(map);\n";
         });
-        return js;
+
+        return js == "" ? js : "\n" + js;
+    };
+
+    var getMapFeaturePopups = function() {
+        var js = "",
+            features = mapFeatureService.getAllUsedPopups();
+
+        _.forIn(features, function(feature) {
+            js += "        ";
+            js += feature.name + ".bindPopup(&quot;&lt;b&gt;Hello world&lt;/b&gt;&lt;br&gt;I&#39;m a popup attached to " + feature.name + "&quot;);\n";
+        });
+        return js == "" ? js : "\n" + js;
+    };
+
+    var getMapEvents = function () {
+        var js = "",
+            events = mapEventsService.getAllEnabled();
+        
+        _.forIn(events, function(event, key) {
+            var popupName = event.name + "Popup";
+            var eventFunctionName = event.name + "Event";
+
+            js += "        var " + popupName + " = L.popup();\n";
+            js += "        function " + eventFunctionName + "(e) {\n";
+            js += "            " +  popupName + "\n";
+            js += "                .setLatLng(" + event.popupOptions.latLng + ")\n";
+            js += "                .setContent('" + event.popupOptions.content + "' + " + event.popupOptions.eventResultContent + ")\n";
+            js += "                .openOn(map);\n";
+            js += "        }\n";
+            js += "        map.on('" + event.name + "', " + eventFunctionName + ");\n";
+
+            if (parseInt(key) < events.length - 1) {
+                js += "\n";
+            }
+        });
+        return js == "" ? js : "\n" + js;
     };
 
     var getCodeView = function() {
@@ -102,6 +141,8 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', functio
         html += getMapOptions();
         html += staticInitMapJs;
         html += getMapFeatures();
+        html += getMapFeaturePopups();
+        html += getMapEvents();
         html += staticEndJs;
         html += staticEndHtml;
         return html;

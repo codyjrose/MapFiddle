@@ -15,7 +15,6 @@
         var map;
         function initialize() {
             var options = {
-                zoomControl: false,
                 center: [51.505,-0.09],
                 zoom: 13,
                 url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -25,9 +24,30 @@
             var osm = new L.TileLayer(options.url, options);
             map.addLayer(osm);
 
-            L.marker([51.505,-0.09]).addTo(map);
-            L.circle([51.505,-0.09], 500, {"color":"red","fillColor":"#f03","fillOpacity":0.5}).addTo(map);
-            L.polygon([[51.505,-0.09],[51.503,-0.06],[51.51,-0.047]]).addTo(map);
+            var clickPopup = L.popup();
+            function clickEvent(e) {
+                clickPopup
+                        .setLatLng(e.latlng)
+                        .setContent('The "click" event fired. You clicked the map at ' + e.latlng.toString())
+                        .openOn(map);
+            }
+            map.on('click', clickEvent);
+            var zoomendPopup = L.popup();
+            function zoomendEvent(e) {
+                zoomendPopup
+                        .setLatLng(e.target.getCenter())
+                        .setContent('The "zoomend" event fired. The new zoom level is ' + e.target.getZoom())
+                        .openOn(map);
+            }
+            map.on('zoomend', zoomendEvent);
+            var moveendPopup = L.popup();
+            function moveendEvent(e) {
+                moveendPopup
+                        .setLatLng(e.target.getCenter())
+                        .setContent('The "moveend" event fired. The new map center is ' + e.target.getCenter().toString())
+                        .openOn(map);
+            }
+            map.on('moveend', moveendEvent);
         }
         initialize();
     }());

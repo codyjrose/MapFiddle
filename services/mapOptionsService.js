@@ -1,9 +1,5 @@
 app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
-    /**
-     * Leaflet map options
-     * @type {{zoom: {value: number, min: number, max: number, type: string, label: string, required: boolean, default: number, inputType: string}, center: {value: number[], type: string, label: string, required: boolean, default: number[], inputType: string}, layers: {value: *, type: string, required: boolean, inputType: string}}}
-     */
-    var lastUpdatedOption = {},
+    var lastUpdatedOption = {},     // Tracks the last updated option
         leafletOsmOptions = [
             {
                 name: "zoomControl",
@@ -140,20 +136,19 @@ app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
                 required: true,
                 inputType: false
             }
-        ],
-        mapOptions = {};
-
+        ],  // The main store for all leaflet api options
+        mapOptions = {};            // The object with the data property holds the actual map options
         mapOptions.data = leafletOsmOptions;
 
     /**
-     * Returns a map option value
-     * @returns {object}
+     * Returns a map option value or false if no value is found.
+     * @param optionName
+     * @returns {*}
      */
-    var get = function (option) {
-        if (mapOptions.data.hasOwnProperty(option) && mapOptions.data[option].hasOwnProperty('value')) {
-            return mapOptions.data[option].value;
-        }
-        return false;
+    var get = function (optionName) {
+        try {
+            return _.find(getAll(), { name: optionName });
+        } catch (e) {}
     };
 
     /**
@@ -165,7 +160,7 @@ app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
     };
 
     /**
-     * Returns all map options that are required for map creation as well as any options that have been modified
+     * Returns all map options that are required for map creation as well as any options that have been modified.
      * @returns {object}
      */
     var getAllModified = function () {
@@ -179,49 +174,42 @@ app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
     var getAllWithStateMethod = function () {
         return _.filter(getAll(), function(option) { return option.hasOwnProperty("stateMethod") });
     };
+
     /**
-     * Gets all options that can be used in the sidebar
+     * Gets all options that are displayed to the user to configure.
      */
-    var getSidebar = function() {
+    var getUserConfigurable = function() {
         return _.filter(getAll(), function(opt) { return opt.inputType != false });
     };
 
     /**
      * Sets a value in the map options object. This is the one true way to set the value of map options.
-     * @param {string} key The map option to set.
+     * @param {string} optionName The map option to set.
      * @param {object} value the map options new value.
      */
-    var set = function(option, value) {
+    var set = function(optionName, value) {
+        // Modify the value if needed.
         if (value instanceof L.LatLng) {
             value = [value.lat, value.lng];
         }
-
-        try {
-            _.find(getAll(), { name: option }).value = value;
-        } catch (e) {}
+        // Set the value of the option
+        get(optionName).value = value;
     };
 
     /**
-     * Pass in an object of map options to set multiple map options at once.
-     * @param {object} Object containing a group of map objects.
+     * Send out broadcast of a changed option.
+     * @param {string} optionName
      */
-    var setMany = function(options) {
-        for(var option in options) {
-            set(option, options[option]);
-        }
-    };
-
-    var broadcastChangedOption = function(option) {
-        lastUpdatedOption = option;
+    var broadcastChangedOption = function(optionName) {
+        lastUpdatedOption = get(optionName);
         $rootScope.$broadcast('mapOptionChange');
     };
 
     return {
-        get: get,
-        getAllModified: getAllModified,
-        getSideBar: getSidebar,
-        getAllWithStateMethod: getAllWithStateMethod,
         set: set,
+        getAllModified: getAllModified,
+        getUserConfigurable: getUserConfigurable,
+        getAllWithStateMethod: getAllWithStateMethod,
         broadcastChangedOption: broadcastChangedOption,
         lastUpdatedOption: function() { return lastUpdatedOption }
     }
