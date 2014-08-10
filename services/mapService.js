@@ -37,12 +37,13 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
             $rootScope.$broadcast('mapMoveEnd');
         });
 
-        var legend = L.control({position: 'topright'});
+        var legend = L.control({position: 'bottomleft'});
 
         legend.onAdd = function (map) {
             var branding = L.DomUtil.create('h3', 'brand legend')
 
-            branding.innerHTML = "MapFiddle";
+            //branding.innerHTML = "<img src='assets/logo.jpg' height='50'/>"
+            branding.innerHTML += "<span id='logo'><i class='fa fa-map-marker'></i> MapFiddle</span>";
             return branding;
         };
 

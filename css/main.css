@@ -11,8 +11,8 @@ body {
     bottom: 0;
     overflow: hidden;
 }
-#theNav {
-    padding-top: 100px;
+#logo {
+    opacity: .7
 }
 
 .appfront {
