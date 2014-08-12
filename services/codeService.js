@@ -24,7 +24,9 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEve
     staticBeginJs =         '"use strict";\n' +
                             '(function() {\n',
 
-    staticCreateMap =       '  var map = new L.Map("map", options);\n' +
+    staticCreateMap =       '  // Create map. ' +
+                            '  // First param is id of div that will contain the map. Second param is desired map options object \n' +
+                            '  var map = new L.Map("map", options);\n' +
                             '  var osm = new L.TileLayer(options.url, options);\n' +
                             '  map.addLayer(osm);\n',
 
@@ -33,7 +35,8 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEve
     //endregion
 
     var getMapOptions = function() {
-        var js = '  var options = {\n',
+        var js = '  // Create map options object\n' +
+                 '  var options = {\n',
             options = mapOptionsService.getAllModified();
 
         _.forIn(options, function(option, key) {
@@ -71,6 +74,12 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEve
         var js = "",
             features = mapFeatureService.getAllUsed();
 
+        if (features.length) {
+            js += "\n   // Add features\n";
+        } else {
+            return "";
+        }
+
         _.forIn(features, function(feature) {
             js += "  ";
             var options = feature.options();
@@ -88,23 +97,35 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEve
             js += ").addTo(map);\n";
         });
 
-        return js == "" ? js : "\n" + js;
+        return js;
     };
 
     var getMapFeaturePopups = function() {
         var js = "",
-            features = mapFeatureService.getAllUsedPopups();
+            popups = mapFeatureService.getAllUsedPopups();
 
-        _.forIn(features, function(feature) {
+        if (popups.length) {
+            js += "\n  // Add feature popups\n"
+        } else {
+            return "";
+        }
+
+        _.forIn(popups, function(popup) {
             js += "  ";
-            js += feature.name + ".bindPopup(&quot;&lt;b&gt;Hello world&lt;/b&gt;&lt;br&gt;I&#39;m a popup attached to " + feature.name + "&quot;);\n";
+            js += popup.name + ".bindPopup(&quot;&lt;b&gt;Hello world&lt;/b&gt;&lt;br&gt;I&#39;m a popup attached to " + popup.name + "&quot;);\n";
         });
-        return js == "" ? js : "\n" + js;
+        return js;
     };
 
     var getMapEvents = function () {
         var js = "",
             events = mapEventsService.getAllEnabled();
+
+        if (events.length) {
+            js += "\n  // Add map events\n";
+        } else {
+            return "";
+        }
         
         _.forIn(events, function(event, key) {
             var popupName = event.name + "Popup";
@@ -123,7 +144,8 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEve
                 js += "\n";
             }
         });
-        return js == "" ? js : "\n" + js;
+
+        return js;
     };
 
     var getCodeView = function() {

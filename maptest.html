@@ -13,21 +13,29 @@
 <script>
     "use strict";
     (function() {
+        // Create map options object
         var options = {
+            zoomControl: false,
+            attributionControl: false,
             center: [51.505,-0.09],
             zoom: 13,
             url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             attribution: 'Map data © OpenStreetMap contributors'
         };
+        // Create map.   // First param is id of div that will contain the map. Second param is desired map options object
         var map = new L.Map("map", options);
         var osm = new L.TileLayer(options.url, options);
         map.addLayer(osm);
 
+        // Add features
         var marker = L.marker([51.505,-0.09]).addTo(map);
-        var circle = L.circle([51.5784762088831,-0.016858672713198075], 911.1650307976637, {"color":"red","fillColor":"#f03","fillOpacity":0.5}).addTo(map);
+        var circle = L.circle([51.5516463305331,-0.17880804539408324], 911.1650307976637, {"color":"red","fillColor":"#f03","fillOpacity":0.5}).addTo(map);
 
+        // Add feature popups
         marker.bindPopup("<b>Hello world</b><br>I'm a popup attached to marker");
+        circle.bindPopup("<b>Hello world</b><br>I'm a popup attached to circle");
 
+        // Add map events
         var clickPopup = L.popup();
         function clickEvent(e) {
             clickPopup
