@@ -1,10 +1,9 @@
 // Responsible for outputting map HTML + Javascript
 app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEventsService', function(mapOptionsService, mapFeatureService, mapEventsService) {
-    var showCode = false;
+    var showCode = false,
 
     //region Static Code
-    var staticBeginHtml = '' +
-        '&lt;!DOCTYPE html&gt;\n' +
+    staticBeginHtml = '&lt;!DOCTYPE html&gt;\n' +
         '&lt;html&gt;\n' +
         '&lt;head&gt;\n' +
         '&lt;title&gt;Simple Map&lt;/title&gt;\n' +
@@ -16,36 +15,29 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEve
         '&lt;/head&gt;\n' +
         '&lt;body&gt;\n' +
         '&lt;div id="map"&gt;&lt;/div&gt;\n' +
-        '&lt;script&gt;\n';
+        '&lt;script&gt;\n',
 
-    var staticEndHtml = '' +
-        '&lt;/script&gt;\n' +
+    staticEndHtml = '&lt;/script&gt;\n' +
         '&lt;/body&gt;\n' +
-        '&lt;/html&gt;\n';
+        '&lt;/html&gt;\n',
 
-    var staticBeginJs = '' +
-                        '(function() {\n' +
-                        '    var map;\n' +
-                        '    function initialize() {\n';
+    staticBeginJs =         '"use strict";\n' +
+                            '(function() {\n',
 
-    var staticInitMapJs ='' +
-                        '        map = new L.Map("map", options);\n' +
-                        '        var osm = new L.TileLayer(options.url, options);\n' +
-                        '        map.addLayer(osm);\n';
+    staticCreateMap =       '  var map = new L.Map("map", options);\n' +
+                            '  var osm = new L.TileLayer(options.url, options);\n' +
+                            '  map.addLayer(osm);\n',
 
-    var staticEndJs =
-                        '    }\n' +
-                        '    initialize();\n' +
-                        '}());\n';
+    staticEndJs =           '}());\n';
 
     //endregion
 
     var getMapOptions = function() {
-        var js = '        var options = {\n',
+        var js = '  var options = {\n',
             options = mapOptionsService.getAllModified();
 
         _.forIn(options, function(option, key) {
-            js += "            ";
+            js += "    ";
 
             switch (option.type) {
                 case "object":
@@ -71,7 +63,7 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEve
                 js += "\n";
             }
         });
-        js += "        };\n";
+        js += "  };\n";
         return js;
     };
 
@@ -80,7 +72,7 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEve
             features = mapFeatureService.getAllUsed();
 
         _.forIn(features, function(feature) {
-            js += "        ";
+            js += "  ";
             var options = feature.options();
             js += "var " + feature.name + " = L." + feature.name + "(";
 
@@ -104,7 +96,7 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEve
             features = mapFeatureService.getAllUsedPopups();
 
         _.forIn(features, function(feature) {
-            js += "        ";
+            js += "  ";
             js += feature.name + ".bindPopup(&quot;&lt;b&gt;Hello world&lt;/b&gt;&lt;br&gt;I&#39;m a popup attached to " + feature.name + "&quot;);\n";
         });
         return js == "" ? js : "\n" + js;
@@ -118,14 +110,14 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEve
             var popupName = event.name + "Popup";
             var eventFunctionName = event.name + "Event";
 
-            js += "        var " + popupName + " = L.popup();\n";
-            js += "        function " + eventFunctionName + "(e) {\n";
-            js += "            " +  popupName + "\n";
-            js += "                .setLatLng(" + event.popupOptions.latLng + ")\n";
-            js += "                .setContent('" + event.popupOptions.content + "' + " + event.popupOptions.eventResultContent + ")\n";
-            js += "                .openOn(map);\n";
-            js += "        }\n";
-            js += "        map.on('" + event.name + "', " + eventFunctionName + ");\n";
+            js += "  var " + popupName + " = L.popup();\n";
+            js += "  function " + eventFunctionName + "(e) {\n";
+            js += "    " +  popupName + "\n";
+            js += "      .setLatLng(" + event.popupOptions.latLng + ")\n";
+            js += "      .setContent('" + event.popupOptions.content + "' + " + event.popupOptions.eventResultContent + ")\n";
+            js += "      .openOn(map);\n";
+            js += "  }\n";
+            js += "  map.on('" + event.name + "', " + eventFunctionName + ");\n";
 
             if (parseInt(key) < events.length - 1) {
                 js += "\n";
@@ -135,17 +127,19 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEve
     };
 
     var getCodeView = function() {
-        var html = "";
-        html += staticBeginHtml;
-        html += staticBeginJs;
-        html += getMapOptions();
-        html += staticInitMapJs;
-        html += getMapFeatures();
-        html += getMapFeaturePopups();
-        html += getMapEvents();
-        html += staticEndJs;
-        html += staticEndHtml;
-        return html;
+        var code = [];
+
+        code.push(staticBeginHtml);
+        code.push(staticBeginJs);
+        code.push(getMapOptions());
+        code.push(staticCreateMap);
+        code.push(getMapFeatures());
+        code.push(getMapFeaturePopups());
+        code.push(getMapEvents());
+        code.push(staticEndJs);
+        code.push(staticEndHtml);
+
+        return code.join("");
     };
 
     var toggleShowCode = function() {
