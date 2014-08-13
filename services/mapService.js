@@ -3,19 +3,6 @@ app.factory('mapService', ['$rootScope', function ($rootScope) {
 
     var map;
 
-    var getMap = function () {
-        return map;
-    };
-
-    var getZoom = function () {
-        return map.getZoom();
-    };
-
-    var getMapCenter = function () {
-        var center = map.getCenter();
-        return [ center.lat, center.lng ];
-    };
-
     var addLogo = function () {
         var logo = L.control({position: 'bottomleft'});
 
@@ -30,13 +17,10 @@ app.factory('mapService', ['$rootScope', function ($rootScope) {
         logo.addTo(map);
     };
 
-    var getLatLngInCurrentBounds = function () {
-        var ne = map.getBounds().getNorthEast(),
-            sw = map.getBounds().getSouthWest(),
-            lat = Math.random() * (ne.lat - sw.lat) + sw.lat,
-            lng = Math.random() * (ne.lng - sw.lng) + sw.lng;
-
-        return [lat, lng];
+    var addMoveEndEvent = function () {
+        map.on('moveend', function () {
+            $rootScope.$broadcast('mapMoveEnd');
+        });
     };
 
     var initMap = function (options) {
@@ -49,14 +33,33 @@ app.factory('mapService', ['$rootScope', function ($rootScope) {
 
         map.addLayer(osm);
 
-        map.on('moveend', function () {
-            $rootScope.$broadcast('mapMoveEnd');
-        });
-
+        addMoveEndEvent();
         addLogo();
-
     };
 
+    var getMap = function () {
+        return map;
+    };
+
+    var getZoom = function () {
+        return map.getZoom();
+    };
+
+    var getMapCenter = function () {
+        var center = map.getCenter();
+        return [ center.lat, center.lng ];
+    };
+
+    var getLatLngInCurrentBounds = function () {
+        var ne = map.getBounds().getNorthEast(),
+            sw = map.getBounds().getSouthWest(),
+            lat = Math.random() * (ne.lat - sw.lat) + sw.lat,
+            lng = Math.random() * (ne.lng - sw.lng) + sw.lng;
+
+        return [lat, lng];
+    };
+
+    // Properties
     // For options that are properties of the map. Ref: http://leafletjs.com/reference.html#map-properties
     var toggleProperty = function (option) {
         if (option.value) {
@@ -95,6 +98,7 @@ app.factory('mapService', ['$rootScope', function ($rootScope) {
         }
     };
 
+    // Features
     var addFeature = function (feature) {
         feature.obj = L[feature.name]
             .apply(null, feature.options())
@@ -135,6 +139,7 @@ app.factory('mapService', ['$rootScope', function ($rootScope) {
         }
     };
 
+    // Events
     var enableEvent = function (event) {
         map.on(event.name, function (e) {
             var latLng = event.eventLatLng(e);
@@ -148,6 +153,11 @@ app.factory('mapService', ['$rootScope', function ($rootScope) {
 
     var disableEvent = function (event) {
         map.off(event.name);
+
+        // Need to make sure moveend isn't turned off for the background map..
+        if (event.name === "moveend") {
+            addMoveEndEvent();
+        }
     };
 
     var toggleMapEvent = function (event) {
