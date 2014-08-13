@@ -24,8 +24,8 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEve
     staticBeginJs =         '"use strict";\n' +
                             '(function() {\n',
 
-    staticCreateMap =       '  // Create map. ' +
-                            '  // First param is id of div that will contain the map. Second param is desired map options object \n' +
+    staticCreateMap =       '\n  // Create map.\n' +
+                            '  // First param is id of div that will contain the map. Second param is the map options object \n' +
                             '  var map = new L.Map("map", options);\n' +
                             '  var osm = new L.TileLayer(options.url, options);\n' +
                             '  map.addLayer(osm);\n',
@@ -150,7 +150,6 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEve
 
     var getCodeView = function() {
         var code = [];
-
         code.push(staticBeginHtml);
         code.push(staticBeginJs);
         code.push(getMapOptions());
