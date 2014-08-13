@@ -40,6 +40,8 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
     };
 
     var initMap = function (options) {
+        L.Icon.Default.imagePath = 'assets/leaflet/';
+
         map = new L.Map('map', options);
 
         // create the tile layer with correct attribution
