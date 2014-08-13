@@ -1,4 +1,4 @@
-// Responsible for outputting map HTML + Javascript
+// Responsible for the map code inside the HTML + Javascript modal.
 app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEventsService', function (mapOptionsService, mapFeatureService, mapEventsService) {
     "use strict";
 
