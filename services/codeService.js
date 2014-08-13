@@ -1,66 +1,66 @@
 // Responsible for outputting map HTML + Javascript
-app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEventsService', function(mapOptionsService, mapFeatureService, mapEventsService) {
+app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEventsService', function (mapOptionsService, mapFeatureService, mapEventsService) {
+    "use strict";
+
     var showCode = false,
 
-    //region Static Code
-    staticBeginHtml = '&lt;!DOCTYPE html&gt;\n' +
-        '&lt;html&gt;\n' +
-        '&lt;head&gt;\n' +
-        '&lt;title&gt;Simple Map&lt;/title&gt;\n' +
-        '&lt;meta name="viewport" content="initial-scale=1.0, user-scalable=no"&gt;\n' +
-        '&lt;meta charset="utf-8"&gt;\n' +
-        '&lt;link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" /&gt;\n' +
-        '&lt;style&gt;html, body, #map { height: 100%; margin: 0; padding: 0 }&lt;/style&gt;\n' +
-        '&lt;script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"&gt;&lt;/script&gt;\n' +
-        '&lt;/head&gt;\n' +
-        '&lt;body&gt;\n' +
-        '&lt;div id="map"&gt;&lt;/div&gt;\n' +
-        '&lt;script&gt;\n',
+        // Static Code
+        staticBeginHtml = '&lt;!DOCTYPE html&gt;\n' +
+            '&lt;html&gt;\n' +
+            '&lt;head&gt;\n' +
+            '&lt;title&gt;Simple Map&lt;/title&gt;\n' +
+            '&lt;meta name="viewport" content="initial-scale=1.0, user-scalable=no"&gt;\n' +
+            '&lt;meta charset="utf-8"&gt;\n' +
+            '&lt;link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" /&gt;\n' +
+            '&lt;style&gt;html, body, #map { height: 100%; margin: 0; padding: 0 }&lt;/style&gt;\n' +
+            '&lt;script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"&gt;&lt;/script&gt;\n' +
+            '&lt;/head&gt;\n' +
+            '&lt;body&gt;\n' +
+            '&lt;div id="map"&gt;&lt;/div&gt;\n' +
+            '&lt;script&gt;\n',
 
-    staticEndHtml = '&lt;/script&gt;\n' +
-        '&lt;/body&gt;\n' +
-        '&lt;/html&gt;\n',
+        staticEndHtml = '&lt;/script&gt;\n' +
+            '&lt;/body&gt;\n' +
+            '&lt;/html&gt;\n',
 
-    staticBeginJs =         '"use strict";\n' +
+        staticBeginJs =     '"use strict";\n' +
                             '(function() {\n',
 
-    staticCreateMap =       '\n  // Create map.\n' +
+        staticCreateMap =   '\n  // Create map.\n' +
                             '  // First param is id of div that will contain the map. Second param is the map options object \n' +
                             '  var map = new L.Map("map", options);\n' +
                             '  var osm = new L.TileLayer(options.url, options);\n' +
                             '  map.addLayer(osm);\n',
 
-    staticEndJs =           '}());\n';
+        staticEndJs =       '}());\n';
 
-    //endregion
-
-    var getMapOptions = function() {
+    var getMapOptions = function () {
         var js = '  // Create map options object\n' +
                  '  var options = {\n',
             options = mapOptionsService.getAllModified();
 
-        _.forIn(options, function(option, key) {
+        _.forIn(options, function (option, key) {
             js += "    ";
 
             switch (option.type) {
-                case "object":
-                    js += option.name + ": " + option.value.toString();
-                    break;
-                case "array":
-                    js += option.name + ": [" + option.value + "]";
-                    break;
-                case "number":
-                    js += option.name + ": " + option.value;
-                    break;
-                case "boolean":
-                    js += option.name + ": " + option.value;
-                    break;
-                default:
-                    js += option.name + ": '" + option.value + "'";
-                    break;
+            case "object":
+                js += option.name + ": " + option.value.toString();
+                break;
+            case "array":
+                js += option.name + ": [" + option.value + "]";
+                break;
+            case "number":
+                js += option.name + ": " + option.value;
+                break;
+            case "boolean":
+                js += option.name + ": " + option.value;
+                break;
+            default:
+                js += option.name + ": '" + option.value + "'";
+                break;
             }
 
-            if (parseInt(key) < options.length - 1) {
+            if (parseInt(key, 10) < options.length - 1) {
                 js += ",\n";
             } else {
                 js += "\n";
@@ -70,7 +70,7 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEve
         return js;
     };
 
-    var getMapFeatures = function() {
+    var getMapFeatures = function () {
         var js = "",
             features = mapFeatureService.getAllUsed();
 
@@ -80,17 +80,15 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEve
             return "";
         }
 
-        _.forIn(features, function(feature) {
+        _.forIn(features, function (feature) {
             js += "  ";
             var options = feature.options();
             js += "var " + feature.name + " = L." + feature.name + "(";
 
-            var index = 0;
-            _.forIn(options, function(option, key) {
+            _.forIn(options, function (option, key) {
                 js += JSON.stringify(option);
-                index += 1;
 
-                if (parseInt(key) < options.length - 1) {
+                if (parseInt(key, 10) < options.length - 1) {
                     js += ", ";
                 }
             });
@@ -100,17 +98,17 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEve
         return js;
     };
 
-    var getMapFeaturePopups = function() {
+    var getMapFeaturePopups = function () {
         var js = "",
             popups = mapFeatureService.getAllUsedPopups();
 
         if (popups.length) {
-            js += "\n  // Add feature popups\n"
+            js += "\n  // Add feature popups\n";
         } else {
             return "";
         }
 
-        _.forIn(popups, function(popup) {
+        _.forIn(popups, function (popup) {
             js += "  ";
             js += popup.name + ".bindPopup(&quot;&lt;b&gt;Hello world&lt;/b&gt;&lt;br&gt;I&#39;m a popup attached to " + popup.name + "&quot;);\n";
         });
@@ -126,8 +124,8 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEve
         } else {
             return "";
         }
-        
-        _.forIn(events, function(event, key) {
+
+        _.forIn(events, function (event, key) {
             var popupName = event.name + "Popup";
             var eventFunctionName = event.name + "Event";
 
@@ -140,7 +138,7 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEve
             js += "  }\n";
             js += "  map.on('" + event.name + "', " + eventFunctionName + ");\n";
 
-            if (parseInt(key) < events.length - 1) {
+            if (parseInt(key, 10) < events.length - 1) {
                 js += "\n";
             }
         });
@@ -148,7 +146,7 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEve
         return js;
     };
 
-    var getCodeView = function() {
+    var getCodeView = function () {
         var code = [];
         code.push(staticBeginHtml);
         code.push(staticBeginJs);
@@ -163,14 +161,14 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEve
         return code.join("");
     };
 
-    var toggleShowCode = function() {
+    var toggleShowCode = function () {
         showCode = !showCode;
         return showCode;
     };
 
     return {
         getCodeView: getCodeView,
-        showCode: function() { return showCode },
+        showCode: function () { return showCode; },
         toggleShowCode: toggleShowCode
     };
 }]);

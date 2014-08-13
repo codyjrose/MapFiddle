@@ -1,5 +1,6 @@
 app.controller('MapEventsController', ['$scope', 'mapEventsService', function($scope, mapEventsService) {
-    $scope.initEvents = function() {
+    "use strict";
+    $scope.initEvents = function () {
         $scope.events = mapEventsService.getAll();
     };
 

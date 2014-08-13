@@ -1,4 +1,6 @@
-app.directive('optionRange', function() {
+"use strict";
+
+app.directive('optionRange', function () {
     return {
         scope: {
             item: '=optionRange'
@@ -8,7 +10,7 @@ app.directive('optionRange', function() {
     };
 });
 
-app.directive('optionCheckbox', function() {
+app.directive('optionCheckbox', function () {
     return {
         scope: {
             item: '=optionCheckbox'
@@ -21,8 +23,8 @@ app.directive('optionCheckbox', function() {
 app.directive('prettyprintd', function() {
     return {
         restrict: 'C',
-        link: function postLink(scope, element, attrs) {
-            scope.$watch('markup', function() {
+        link: function postLink(scope, element) {
+            scope.$watch('markup', function () {
                 element.html(prettyPrintOne(scope.markup));
             });
         }

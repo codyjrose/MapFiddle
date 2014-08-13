@@ -1,25 +1,26 @@
-app.factory('mapService', ['$rootScope', function($rootScope) {
+app.factory('mapService', ['$rootScope', function ($rootScope) {
+    "use strict";
 
-    var map, legend;
+    var map;
 
-    var getMap = function() {
-        return map
+    var getMap = function () {
+        return map;
     };
 
-    var getZoom = function() {
+    var getZoom = function () {
         return map.getZoom();
     };
 
-    var getMapCenter = function() {
+    var getMapCenter = function () {
         var center = map.getCenter();
         return [ center.lat, center.lng ];
     };
 
-    var addLogo = function() {
+    var addLogo = function () {
         var logo = L.control({position: 'bottomleft'});
 
-        logo.onAdd = function (map) {
-            var branding = L.DomUtil.create('h3', 'brand legend')
+        logo.onAdd = function () {
+            var branding = L.DomUtil.create('h3', 'brand legend');
 
             //branding.innerHTML = "<img src='assets/logo.jpg' height='50'/>"
             branding.innerHTML += "<span id='logo'><i class='fa fa-map-marker'></i> MapFiddle</span>";
@@ -29,12 +30,11 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
         logo.addTo(map);
     };
 
-    var getLatLngInCurrentBounds = function() {
-        var ne = map.getBounds().getNorthEast();
-        var sw = map.getBounds().getSouthWest();
-
-        var lat = Math.random() * (ne.lat - sw.lat) + sw.lat;
-        var lng = Math.random() * (ne.lng - sw.lng) + sw.lng;
+    var getLatLngInCurrentBounds = function () {
+        var ne = map.getBounds().getNorthEast(),
+            sw = map.getBounds().getSouthWest(),
+            lat = Math.random() * (ne.lat - sw.lat) + sw.lat,
+            lng = Math.random() * (ne.lng - sw.lng) + sw.lng;
 
         return [lat, lng];
     };
@@ -49,7 +49,7 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
 
         map.addLayer(osm);
 
-        map.on('moveend', function() {
+        map.on('moveend', function () {
             $rootScope.$broadcast('mapMoveEnd');
         });
 
@@ -58,7 +58,7 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
     };
 
     // For options that are properties of the map. Ref: http://leafletjs.com/reference.html#map-properties
-    var toggleProperty = function(option) {
+    var toggleProperty = function (option) {
         if (option.value) {
             map[option.name].enable();
         } else {
@@ -67,47 +67,56 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
     };
 
     // For options that are map controls. Ref: http://leafletjs.com/reference.html#map-addcontrol
-    var toggleControl = function(option) {
+    var toggleControl = function (option) {
         if (option.value) {
-            map[option.name].addTo(map)
+            map[option.name].addTo(map);
         } else {
             map[option.name].removeFrom(map);
         }
     };
 
-    var updatePropertyOfOptions = function(option) {
+    var updatePropertyOfOptions = function (option) {
         map.options[option.name] = option.value;
     };
 
-    var setMapOption = function(option) {
+    var setMapOption = function (option) {
         switch (option.updateMethod) {
-            case "mapProperty":
-                toggleProperty(option);
-                break;
-            case "control":
-                toggleControl(option);
-                break;
-            case "propertyOfMapDotOptions":
-                updatePropertyOfOptions(option);
-                break;
-            default:
-                console.log('could not update: ' + option.name);
-                break;
+        case "mapProperty":
+            toggleProperty(option);
+            break;
+        case "control":
+            toggleControl(option);
+            break;
+        case "propertyOfMapDotOptions":
+            updatePropertyOfOptions(option);
+            break;
+        default:
+            break;
         }
     };
 
-    var addFeature = function(feature) {
+    var addFeature = function (feature) {
         feature.obj = L[feature.name]
             .apply(null, feature.options())
             .addTo(map);
     };
 
-    var removeFeature = function(feature) {
+    var removeFeature = function (feature) {
         map.removeLayer(feature.obj);
         feature.obj = null;
     };
 
-    var toggleMapFeature = function(feature) {
+    var bindPopupToFeature = function (feature) {
+        feature.obj.bindPopup("<b>Hello world</b><br>I'm a popup attached to " + feature.name);
+        feature.popupEnabled = true;
+    };
+
+    var unbindPopupToFeature = function (feature) {
+        feature.obj.unbindPopup();
+        feature.popupEnabled = false;
+    };
+
+    var toggleMapFeature = function (feature) {
         if (feature.obj) {
             unbindPopupToFeature(feature);
             removeFeature(feature);
@@ -117,17 +126,7 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
         return feature;
     };
 
-    var bindPopupToFeature = function(feature) {
-        feature.obj.bindPopup("<b>Hello world</b><br>I'm a popup attached to " + feature.name);
-        feature.popupEnabled = true;
-    };
-
-    var unbindPopupToFeature = function(feature) {
-        feature.obj.unbindPopup();
-        feature.popupEnabled = false;
-    };
-
-    var toggleBindPopupToFeature = function(feature) {
+    var toggleBindPopupToFeature = function (feature) {
         if (feature.popupEnabled) {
             bindPopupToFeature(feature);
 
@@ -136,8 +135,8 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
         }
     };
 
-    var enableEvent = function(event) {
-        map.on(event.name, function(e) {
+    var enableEvent = function (event) {
+        map.on(event.name, function (e) {
             var latLng = event.eventLatLng(e);
 
             L[event.method]()
@@ -147,11 +146,11 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
         });
     };
 
-    var disableEvent = function(event) {
+    var disableEvent = function (event) {
         map.off(event.name);
     };
 
-    var toggleMapEvent = function(event) {
+    var toggleMapEvent = function (event) {
         if (!event.enabled) {
             enableEvent(event);
             event.enabled = true;
@@ -172,5 +171,5 @@ app.factory('mapService', ['$rootScope', function($rootScope) {
         toggleMapFeature: toggleMapFeature,
         toggleBindPopupToFeature: toggleBindPopupToFeature,
         toggleMapEvent: toggleMapEvent
-    }
+    };
 }]);

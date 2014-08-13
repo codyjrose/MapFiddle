@@ -1,4 +1,5 @@
-app.factory('mapEventsService', ['$rootScope', function($rootScope) {
+app.factory('mapEventsService', ['$rootScope', function ($rootScope) {
+    "use strict";
 
     var lastUpdatedEvent = {},
         events = {};
@@ -12,8 +13,8 @@ app.factory('mapEventsService', ['$rootScope', function($rootScope) {
                 eventResultContent: "e.latlng",
                 latLng: "e.latlng"
             },
-            eventLatLng: function(e) {
-                return { lat: e.latlng.lat, lng: e.latlng.lng }
+            eventLatLng: function (e) {
+                return { lat: e.latlng.lat, lng: e.latlng.lng };
             },
             enabled: false,
             method: "popup"
@@ -26,18 +27,18 @@ app.factory('mapEventsService', ['$rootScope', function($rootScope) {
                 eventResultContent: "e.target.getCenter().toString()",
                 latLng: "e.target.getCenter()"
             },
-            eventLatLng: function(e) {
-                return { lat: e.target.getCenter().lat, lng: e.target.getCenter().lng }
+            eventLatLng: function (e) {
+                return { lat: e.target.getCenter().lat, lng: e.target.getCenter().lng };
             },
             enabled: false,
             method: "popup"
         }
     ];
 
-     var get = function (eventName) {
+    var get = function (eventName) {
         try {
             return _.find(getAll(), { name: eventName });
-        } catch (e) {}
+        } catch (ignore) {}
     };
 
     var getAll = function () {
@@ -45,10 +46,10 @@ app.factory('mapEventsService', ['$rootScope', function($rootScope) {
     };
 
     var getAllEnabled = function () {
-        return _.filter(getAll(), function(event) { return event.enabled });
+        return _.filter(getAll(), function (event) { return event.enabled; });
     };
 
-    var broadcastChangedEvent = function(eventName) {
+    var broadcastChangedEvent = function (eventName) {
         lastUpdatedEvent = get(eventName);
         $rootScope.$broadcast('mapEventChange');
     };
@@ -58,7 +59,7 @@ app.factory('mapEventsService', ['$rootScope', function($rootScope) {
         getAll: getAll,
         getAllEnabled: getAllEnabled,
         broadcastChangedEvent: broadcastChangedEvent,
-        lastUpdatedEvent: function() { return lastUpdatedEvent }
+        lastUpdatedEvent: function () { return lastUpdatedEvent; }
 
-    }
+    };
 }]);

@@ -1,4 +1,6 @@
-app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
+app.factory('mapOptionsService', ['$rootScope', function ($rootScope) {
+    "use strict";
+
     var lastUpdatedOption = {},     // Tracks the last updated option
         leafletOsmOptions = [
             {
@@ -138,18 +140,8 @@ app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
             }
         ],  // The main store for all leaflet api options
         mapOptions = {};            // The object with the data property holds the actual map options
-        mapOptions.data = leafletOsmOptions;
 
-    /**
-     * Returns a map option value or false if no value is found.
-     * @param optionName
-     * @returns {*}
-     */
-    var get = function (optionName) {
-        try {
-            return _.find(getAll(), { name: optionName });
-        } catch (e) {}
-    };
+    mapOptions.data = leafletOsmOptions;
 
     /**
      * Returns all map options
@@ -160,11 +152,23 @@ app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
     };
 
     /**
+     * Returns a map option value or false if no value is found.
+     * @param optionName
+     * @returns {*}
+     */
+    var get = function (optionName) {
+        try {
+            return _.find(getAll(), { name: optionName });
+        } catch (ignore) {}
+    };
+
+
+    /**
      * Returns all map options that are required for map creation as well as any options that have been modified.
      * @returns {object}
      */
     var getAllModified = function () {
-        return _.filter(getAll(), function(option) { return option.required || (option.value != option.default) });
+        return _.filter(getAll(), function (option) { return option.required || (option.value !== option.default); });
     };
 
     /**
@@ -172,14 +176,14 @@ app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
      * @returns {object}
      */
     var getAllWithStateMethod = function () {
-        return _.filter(getAll(), function(option) { return option.hasOwnProperty("stateMethod") });
+        return _.filter(getAll(), function (option) { return option.hasOwnProperty("stateMethod"); });
     };
 
     /**
      * Gets all options that are displayed to the user to configure.
      */
-    var getUserConfigurable = function() {
-        return _.filter(getAll(), function(opt) { return opt.inputType != false });
+    var getUserConfigurable = function () {
+        return _.filter(getAll(), function (opt) { return opt.inputType !== false; });
     };
 
     /**
@@ -187,7 +191,7 @@ app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
      * @param {string} optionName The map option to set.
      * @param {object} value the map options new value.
      */
-    var set = function(optionName, value) {
+    var set = function (optionName, value) {
         // Modify the value if needed.
         if (value instanceof L.LatLng) {
             value = [value.lat, value.lng];
@@ -200,7 +204,7 @@ app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
      * Send out broadcast of a changed option.
      * @param {string} optionName
      */
-    var broadcastChangedOption = function(optionName) {
+    var broadcastChangedOption = function (optionName) {
         lastUpdatedOption = get(optionName);
         $rootScope.$broadcast('mapOptionChange');
     };
@@ -211,6 +215,6 @@ app.factory('mapOptionsService', ['$rootScope', function($rootScope) {
         getUserConfigurable: getUserConfigurable,
         getAllWithStateMethod: getAllWithStateMethod,
         broadcastChangedOption: broadcastChangedOption,
-        lastUpdatedOption: function() { return lastUpdatedOption }
-    }
+        lastUpdatedOption: function () { return lastUpdatedOption; }
+    };
 }]);

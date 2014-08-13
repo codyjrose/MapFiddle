@@ -1,5 +1,6 @@
-app.controller('MapFeaturesController', ['$scope', 'mapService', 'mapFeatureService', function($scope, mapService, mapFeatureService) {
-    $scope.initFeatures = function() {
+app.controller('MapFeaturesController', ['$scope', 'mapFeatureService', function ($scope, mapFeatureService) {
+    "use strict";
+    $scope.initFeatures = function () {
         $scope.features = mapFeatureService.getAll();
     };
 
