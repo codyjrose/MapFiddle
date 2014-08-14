@@ -1,0 +1,29 @@
+{
+  "name": "mapfiddle",
+  "version": "0.0.0",
+  "description": "MapFiddle was created to promote the use of maps by making the process of creating one as simple as possible.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://codyjrose@bitbucket.org/codyjrose/mapfiddle.git"
+  },
+  "keywords": [
+    "map",
+    "osm",
+    "leaflet",
+    "angular",
+    "lo-dash"
+  ],
+  "author": "Cody Rose",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.8.7",
+    "gulp-concat": "^2.3.4",
+    "gulp-rename": "^1.2.0",
+    "gulp-rimraf": "^0.1.0",
+    "gulp-uglify": "^0.3.1"
+  }
+}
