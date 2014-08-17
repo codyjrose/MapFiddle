@@ -4,8 +4,6 @@ var gulp = require('gulp');
 // Include plugins
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
-var rename = require('gulp-rename');
-var rimraf = require('gulp-rimraf');
 var streamqueue = require('streamqueue');
 var minifyCSS = require('gulp-minify-css');
 var htmlreplace = require('gulp-html-replace');
