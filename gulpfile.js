@@ -71,5 +71,4 @@ gulp.task('watch', function () {
 });
 
 // Default Task
-gulp.task('default', ['scripts', 'css', 'watch']);
-gulp.task('build', ['scripts', 'css', 'html', 'assets']);
+gulp.task('default', ['scripts', 'css', 'html', 'assets']);
