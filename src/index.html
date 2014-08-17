@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="utf-8">
+    <title>Map Fiddle</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- build:css -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/leaflet.css"/>
+    <link rel="stylesheet" href="css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="css/main.css"/>
+    <!-- endbuild -->
+</head>
+<body>
+<div class="container-fluid">
+    <div ng-controller="ViewMapController as mv">
+        <div id="map"></div>
+    </div>
+    <!-- http://getbootstrap.com/css/#grid -->
+    <div class="row app-front">
+        <div ng-controller="NavController as nc" class="col-sm-6 col-md-5 col-lg-3 pull-right">
+            <ul class="nav nav-pills navbar-default nav-justified text-nowrap">
+                <li ng-class="{ active: nc.isSelected(1) }"><a class="force-square" ng-click="nc.selectTab(1)" href="#/options"><i class="fa fa-cogs"></i> Options</a></li>
+                <li ng-class="{ active: nc.isSelected(2) }"><a class="force-square" ng-click="nc.selectTab(2)" href="#/features"><i class="fa fa-map-marker"></i> Features</a></li>
+                <li ng-class="{ active: nc.isSelected(3) }"><a class="force-square" ng-click="nc.selectTab(3)" href="#/events"><i class="fa fa-bolt"></i> Events</a></li>
+                <li ng-class="{ active: nc.isSelected(4) }"><a class="force-square" ng-click="nc.selectTab(4)" href="#/about"><i class="fa fa-question-circle"></i></a></li>
+            </ul>
+            <!--This is where the options, data and events panels will appear.-->
+            <div class="panel force-square">
+                <div ng-view></div>
+            </div>
+            <button class="btn btn-full-width force-square no-outline"
+                    ng-class="{ 'btn-success': btnSuccess, 'btn-danger': !btnSuccess }"
+                    ng-click="nc.toggleShowCode()">
+                <i class="fa fa-code"></i> {{ showHideText }} HTML + Javascript
+            </button>
+        </div>
+        <div ng-controller="ViewCodeController as cv" class="col-xs-11 col-md-6 col-lg-8 pull-right">
+            <div ng-show="showCode()">
+                <div class="panel force-square">
+                    <div class="panel-body">
+                        <pre id="code" class="prettyprintd force-square">{{ markup }}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- build:cdn -->
+<script src="js/vendor/angular.min.js"></script>
+<script src="js/vendor/angular-route.min.js"></script>
+<script src="js/vendor/lodash.min.js"></script>
+<script src="js/vendor/leaflet.min.js"></script>
+
+<script src="js/vendor/prettify/run_prettify.min.js"></script>
+<script src="js/vendor/prettify/prettify.min.js"></script>
+<!-- endbuild -->
+
+<!-- build:js -->
+<script src="js/app.js"></script>
+<script src="js/controllers/navController.js"></script>
+<script src="js/controllers/MapOptionsController.js"></script>
+<script src="js/controllers/MapFeaturesController.js"></script>
+<script src="js/controllers/MapEventsController.js"></script>
+<script src="js/controllers/viewMapController.js"></script>
+<script src="js/controllers/ViewCodeController.js"></script>
+<script src="js/directives/directives.js"></script>
+<script src="js/services/mapService.js"></script>
+<script src="js/services/mapOptionsService.js"></script>
+<script src="js/services/mapFeatureService.js"></script>
+<script src="js/services/mapEventsService.js"></script>
+<script src="js/services/codeService.js"></script>
+<!-- endbuild -->
+
+
+</body>
+
+</html>
