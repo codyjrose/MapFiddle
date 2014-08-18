@@ -41,16 +41,9 @@ gulp.task('css', function () {
 // Copy HTML files to dist folder
 gulp.task('html', function () {
     // Copy fonts to dist/css folder
-    gulp.src(['src/**/*.html', '!src/index.html'])
-        .pipe(gulp.dest('dist/'));
-});
-
-// Copy HTML files to dist folder
-gulp.task('index', function () {
-    // Copy fonts to dist/css folder
-    gulp.src('src/index.html')
+    gulp.src('src/**/*.html')
         .pipe(htmlreplace({
-            'js': 'dist/js/scripts.js',
+            'js': 'js/scripts.js',
             'cdn': [
                 '//cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js',
                 '//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js',
@@ -59,16 +52,9 @@ gulp.task('index', function () {
                 '//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js',
                 '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js'
             ],
-            'css': 'dist/css/styles.css'
+            'css': 'css/styles.css'
         }))
-        .pipe(gulp.dest(''));
-});
-
-// Copy HTML files to dist folder
-gulp.task('assets', function () {
-    // Copy fonts to dist/css folder
-    gulp.src(['src/assets/**/*.*'])
-        .pipe(gulp.dest('dist/assets'));
+        .pipe(gulp.dest('dist/'));
 });
 
 // Watch Files For Changes
@@ -77,4 +63,4 @@ gulp.task('watch', function () {
 });
 
 // Default Task
-gulp.task('default', ['scripts', 'css', 'html', 'index', 'assets']);
+gulp.task('default', ['scripts', 'css', 'html']);
