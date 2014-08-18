@@ -1,4 +1,4 @@
-app.factory('mapService', ['$rootScope', function ($rootScope) {
+app.factory('mapService', ['$rootScope', '$location', function ($rootScope, $location) {
     "use strict";
 
     var map;
@@ -24,7 +24,11 @@ app.factory('mapService', ['$rootScope', function ($rootScope) {
     };
 
     var initMap = function (options) {
-        L.Icon.Default.imagePath = 'assets/leaflet/';
+
+        if ($location.absUrl().indexOf('/src') > 0) {
+            // Hacky way to check if work in dev or prod env. When in prod, images are served up via cdn.
+            L.Icon.Default.imagePath = 'assets/leaflet/';
+        }
 
         map = new L.Map('map', options);
 
