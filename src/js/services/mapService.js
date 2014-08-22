@@ -1,7 +1,8 @@
-app.factory('mapService', ['$rootScope', '$location', function ($rootScope, $location) {
+app.factory('mapService', ['$rootScope', '$location', 'geoLocationService', function ($rootScope, $location, geoLocationService) {
     "use strict";
 
     var map;
+    var userLocation = geoLocationService.getLatLng();
 
     var addLogo = function () {
         var logo = L.control({position: 'bottomleft'});
@@ -24,6 +25,10 @@ app.factory('mapService', ['$rootScope', '$location', function ($rootScope, $loc
     };
 
     var initMap = function (options) {
+
+        if (userLocation) {
+            options.center.value = userLocation;
+        }
 
         if ($location.absUrl().indexOf('/src') > 0) {
             // Hacky way to check if work in dev or prod env. When in prod, images are served up via cdn.
