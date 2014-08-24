@@ -27,7 +27,7 @@ app.factory('mapOptionsService', ['$rootScope', function ($rootScope) {
             },
             {
                 name: "center",
-                value: [51.505, -0.09],
+                value: [0,0],
                 type: "array",
                 updateMethod: "",
                 label: "Set View",
@@ -39,7 +39,7 @@ app.factory('mapOptionsService', ['$rootScope', function ($rootScope) {
             },
             {
                 name: "zoom",
-                value: 13,
+                value: 4,
                 updateMethod: "",
                 type: "number",
                 label: "Set Zoom",
@@ -208,6 +208,8 @@ app.factory('mapOptionsService', ['$rootScope', function ($rootScope) {
         lastUpdatedOption = get(optionName);
         $rootScope.$broadcast('mapOptionChange');
     };
+
+
 
     return {
         set: set,

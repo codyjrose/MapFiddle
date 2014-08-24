@@ -1,8 +1,14 @@
-app.factory('mapService', ['$rootScope', '$location', 'geoLocationService', function ($rootScope, $location, geoLocationService) {
+app.factory('mapService', ['$rootScope', '$location', 'geoLocationService', 'mapOptionsService', function ($rootScope, $location, geoLocationService, mapOptionsService) {
     "use strict";
 
     var map;
-    var userLocation = geoLocationService.getLatLng();
+
+    geoLocationService.userLatLng()
+        .success(function(data, status, headers, config) {
+            if (status === 200) {
+                map.setView(geoLocationService.countries[data.country_code]);
+            }
+        });
 
     var addLogo = function () {
         var logo = L.control({position: 'bottomleft'});
@@ -25,10 +31,6 @@ app.factory('mapService', ['$rootScope', '$location', 'geoLocationService', func
     };
 
     var initMap = function (options) {
-
-        if (userLocation) {
-            options.center.value = userLocation;
-        }
 
         if ($location.absUrl().indexOf('/src') > 0) {
             // Hacky way to check if work in dev or prod env. When in prod, images are served up via cdn.
