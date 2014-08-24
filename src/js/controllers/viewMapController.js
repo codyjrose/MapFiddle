@@ -1,12 +1,20 @@
-app.controller("ViewMapController", ['$scope', 'mapOptionsService', 'mapFeatureService','mapEventsService', 'mapService', function($scope, mapOptionsService, mapFeatureService, mapEventsService, mapService) {
+app.controller("ViewMapController", ['$scope', 'mapOptionsService', 'mapFeatureService','mapEventsService', 'mapService', 'geoLocationService', function($scope, mapOptionsService, mapFeatureService, mapEventsService, mapService, geoLocationService) {
     "use strict";
 
-    // Get map options object to create the map
-    var optionsObject = {};
-    _.forIn(mapOptionsService.getAllModified(), function (option) {
-        optionsObject[option.name] = option.value;
-    });
-    mapService.initMap(optionsObject);
+    geoLocationService.userLatLng()
+        .success(function(data, status, headers, config) {
+            if (status === 200) {
+                mapOptionsService.set('center', geoLocationService.countries[data.country_code]);
+            }
+        }).then(function() {
+            // Get map options object to create the map
+            var optionsObject = {};
+            _.forIn(mapOptionsService.getAllModified(), function (option) {
+                optionsObject[option.name] = option.value;
+            });
+            // Initialize the map
+            mapService.initMap(optionsObject);
+        });
 
     // Options have been changed via the sidebar, update the map.
     $scope.$on('mapOptionChange', function () {

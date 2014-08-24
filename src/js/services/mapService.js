@@ -1,14 +1,7 @@
-app.factory('mapService', ['$rootScope', '$location', 'geoLocationService', 'mapOptionsService', function ($rootScope, $location, geoLocationService, mapOptionsService) {
+app.factory('mapService', ['$rootScope', '$location', function ($rootScope, $location) {
     "use strict";
 
     var map;
-
-    geoLocationService.userLatLng()
-        .success(function(data, status, headers, config) {
-            if (status === 200) {
-                map.setView(geoLocationService.countries[data.country_code]);
-            }
-        });
 
     var addLogo = function () {
         var logo = L.control({position: 'bottomleft'});
@@ -16,7 +9,6 @@ app.factory('mapService', ['$rootScope', '$location', 'geoLocationService', 'map
         logo.onAdd = function () {
             var branding = L.DomUtil.create('h3', 'brand legend');
 
-            //branding.innerHTML = "<img src='assets/logo.jpg' height='50'/>"
             branding.innerHTML += "<span id='logo'><i class='fa fa-map-marker'></i> MapFiddle</span>";
             return branding;
         };
