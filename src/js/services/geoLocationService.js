@@ -254,7 +254,6 @@ app.factory('geoLocationService', ['$http', function ($http) {
     };
 
     var userLatLng = function (ipAddress) {
-        console.log("get latlng");
         return $http({method: 'GET', url: 'http://freegeoip.net/json/', dataType: 'jsonp'})
     };
 

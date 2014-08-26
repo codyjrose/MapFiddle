@@ -9,8 +9,7 @@ app.controller("ViewMapController", ['$scope', 'mapOptionsService', 'mapFeatureS
             }
         }).
         error(function(data, status, headers, config) {
-            // Handle error.
-            console.log(data);
+            // Set zoom to 3 so it shows all continents at 0,0
             mapOptionsService.set('zoom', 3);
             mapOptionsService.broadcastChangedOption('zoom');
         }).
