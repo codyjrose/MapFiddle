@@ -4,14 +4,24 @@ app.controller("ViewMapController", ['$scope', 'mapOptionsService', 'mapFeatureS
     geoLocationService.userLatLng()
         .success(function(data, status, headers, config) {
             if (status === 200) {
-                mapOptionsService.set('center', geoLocationService.countries[data.country_code]);
+                mapOptionsService.set('center', geoLocationService.getCountryLatLng(data.country_code));
+                mapOptionsService.broadcastChangedOption('center');
             }
-        }).then(function() {
+        }).
+        error(function(data, status, headers, config) {
+            // Handle error.
+            console.log(data);
+            mapOptionsService.set('zoom', 3);
+            mapOptionsService.broadcastChangedOption('zoom');
+        }).
+        finally(function() {
+
             // Get map options object to create the map
             var optionsObject = {};
             _.forIn(mapOptionsService.getAllModified(), function (option) {
                 optionsObject[option.name] = option.value;
             });
+
             // Initialize the map
             mapService.initMap(optionsObject);
         });
