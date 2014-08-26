@@ -1,26 +1,19 @@
 app.controller('NavController', ['$scope', '$location', 'mapCodeService', function($scope, $location, mapCodeService) {
     "use strict";
 
-    var path = {
-        '/options': 1,
-        '/features': 2,
-        '/events': 3,
-        '/about': 4
-    };
+    // Set default
+    this.tab = 'options';
 
     $scope.showHideText = mapCodeService.showCode() ? "Hide " : "Show ";
     $scope.btnSuccess = true;
 
-    this.selectTab = function (setTab) {
-        this.tab = setTab;
+    this.selectTab = function (tabName) {
+        this.tab = tabName;
     };
 
-    this.isSelected = function (checkTab) {
-        return this.tab === checkTab;
+    this.selected = function () {
+        return this.tab;
     };
-
-    // Make initial selection.
-    this.selectTab($location.path() ? path[$location.path()] : 1);
 
     this.toggleShowCode = function () {
         var toggleShowHideText = mapCodeService.toggleShowCode();

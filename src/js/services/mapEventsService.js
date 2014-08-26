@@ -60,6 +60,5 @@ app.factory('mapEventsService', ['$rootScope', function ($rootScope) {
         getAllEnabled: getAllEnabled,
         broadcastChangedEvent: broadcastChangedEvent,
         lastUpdatedEvent: function () { return lastUpdatedEvent; }
-
     };
 }]);
