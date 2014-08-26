@@ -11,8 +11,12 @@ app.controller('NavController', ['$scope', '$location', 'mapCodeService', functi
         this.tab = tabName;
     };
 
-    this.selected = function () {
+    this.selectedTab = function () {
         return this.tab;
+    };
+
+    this.isSelectedTab = function(tabName) {
+        return this.tab === tabName;
     };
 
     this.toggleShowCode = function () {

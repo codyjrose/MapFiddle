@@ -23,13 +23,13 @@
     <div class="row app-front">
         <div ng-controller="NavController as nc" class="col-sm-6 col-md-5 col-lg-3 pull-right">
             <ul class="nav nav-pills navbar-default nav-justified text-nowrap">
-                <li ng-class="{ active: nc.isSelected(1) }"><a class="force-square" ng-click="nc.selectTab('options')"><i class="fa fa-cogs"></i> Options</a></li>
-                <li ng-class="{ active: nc.isSelected(2) }"><a class="force-square" ng-click="nc.selectTab('features')"><i class="fa fa-map-marker"></i> Features</a></li>
-                <li ng-class="{ active: nc.isSelected(3) }"><a class="force-square" ng-click="nc.selectTab('events')"><i class="fa fa-bolt"></i> Events</a></li>
-                <li ng-class="{ active: nc.isSelected(4) }"><a class="force-square" ng-click="nc.selectTab('about')"><i class="fa fa-question-circle"></i></a></li>
+                <li ng-class="{ active: nc.isSelectedTab('options') }"><a class="force-square" ng-click="nc.selectTab('options')"><i class="fa fa-cogs"></i> Options</a></li>
+                <li ng-class="{ active: nc.isSelectedTab('features') }"><a class="force-square" ng-click="nc.selectTab('features')"><i class="fa fa-map-marker"></i> Features</a></li>
+                <li ng-class="{ active: nc.isSelectedTab('events') }"><a class="force-square" ng-click="nc.selectTab('events')"><i class="fa fa-bolt"></i> Events</a></li>
+                <li ng-class="{ active: nc.isSelectedTab('about') }"><a class="force-square" ng-click="nc.selectTab('about')"><i class="fa fa-question-circle"></i></a></li>
             </ul>
             <!--This is where the options, data and events panels will appear.-->
-            <div class="panel force-square" ng-switch="nc.selected()">
+            <div class="panel force-square" ng-switch="nc.selectedTab()">
                 <options-panel ng-switch-when="options"></options-panel>
                 <features-panel ng-switch-when="features"></features-panel>
                 <events-panel ng-switch-when="events"></events-panel>
