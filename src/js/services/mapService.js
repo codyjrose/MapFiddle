@@ -9,7 +9,7 @@ app.factory('mapService', ['$rootScope', '$location', function ($rootScope, $loc
         logo.onAdd = function () {
             var branding = L.DomUtil.create('h3', 'brand legend');
 
-            branding.innerHTML += "<span id='logo'><i class='fa fa-map-marker'></i> MapFiddle</span>";
+            branding.innerHTML += "<span id='logo'><i class='fa fa-map-marker'></i> Mapstrap</span>";
             return branding;
         };
 

@@ -1,14 +1,14 @@
 {
-  "name": "mapfiddle",
+  "name": "Mapstrap",
   "version": "0.0.0",
-  "description": "MapFiddle was created to promote the use of maps by making the process of creating one as simple as possible.",
+  "description": "Mapstrap was created to promote the use of maps by making the process of creating one as simple as possible.",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://codyjrose@bitbucket.org/codyjrose/mapfiddle.git"
+    "url": "https://codyjrose@bitbucket.org/codyjrose/Mapstrap.git"
   },
   "keywords": [
     "map",
