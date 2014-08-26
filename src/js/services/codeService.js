@@ -23,8 +23,8 @@ app.factory('mapCodeService', ['mapOptionsService', 'mapFeatureService', 'mapEve
             '&lt;/body&gt;\n' +
             '&lt;/html&gt;\n',
 
-        staticBeginJs =     '"use strict";\n' +
-                            '(function() {\n',
+        staticBeginJs =     '(function() {\n' +
+                            '  "use strict";\n',
 
         staticCreateMap =   '\n  // Create map.\n' +
                             '  // First param is id of div that will contain the map. Second param is the map options object \n' +
