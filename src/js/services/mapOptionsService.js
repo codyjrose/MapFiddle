@@ -2,14 +2,14 @@ app.factory('mapOptionsService', ['$rootScope', function ($rootScope) {
     "use strict";
 
     var lastUpdatedOption = {},     // Tracks the last updated option
-        leafletOsmOptions = [
+        leafletOptions = [
             {
                 name: "zoomControl",
                 value: true,
                 updateMethod: "control",
                 type: "boolean",
                 label: "Zoom Control",
-                tooltip: "Whether the zoom control is added to the map by default.",
+                tooltip: "Whether the zoom control is added to the map.",
                 required: false,
                 default: true,
                 inputType: "checkbox"
@@ -20,7 +20,7 @@ app.factory('mapOptionsService', ['$rootScope', function ($rootScope) {
                 updateMethod: "control",
                 type: "boolean",
                 label: "Attribution Control",
-                tooltip: "Whether the attribution control is added to the map by default.",
+                tooltip: "Whether the attribution control is added to the map.",
                 required: false,
                 default: true,
                 inputType: "checkbox"
@@ -33,7 +33,7 @@ app.factory('mapOptionsService', ['$rootScope', function ($rootScope) {
                 label: "Set View",
                 tooltip: "Initial geographical center of the map.",
                 required: true,
-                default: [51.505, -0.09],
+                default: [0,0],
                 inputType: false,
                 stateMethod: "getCenter"
             },
@@ -45,7 +45,7 @@ app.factory('mapOptionsService', ['$rootScope', function ($rootScope) {
                 label: "Set Zoom",
                 tooltip: "Initial map zoom.",
                 required: true,
-                default: 13,
+                default: 4,
                 inputType: false,
                 stateMethod: "getZoom"
             },
@@ -138,10 +138,87 @@ app.factory('mapOptionsService', ['$rootScope', function ($rootScope) {
                 required: true,
                 inputType: false
             }
-        ],  // The main store for all leaflet api options
+        ],  // Leaflet API options
+        googleMapOptions = [
+            {
+                name: "zoomControl",
+                value: true,
+                updateMethod: "control", // TODO can this property be removed?
+                type: "boolean",
+                label: "Zoom Control",
+                tooltip: "Whether the zoom control is added to the map.",
+                required: false,
+                default: true,
+                inputType: "checkbox"
+            },
+            {
+                name: "panControl",
+                value: true,
+                updateMethod: "control",
+                type: "boolean",
+                label: "Pan Control",
+                tooltip: "Whether the pan control is added to the map.",
+                required: false,
+                default: true,
+                inputType: "checkbox"
+            },
+            {
+                name: "center",
+                value: [0,0],
+                type: "array",
+                updateMethod: "",
+                label: "Set View",
+                tooltip: "Initial geographical center of the map.",
+                required: true,
+                default: [0,0],
+                inputType: false,
+                stateMethod: "getCenter"
+            },
+            {
+                name: "zoom",
+                value: 4,
+                updateMethod: "",
+                type: "number",
+                label: "Set Zoom",
+                tooltip: "Initial map zoom.",
+                required: true,
+                default: 4,
+                inputType: false,
+                stateMethod: "getZoom"
+            },
+            {
+                name: "minZoom",
+                label: "Minimum Zoom Level",
+                tooltip: "Minimum zoom level of the map. Overrides any minZoom set on map layers.",
+                value: 0,
+                min: 0,
+                max: 21,
+                updateMethod: "propertyOfMapDotOptions",
+                type: "number",
+                required: false,
+                default: 0,
+                inputType: "range",
+                stateMethod: "getMinZoom"
+
+            },
+            {
+                name: "maxZoom",
+                label: "Max Zoom Level",
+                tooltip: "Maximum zoom level of the map. This overrides any maxZoom set on map layers.",
+                value: 21,
+                min: 0,
+                max: 21,
+                updateMethod: "propertyOfMapDotOptions",
+                type: "number",
+                required: false,
+                default: 21,
+                inputType: "range",
+                stateMethod: "getMaxZoom"
+            }
+        ],      // Google Maps API options
         mapOptions = {};            // The object with the data property holds the actual map options
 
-    mapOptions.data = leafletOsmOptions;
+    mapOptions.data = leafletOptions;
 
     /**
      * Returns all map options
@@ -208,8 +285,6 @@ app.factory('mapOptionsService', ['$rootScope', function ($rootScope) {
         lastUpdatedOption = get(optionName);
         $rootScope.$broadcast('mapOptionChange');
     };
-
-
 
     return {
         set: set,

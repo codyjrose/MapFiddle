@@ -17,16 +17,20 @@
 <body>
 <div class="container-fluid">
     <div ng-controller="ViewMapController as mv">
-        <div id="map"></div>
+        <div ng-show="showMapType === 'OSM'" id="osmmap"></div>
+        <div ng-show="showMapType === 'GM'" id="gmap"></div>
     </div>
     <!-- http://getbootstrap.com/css/#grid -->
     <div class="row app-front">
         <div ng-controller="NavController as nc" class="col-sm-6 col-md-5 col-lg-3 pull-right">
+
+            <select ng-model="selectedMapType" ng-change="changeHandler()" ng-options="option as option.label for option in mapTypes track by option.name"></select>
+
             <ul class="nav nav-pills navbar-default nav-justified text-nowrap">
-                <li ng-class="{ active: nc.isSelectedTab('options') }"><a class="force-square" ng-click="nc.selectTab('options')"><i class="fa fa-cogs"></i> Options</a></li>
-                <li ng-class="{ active: nc.isSelectedTab('features') }"><a class="force-square" ng-click="nc.selectTab('features')"><i class="fa fa-map-marker"></i> Features</a></li>
-                <li ng-class="{ active: nc.isSelectedTab('events') }"><a class="force-square" ng-click="nc.selectTab('events')"><i class="fa fa-bolt"></i> Events</a></li>
-                <li ng-class="{ active: nc.isSelectedTab('about') }"><a class="force-square" ng-click="nc.selectTab('about')"><i class="fa fa-question-circle"></i></a></li>
+                <li ng-class="{ active: nc.isSelectedTab('options') }"><a class="force-square" ng-click="nc.selectTab('options')" href="#"><i class="fa fa-cogs"></i> Options</a></li>
+                <li ng-class="{ active: nc.isSelectedTab('features') }"><a class="force-square" ng-click="nc.selectTab('features')" href="#"><i class="fa fa-map-marker"></i> Features</a></li>
+                <li ng-class="{ active: nc.isSelectedTab('events') }"><a class="force-square" ng-click="nc.selectTab('events')" href="#"><i class="fa fa-bolt"></i> Events</a></li>
+                <li ng-class="{ active: nc.isSelectedTab('about') }"><a class="force-square" ng-click="nc.selectTab('about')" href="#"><i class="fa fa-question-circle"></i></a></li>
             </ul>
             <!--This is where the options, data and events panels will appear.-->
             <div class="panel force-square" ng-switch="nc.selectedTab()">
@@ -75,6 +79,9 @@
 <script src="js/services/mapFeatureService.js"></script>
 <script src="js/services/mapEventsService.js"></script>
 <script src="js/services/codeService.js"></script>
+<script src="js/services/mapTypeService.js"></script>
 <!-- endbuild -->
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
 </body>
 </html>

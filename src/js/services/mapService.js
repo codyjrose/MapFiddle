@@ -1,7 +1,8 @@
 app.factory('mapService', ['$rootScope', '$location', function ($rootScope, $location) {
     "use strict";
 
-    var map;
+    var map,
+        loadedMaps = [];
 
     var addLogo = function () {
         var logo = L.control({position: 'bottomleft'});
@@ -22,22 +23,37 @@ app.factory('mapService', ['$rootScope', '$location', function ($rootScope, $loc
         });
     };
 
-    var initMap = function (options) {
-
-        if ($location.absUrl().indexOf('/src') > 0) {
-            // Hacky way to check if work in dev or prod env. When in prod, images are served up via cdn.
-            L.Icon.Default.imagePath = 'assets/leaflet/';
+    var initMap = function (mapTypeName, options) {
+        if (loadedMaps.indexOf(mapTypeName) > -1) {
+            return;
+        } else {
+            loadedMaps.push(mapTypeName);
         }
 
-        map = new L.Map('map', options);
+        if (mapTypeName === "OSM") {
+            if ($location.absUrl().indexOf('/src') > 0) {
+                // Hacky way to check if work in dev or prod env. When in prod, images are served up via cdn.
+                L.Icon.Default.imagePath = 'assets/leaflet/';
+            }
 
-        // create the tile layer with correct attribution
-        var osm = new L.TileLayer(options.url, options);
+            map = new L.Map('osmmap', options);
 
-        map.addLayer(osm);
+            // create the tile layer with correct attribution
+            var osm = new L.TileLayer(options.url, options);
 
-        addMoveEndEvent();
-        addLogo();
+            map.addLayer(osm);
+
+            addMoveEndEvent();
+            addLogo();
+
+        } else {
+            var mapOptions = {
+                zoom: 8,
+                center: new google.maps.LatLng(-34.397, 150.644)
+            };
+            var gmap = new google.maps.Map(document.getElementById('gmap'),
+                mapOptions);
+        }
     };
 
     var getMap = function () {

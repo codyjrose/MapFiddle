@@ -1,8 +1,8 @@
-body {
-    padding-top: 20px;
-    padding-bottom: 20px;
+html, body {
+    padding-top: 0;
+    padding-bottom: 0;
 }
-#map {
+#osmmap {
     height: 100%;
     position: fixed;
     top: 0;
@@ -11,6 +11,17 @@ body {
     bottom: 0;
     overflow: hidden;
 }
+#gmap {
+     height: 100%;
+     position: fixed !important;
+     top: 0;
+     right: 0;
+     left: 0;
+     bottom: 0;
+     overflow: hidden;
+     margin: 0;
+     padding: 0;
+ }
 #logo {
     opacity: .7
 }
