@@ -1,8 +1,33 @@
-app.factory('mapService', ['$rootScope', '$location', function ($rootScope, $location) {
+app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOptionsService', function ($rootScope, $location, mapTypeService, mapOptionsService) {
     "use strict";
 
     var map,
-        loadedMaps = [];
+        maps = [
+            {
+                name: "OSM",
+                mapObj: null
+            },
+            {
+                name: "GM",
+                mapObj: null
+            }
+        ];
+
+    /**
+     * Assigns mapService's map object by map type.
+     * @param mapTypeName
+     */
+    var setMapType = function(mapTypeName) {
+        map = _.find(maps, function(map) { return map.name === mapTypeName; }).mapObj;
+    };
+
+    /**
+     * Saves the map object to the maps array so the map doesn't have to be recreated each time the map type is changed.
+     * @param mapTypeName
+     */
+    var saveMap = function(mapTypeName) {
+        _.find(maps, function(map) { return map.name === mapTypeName; }).mapObj = map;
+    };
 
     var addLogo = function () {
         var logo = L.control({position: 'bottomleft'});
@@ -23,11 +48,18 @@ app.factory('mapService', ['$rootScope', '$location', function ($rootScope, $loc
         });
     };
 
-    var initMap = function (mapTypeName, options) {
-        if (loadedMaps.indexOf(mapTypeName) > -1) {
+    var initMap = function () {
+        var options = {};
+        _.forIn(mapOptionsService.getAllModified(), function (option) {
+            options[option.name] = option.value;
+        });
+        var mapTypeName = mapTypeService.getActiveMapTypeName();
+
+        setMapType(mapTypeName);
+
+        // Short curcuit if map already exists;
+        if(map) {
             return;
-        } else {
-            loadedMaps.push(mapTypeName);
         }
 
         if (mapTypeName === "OSM") {
@@ -37,23 +69,33 @@ app.factory('mapService', ['$rootScope', '$location', function ($rootScope, $loc
             }
 
             map = new L.Map('osmmap', options);
+            saveMap(mapTypeName);
 
-            // create the tile layer with correct attribution
+            // Create and add tile layer.
             var osm = new L.TileLayer(options.url, options);
-
             map.addLayer(osm);
 
             addMoveEndEvent();
             addLogo();
 
         } else {
-            var mapOptions = {
-                zoom: 8,
-                center: new google.maps.LatLng(-34.397, 150.644)
-            };
-            var gmap = new google.maps.Map(document.getElementById('gmap'),
-                mapOptions);
+            options.center = convertToLatLngObj(options.center);
+            map = new google.maps.Map(document.getElementById('gmap'), options);
+
+            saveMap(mapTypeName);
         }
+    };
+
+    /**
+     * Utility function to differences between OSM and Google's acceptable latLng parameters.
+     * @param latLngArr
+     * @returns {*}
+     */
+    var convertToLatLngObj = function(latLngArr) {
+        if (Array.isArray(latLngArr)) {
+            return { lat: latLngArr[0], lng: latLngArr[1] }
+        }
+        return latLngArr;
     };
 
     var getMap = function () {

@@ -1,42 +1,64 @@
-app.controller("ViewMapController", ['$scope', 'mapOptionsService', 'mapFeatureService','mapEventsService', 'mapService', 'geoLocationService', 'mapTypeService', function($scope, mapOptionsService, mapFeatureService, mapEventsService, mapService, geoLocationService, mapTypeService) {
+app.controller("ViewMapController", [
+        '$scope',
+        'mapOptionsService',
+        'mapFeatureService',
+        'mapEventsService',
+        'mapService',
+        'geoLocationService',
+        'mapTypeService',
+        function ($scope,
+                  mapOptionsService,
+                  mapFeatureService,
+                  mapEventsService,
+                  mapService,
+                  geoLocationService,
+                  mapTypeService) {
+
     "use strict";
 
     $scope.showMapType = mapTypeService.getActiveMapTypeName();
 
-    var loadMap = function() {
-        // Get the location of the user and zoom/center around it.
-        geoLocationService.userLatLng()
-            .success(function(data, status, headers, config) {
-                if (status === 200) {
-                    mapOptionsService.set('center', geoLocationService.getCountryLatLng(data.country_code));
-                    mapOptionsService.broadcastChangedOption('center');
-                }
-            }).
-            error(function(data, status, headers, config) {
-                // Set zoom to 3 so it shows all continents at 0,0
-                mapOptionsService.set('zoom', 3);
-                mapOptionsService.broadcastChangedOption('zoom');
-            }).
-            finally(function() {
-
-                // Get map options object to create the map
-                var optionsObject = {};
-                _.forIn(mapOptionsService.getAllModified(), function (option) {
-                    optionsObject[option.name] = option.value;
-                });
-
-                // Initialize the map
-                mapService.initMap($scope.showMapType, optionsObject);
-            });
-    };
-
-    loadMap();
+//    var loadMap = function() {
+//        // Get the location of the user and zoom/center around it.
+//        geoLocationService.userLatLng()
+//            .success(function(data, status, headers, config) {
+//                if (status === 200) {
+//                    mapOptionsService.set('center', geoLocationService.getCountryLatLng(data.country_code));
+//                    mapOptionsService.broadcastChangedOption('center');
+//                }
+//            }).
+//            error(function(data, status, headers, config) {
+//                // Set zoom to 3 so it shows all continents at 0,0
+//                mapOptionsService.set('zoom', 3);
+//                mapOptionsService.broadcastChangedOption('zoom');
+//            }).
+//            finally(function() {
+//
+//                // Get map options object to create the map
+//
+//
+//                // Initialize the map
+//                mapService.initMap();
+//            });
+//    };
+//
+//    loadMap();
 
     $scope.$on('mapTypeChange', function (e, mapTypeName) {
         $scope.showMapType = mapTypeName;
 
-        loadMap();
+        mapOptionsService.setMapOptionsType();
+
+        mapService.initMap();
+
+        //loadMap();
     });
+
+    mapService.initMap();
+
+    $scope.$on('mapOptionChange'), function () {
+        mapService.initMap();
+    };
 
     // Options have been changed via the sidebar, update the map.
     $scope.$on('mapOptionChange', function () {
