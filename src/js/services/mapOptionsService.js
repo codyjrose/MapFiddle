@@ -1,6 +1,14 @@
 app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($rootScope, mapTypeService) {
     "use strict";
 
+    var activeMapType = mapTypeService.getActiveMapTypeName();
+
+    $rootScope.$on('mapTypeChange', function(e, mapTypeName) {
+        activeMapType = mapTypeName;
+        setOptionsByMapType(activeMapType);
+
+    });
+
     var lastUpdatedOption = {},     // Tracks the last updated option
         optionsByMapType = [
             {
@@ -51,35 +59,6 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
                         default: 4,
                         inputType: false,
                         stateMethod: "getZoom"
-                    },
-                    {
-                        name: "minZoom",
-                        label: "Minimum Zoom Level",
-                        tooltip: "Minimum zoom level of the map. Overrides any minZoom set on map layers.",
-                        value: 0,
-                        min: 0,
-                        max: 18,
-                        updateMethod: "propertyOfMapDotOptions",
-                        type: "number",
-                        required: false,
-                        default: 0,
-                        inputType: "range",
-                        stateMethod: "getMinZoom"
-
-                    },
-                    {
-                        name: "maxZoom",
-                        label: "Max Zoom Level",
-                        tooltip: "Maximum zoom level of the map. This overrides any maxZoom set on map layers.",
-                        value: 18,
-                        min: 0,
-                        max: 18,
-                        updateMethod: "propertyOfMapDotOptions",
-                        type: "number",
-                        required: false,
-                        default: 18,
-                        inputType: "range",
-                        stateMethod: "getMaxZoom"
                     },
                     {
                         name: "dragging",
@@ -147,23 +126,34 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
                 name: "GM",
                 data: [
                     {
-                        name: "zoomControl",
+                        name: "panControl",
                         value: true,
-                        updateMethod: "control", // TODO can this property be removed?
+                        updateMethod: "setOption",
                         type: "boolean",
-                        label: "Zoom Control",
-                        tooltip: "Whether the zoom control is added to the map.",
+                        label: "Pan Control",
+                        tooltip: "Whether the pan control is added to the map.",
                         required: false,
                         default: true,
                         inputType: "checkbox"
                     },
                     {
-                        name: "panControl",
+                        name: "streetViewControl",
                         value: true,
-                        updateMethod: "control",
                         type: "boolean",
-                        label: "Pan Control",
-                        tooltip: "Whether the pan control is added to the map.",
+                        updateMethod: "setOption",
+                        label: "Street View Pegman",
+                        tooltip: "The enabled/disabled state of the Street View Pegman control.",
+                        required: false,
+                        default: true,
+                        inputType: "checkbox"
+                    },
+                    {
+                        name: "zoomControl",
+                        value: true,
+                        updateMethod: "setOption",
+                        type: "boolean",
+                        label: "Zoom Control",
+                        tooltip: "Whether the zoom control is added to the map.",
                         required: false,
                         default: true,
                         inputType: "checkbox"
@@ -193,34 +183,27 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
                         stateMethod: "getZoom"
                     },
                     {
-                        name: "minZoom",
-                        label: "Minimum Zoom Level",
-                        tooltip: "Minimum zoom level of the map. Overrides any minZoom set on map layers.",
-                        value: 0,
-                        min: 0,
-                        max: 21,
-                        updateMethod: "propertyOfMapDotOptions",
-                        type: "number",
+                        name: "draggable",
+                        value: true,
+                        type: "boolean",
+                        updateMethod: "setOption",
+                        label: "Dragging",
+                        tooltip: "Whether the map be draggable with mouse/touch or not.",
                         required: false,
-                        default: 0,
-                        inputType: "range",
-                        stateMethod: "getMinZoom"
-
+                        default: true,
+                        inputType: "checkbox"
                     },
                     {
-                        name: "maxZoom",
-                        label: "Max Zoom Level",
-                        tooltip: "Maximum zoom level of the map. This overrides any maxZoom set on map layers.",
-                        value: 21,
-                        min: 0,
-                        max: 21,
-                        updateMethod: "propertyOfMapDotOptions",
-                        type: "number",
+                        name: "mapTypeControl",
+                        value: true,
+                        type: "boolean",
+                        updateMethod: "setOption",
+                        label: "Map Type Control",
+                        tooltip: "The enabled/disabled state of the Map type control.",
                         required: false,
-                        default: 21,
-                        inputType: "range",
-                        stateMethod: "getMaxZoom"
-                    }
+                        default: true,
+                        inputType: "checkbox"
+                    },
                 ]
             }
         ],
@@ -292,9 +275,9 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
     /**
      * Sets the mapOptions data by map type name.
      */
-    var setMapOptionsType = function() {
-        var options = _.find(optionsByMapType, function (option) { return option.name === mapTypeService.getActiveMapTypeName(); });
-        mapOptions.data = options.data;
+    var setOptionsByMapType = function() {
+        var d = _.find(optionsByMapType, function (option) { return option.name === activeMapType; });
+        mapOptions.data = d.data;
 
         broadcastChangedMapTypeOptions();
     };
@@ -316,12 +299,12 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
     };
 
     // Init map options to OSM
-    setMapOptionsType("OSM");
+    setOptionsByMapType(activeMapType);
 
     return {
         get:get,
         set: set,
-        setMapOptionsType: setMapOptionsType,
+        setOptionsByMapType: setOptionsByMapType,
         getAllModified: getAllModified,
         getUserConfigurable: getUserConfigurable,
         getAllWithStateMethod: getAllWithStateMethod,

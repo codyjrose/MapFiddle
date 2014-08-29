@@ -1,46 +1,141 @@
-app.factory('mapFeatureService', ['$rootScope', 'mapService', function ($rootScope, mapService) {
+app.factory('mapFeatureService', ['$rootScope', 'mapService', 'mapTypeService', function ($rootScope, mapService, mapTypeService) {
     "use strict";
 
+    var activeMapType = mapTypeService.getActiveMapTypeName();
+
+    $rootScope.$on('mapTypeChange', function(e, mapTypeName) {
+        activeMapType = mapTypeName;
+        setFeaturesByMapType(activeMapType);
+    });
+
     var lastUpdatedFeature = {},
-        features = {};
+        features = {},
+        featuresByMapType = [
+            {
+                name: "OSM",
+                data: [
+                    {
+                        name: 'marker',
+                        obj: null,
+                        options: function () {
+                            return [ mapService.getMapCenter() ];
+                        },
+                        popupEnabled: false,
+                        popupContent: "<b>Hello world</b><br>I'm a popup attached to a marker"
+                    },
+                    {
+                        name: 'circle',
+                        obj: null,
+                        options: function () {
+                            var zoom = mapService.getZoom();
+                            var radius = 500000;
 
-    features.data = [
-        {
-            name: 'marker',
-            obj: null,
-            options: function () {
-                return [ mapService.getMapCenter() ];
+                            if (zoom !== 0) {
+                                radius = radius / Math.pow(2, (zoom * 0.7));
+                            }
+
+                            return [ mapService.getLatLngInCurrentBounds(), radius, { color: 'red', fillColor: '#f03', fillOpacity: 0.5 } ];
+                        },
+                        popupEnabled: false,
+                        popupContent: "<b>Hello world</b><br>I'm a popup attached to a circle"
+                    },
+                    {
+                        name: 'polygon',
+                        obj: null,
+                        options: function () {
+                            var exteriorRing = mapService.getLatLngInCurrentBounds();
+                            var hole1 = mapService.getLatLngInCurrentBounds();
+                            var hole2 = mapService.getLatLngInCurrentBounds();
+
+                            return [[ exteriorRing, hole1, hole2 ]];
+                        },
+                        popupEnabled: false,
+                        popupContent: "<b>Hello world</b><br>I'm a popup attached to a polygon"
+                    }
+                ]
             },
-            popupEnabled: false
-        },
-        {
-            name: 'circle',
-            obj: null,
-            options: function () {
-                var zoom = mapService.getZoom();
-                var radius = 500000;
+            {
+                name: "GM",
+                data: [
+                    {
+                        name: 'marker',
+                        apiName: 'Marker',
+                        obj: null,
+                        infoWindow: null,
+                        options: function () {
+                            return {
+                                position: mapService.getMapCenter(),
+                                map: mapService.getMap(),
+                                title: 'Hello, world'
+                            };
+                        },
+                        popupEnabled: false,
+                        popupContent: "<b>Hello world</b><br>I'm a popup attached to a marker"
+                    },
+                    {
+                        name: 'circle',
+                        apiName: 'Circle',
+                        obj: null,
+                        infoWindow: null,
+                        options: function () {
 
-                if (zoom !== 0) {
-                    radius = radius / Math.pow(2, (zoom * 0.7));
-                }
+                            var zoom = mapService.getZoom();
+                            var radius = 500000;
 
-                return [ mapService.getLatLngInCurrentBounds(), radius, { color: 'red', fillColor: '#f03', fillOpacity: 0.5 } ];
-            },
-            popupEnabled: false
-        },
-        {
-            name: 'polygon',
-            obj: null,
-            options: function () {
-                var exteriorRing = mapService.getLatLngInCurrentBounds();
-                var hole1 = mapService.getLatLngInCurrentBounds();
-                var hole2 = mapService.getLatLngInCurrentBounds();
+                            if (zoom !== 0) {
+                                radius = radius / Math.pow(2, (zoom * 0.7));
+                            }
 
-                return [[ exteriorRing, hole1, hole2 ]];
-            },
-            popupEnabled: false
-        }
-    ];
+                            return {
+                                strokeColor: '#FF0000',
+                                strokeOpacity: 0.8,
+                                strokeWeight: 2,
+                                fillColor: '#FF0000',
+                                fillOpacity: 0.35,
+                                map: mapService.getMap(),
+                                center: mapService.getLatLngInCurrentBounds(),
+                                radius: radius
+                            };
+                        },
+                        popupEnabled: false,
+                        popupContent: "<b>Hello world</b><br>I'm a popup attached to a circle"
+                    },
+                    {
+                        name: 'polygon',
+                        apiName: 'Polygon',
+                        obj: null,
+                        infoWindow: null,
+                        options: function () {
+                            var p1 = mapService.getLatLngInCurrentBounds();
+                            var p2 = mapService.getLatLngInCurrentBounds();
+                            var p3 = mapService.getLatLngInCurrentBounds();
+
+                            return {
+                                paths: [p1, p2, p3],
+                                strokeColor: '#FF0000',
+                                strokeOpacity: 0.8,
+                                strokeWeight: 2,
+                                fillColor: '#FF0000',
+                                fillOpacity: 0.35,
+                                map: mapService.getMap()
+                            };
+                        },
+                        popupEnabled: false,
+                        popupContent: "<b>Hello world</b><br>I'm a popup attached to a polygon"
+                    }
+                ]
+            }
+        ];
+
+    features.data = [];
+
+    /**
+     * Sets features data by map type.
+     */
+    var setFeaturesByMapType = function() {
+        var d = _.find(featuresByMapType, function (feature) { return feature.name === activeMapType; });
+        features.data = d.data;
+    };
 
     var get = function (featureName) {
         try {
@@ -79,8 +174,11 @@ app.factory('mapFeatureService', ['$rootScope', 'mapService', function ($rootSco
         return (get(featureName).obj);
     };
 
+    setFeaturesByMapType(activeMapType);
+
     return {
         set: set,
+        setFeaturesByMapType: setFeaturesByMapType,
         get: get,
         getAll: getAll,
         getAllUsedPopups: getAllUsedPopups,

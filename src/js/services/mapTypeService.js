@@ -37,7 +37,7 @@ app.factory('mapTypeService', ['$rootScope', function ($rootScope) {
         $rootScope.$broadcast('mapTypeChange', getActiveMapTypeName());
     };
 
-    // Set default to OSM.
+    // Set the default map. Changing this will set the default map on page load.
     setMapType("OSM");
 
     return {

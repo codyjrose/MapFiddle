@@ -47,7 +47,8 @@ app.controller("ViewMapController", [
     $scope.$on('mapTypeChange', function (e, mapTypeName) {
         $scope.showMapType = mapTypeName;
 
-        mapOptionsService.setMapOptionsType();
+//        mapOptionsService.setOptionsByMapType();
+//        mapFeatureService.setFeaturesByMapType();
 
         mapService.initMap();
 
