@@ -60,4 +60,10 @@
         };
     });
 
+    app.directive('docBox', function () {
+        return {
+            restrict: 'E',
+            templateUrl: 'templates/doc-box.html'
+        };
+    });
 }());

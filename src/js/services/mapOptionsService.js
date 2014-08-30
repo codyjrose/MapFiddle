@@ -5,14 +5,20 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
 
     $rootScope.$on('mapTypeChange', function(e, mapTypeName) {
         activeMapType = mapTypeName;
-        setOptionsByMapType(activeMapType);
-
+        setOptionsByMapType();
+        setDocsByMapType();
     });
 
     var lastUpdatedOption = {},     // Tracks the last updated option
         optionsByMapType = [
             {
                 name: "OSM",
+                docs: [
+                    {
+                        text: "Map options",
+                        url: "//leafletjs.com/reference.html#map-options"
+                    }
+                ],
                 data: [
                     {
                         name: "zoomControl",
@@ -207,16 +213,18 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
                 ]
             }
         ],
-        mapOptions = {};            // The object with the data property holds the actual map options
+        options = {};            // The object with the data property holds the actual map options
 
-    mapOptions.data = [];
+    options.data = [];
+    options.docs = [];
+
 
     /**
      * Returns all map options
      * @returns {object}
      */
     var getAll = function () {
-        return mapOptions.data;
+        return options.data;
     };
 
     /**
@@ -258,6 +266,10 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
         return _.filter(getAll(), function (opt) { return opt.inputType !== false; });
     };
 
+    var getDocs = function () {
+        return options.docs;
+    };
+
     /**
      * Sets a value in the map options object. This is the one true way to set the value of map options.
      * @param {string} optionName The map option to set.
@@ -277,9 +289,17 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
      */
     var setOptionsByMapType = function() {
         var d = _.find(optionsByMapType, function (option) { return option.name === activeMapType; });
-        mapOptions.data = d.data;
+        options.data = d.data;
 
         broadcastChangedMapTypeOptions();
+    };
+
+    /**
+     * Sets options doc list by map type.
+     */
+    var setDocsByMapType = function() {
+        var d = _.find(optionsByMapType, function (feature) { return feature.name === activeMapType; });
+        options.docs = d.docs;
     };
 
     /**
@@ -299,12 +319,14 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
     };
 
     // Init map options to OSM
-    setOptionsByMapType(activeMapType);
+    setOptionsByMapType();
+    setDocsByMapType();
 
     return {
         get:get,
         set: set,
-        setOptionsByMapType: setOptionsByMapType,
+        getDocs: getDocs,
+        //setOptionsByMapType: setOptionsByMapType,
         getAllModified: getAllModified,
         getUserConfigurable: getUserConfigurable,
         getAllWithStateMethod: getAllWithStateMethod,

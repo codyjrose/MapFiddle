@@ -4,9 +4,14 @@ app.controller('MapEventsController', ['$scope', 'mapEventsService', function($s
         $scope.events = mapEventsService.getAll();
     };
 
+    $scope.initDocs = function () {
+        $scope.docs = mapEventsService.getDocs();
+    };
+
     $scope.broadcastChangedEvent = function (eventName) {
         mapEventsService.broadcastChangedEvent(eventName);
     };
 
     $scope.initEvents();
+    $scope.initDocs();
 }]);

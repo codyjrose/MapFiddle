@@ -5,7 +5,8 @@ app.factory('mapFeatureService', ['$rootScope', 'mapService', 'mapTypeService', 
 
     $rootScope.$on('mapTypeChange', function(e, mapTypeName) {
         activeMapType = mapTypeName;
-        setFeaturesByMapType(activeMapType);
+        setFeaturesByMapType();
+        setDocsByMapType();
     });
 
     var lastUpdatedFeature = {},
@@ -13,6 +14,20 @@ app.factory('mapFeatureService', ['$rootScope', 'mapService', 'mapTypeService', 
         featuresByMapType = [
             {
                 name: "OSM",
+                docs: [
+                    {
+                        text: "Markers",
+                        url: "//leafletjs.com/reference.html#marker"
+                    },
+                    {
+                        text: "Circles",
+                        url: "//leafletjs.com/reference.html#circle"
+                    },
+                    {
+                        text: "Polygons",
+                        url: "//leafletjs.com/reference.html#polygon"
+                    }
+                ],
                 data: [
                     {
                         name: 'marker',
@@ -56,6 +71,7 @@ app.factory('mapFeatureService', ['$rootScope', 'mapService', 'mapTypeService', 
             },
             {
                 name: "GM",
+                docs: [],
                 data: [
                     {
                         name: 'marker',
@@ -128,6 +144,7 @@ app.factory('mapFeatureService', ['$rootScope', 'mapService', 'mapTypeService', 
         ];
 
     features.data = [];
+    features.docs = [];
 
     /**
      * Sets features data by map type.
@@ -135,6 +152,14 @@ app.factory('mapFeatureService', ['$rootScope', 'mapService', 'mapTypeService', 
     var setFeaturesByMapType = function() {
         var d = _.find(featuresByMapType, function (feature) { return feature.name === activeMapType; });
         features.data = d.data;
+    };
+
+    /**
+     * Sets features doc list by map type.
+     */
+    var setDocsByMapType = function() {
+        var d = _.find(featuresByMapType, function (feature) { return feature.name === activeMapType; });
+        features.docs = d.docs;
     };
 
     var get = function (featureName) {
@@ -150,6 +175,10 @@ app.factory('mapFeatureService', ['$rootScope', 'mapService', 'mapTypeService', 
 
     var getAll = function () {
         return features.data;
+    };
+
+    var getDocs = function () {
+        return features.docs;
     };
 
     var getAllUsed = function () {
@@ -174,7 +203,8 @@ app.factory('mapFeatureService', ['$rootScope', 'mapService', 'mapTypeService', 
         return (get(featureName).obj);
     };
 
-    setFeaturesByMapType(activeMapType);
+    setFeaturesByMapType();
+    setDocsByMapType();
 
     return {
         set: set,
@@ -183,6 +213,7 @@ app.factory('mapFeatureService', ['$rootScope', 'mapService', 'mapTypeService', 
         getAll: getAll,
         getAllUsedPopups: getAllUsedPopups,
         getAllUsed: getAllUsed,
+        getDocs: getDocs,
         featureEnabled: featureEnabled,
         broadcastChangedFeature: broadcastChangedFeature,
         broadcastChangedFeaturePopup: broadcastChangedFeaturePopup,
