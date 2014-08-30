@@ -210,6 +210,20 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
                         default: true,
                         inputType: "checkbox"
                     },
+                    {
+                        name: "mapTypeControlOptions",
+                        value: {
+                            style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                            position: google.maps.ControlPosition.TOP_LEFT
+                        },
+                        type: "object",
+                        updateMethod: "",
+                        label: "Map Type Control",
+                        tooltip: "The enabled/disabled state of the Map type control.",
+                        required: false,
+                        default: true,
+                        inputType: ""
+                    }
                 ]
             }
         ],
@@ -218,7 +232,10 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
     options.data = [];
     options.docs = [];
 
-
+//    mapTypeControlOptions: {
+//        style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+//            position: google.maps.ControlPosition.BOTTOM_CENTER
+//    }
     /**
      * Returns all map options
      * @returns {object}
