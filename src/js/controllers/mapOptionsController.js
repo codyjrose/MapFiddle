@@ -14,9 +14,9 @@ app.controller('MapOptionsController', ['$scope', 'mapOptionsService', function(
         mapOptionsService.broadcastChangedOption(option.name);
     };
 
-    $scope.$on('mapTypeOptionsChange', function() {
-        // Map type has been changed, re-init options.
+    $scope.$on('mapTypeChange', function() {
         $scope.initOptions();
+        $scope.initDocs();
     });
 
     // Init the sidebar

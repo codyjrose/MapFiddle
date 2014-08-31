@@ -232,10 +232,6 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
     options.data = [];
     options.docs = [];
 
-//    mapTypeControlOptions: {
-//        style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-//            position: google.maps.ControlPosition.BOTTOM_CENTER
-//    }
     /**
      * Returns all map options
      * @returns {object}
@@ -307,8 +303,6 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
     var setOptionsByMapType = function() {
         var d = _.find(optionsByMapType, function (option) { return option.name === activeMapType; });
         options.data = d.data;
-
-        broadcastChangedMapTypeOptions();
     };
 
     /**
@@ -328,13 +322,6 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
         $rootScope.$broadcast('mapOptionChange');
     };
 
-    /**
-     * Send out broadcast that a
-     */
-    var broadcastChangedMapTypeOptions = function () {
-        $rootScope.$broadcast('mapTypeOptionsChange');
-    };
-
     // Init map options to OSM
     setOptionsByMapType();
     setDocsByMapType();
@@ -343,12 +330,10 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
         get:get,
         set: set,
         getDocs: getDocs,
-        //setOptionsByMapType: setOptionsByMapType,
         getAllModified: getAllModified,
         getUserConfigurable: getUserConfigurable,
         getAllWithStateMethod: getAllWithStateMethod,
         broadcastChangedOption: broadcastChangedOption,
-        broadcastChangedMapTypeOptions: broadcastChangedMapTypeOptions,
         lastUpdatedOption: function () { return lastUpdatedOption; }
     };
 }]);

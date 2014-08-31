@@ -16,6 +16,11 @@ app.controller('MapFeaturesController', ['$scope', 'mapFeatureService', function
         mapFeatureService.broadcastChangedFeaturePopup(featureName);
     };
 
+    $scope.$on('mapTypeChange', function() {
+        $scope.initFeatures();
+        $scope.initDocs();
+    });
+
     $scope.initFeatures();
     $scope.initDocs();
 }]);

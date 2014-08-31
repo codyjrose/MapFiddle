@@ -12,6 +12,11 @@ app.controller('MapEventsController', ['$scope', 'mapEventsService', function($s
         mapEventsService.broadcastChangedEvent(eventName);
     };
 
+    $scope.$on('mapTypeChange', function() {
+        $scope.initEvents();
+        $scope.initDocs();
+    });
+
     $scope.initEvents();
     $scope.initDocs();
 }]);
