@@ -94,6 +94,11 @@ app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOpti
 
         } else {
             options.center = getActiveMapTypeLatLngObj(options.center);
+            options.mapTypeControlOptions = {
+                style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                position: google.maps.ControlPosition.TOP_LEFT
+            };
+
             map.mapObj = new google.maps.Map(document.getElementById('gmap'), options);
 
             storeMap(mapTypeName);
@@ -232,7 +237,7 @@ app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOpti
                 .addTo(map.mapObj);
         },
         GM: function (feature) {
-            feature.obj = new google.maps[feature.apiName](feature.options());
+            feature.obj = new google.maps[feature.name](feature.options());
 
         }
     };
@@ -302,7 +307,7 @@ app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOpti
         OSM: function (event) {
             map.mapObj.on(event.name, function (e) {
                 var popupLatLng = event.eventLatLng(e);
-                var popupContent = event.popupOptions.content(e);
+                var popupContent = event.eventContent(e);
 
                 L[event.method]()
                     .setLatLng(popupLatLng)
@@ -315,7 +320,7 @@ app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOpti
 
             google.maps.event.addListener(map.mapObj, event.name, function(e) {
                 var popupLatLng = event.eventLatLng(e);
-                var popupContent = event.popupOptions.content(e);
+                var popupContent = event.eventContent(e);
 
                 event.infoWindow.setContent(popupContent);
                 event.infoWindow.setPosition(popupLatLng);

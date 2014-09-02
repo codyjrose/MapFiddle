@@ -66,4 +66,10 @@
             templateUrl: 'templates/doc-box.html'
         };
     });
+    app.directive('selectMap', function () {
+        return {
+            restrict: 'E',
+            templateUrl: 'templates/select-map.html'
+        };
+    });
 }());

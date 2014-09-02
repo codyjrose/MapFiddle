@@ -167,7 +167,7 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
                     {
                         name: "center",
                         value: [0,0],
-                        type: "array",
+                        type: "google.maps.LatLng",
                         updateMethod: "",
                         label: "Set View",
                         tooltip: "Initial geographical center of the map.",
@@ -209,20 +209,6 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
                         required: false,
                         default: true,
                         inputType: "checkbox"
-                    },
-                    {
-                        name: "mapTypeControlOptions",
-                        value: {
-                            style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-                            position: google.maps.ControlPosition.TOP_LEFT
-                        },
-                        type: "object",
-                        updateMethod: "",
-                        label: "Map Type Control",
-                        tooltip: "The enabled/disabled state of the Map type control.",
-                        required: false,
-                        default: true,
-                        inputType: ""
                     }
                 ]
             }

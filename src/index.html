@@ -25,6 +25,7 @@
         <div ng-controller="NavController as nc" class="col-sm-6 col-md-5 col-lg-3 pull-right">
 
             <select ng-model="selectedMapType" ng-change="changeHandler()" ng-options="option as option.label for option in mapTypes track by option.name"></select>
+            <!--<select-map></select-map>-->
 
             <ul class="nav nav-pills navbar-default nav-justified text-nowrap">
                 <li ng-class="{ active: nc.isSelectedTab('options') }"><a class="force-square" ng-click="nc.selectTab('options')" href="#"><i class="fa fa-cogs"></i> Options</a></li>

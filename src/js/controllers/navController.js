@@ -1,6 +1,8 @@
 app.controller('NavController', ['$scope', '$location', 'mapCodeService', 'mapTypeService', function($scope, $location, mapCodeService, mapTypeService) {
     "use strict";
 
+    $scope.hello = "HEllwo world!";
+
     // Set map options for <select>
     $scope.mapTypes = mapTypeService.getAll();
     $scope.selectedMapType = mapTypeService.getActiveMapType();

@@ -74,8 +74,7 @@ app.factory('mapFeatureService', ['$rootScope', 'mapService', 'mapTypeService', 
                 docs: [],
                 data: [
                     {
-                        name: 'marker',
-                        apiName: 'Marker',
+                        name: 'Marker',
                         obj: null,
                         infoWindow: null,
                         options: function () {
@@ -89,8 +88,7 @@ app.factory('mapFeatureService', ['$rootScope', 'mapService', 'mapTypeService', 
                         popupContent: "<b>Hello world</b><br>I'm a popup attached to a marker"
                     },
                     {
-                        name: 'circle',
-                        apiName: 'Circle',
+                        name: 'Circle',
                         obj: null,
                         infoWindow: null,
                         options: function () {
@@ -117,8 +115,7 @@ app.factory('mapFeatureService', ['$rootScope', 'mapService', 'mapTypeService', 
                         popupContent: "<b>Hello world</b><br>I'm a popup attached to a circle"
                     },
                     {
-                        name: 'polygon',
-                        apiName: 'Polygon',
+                        name: 'Polygon',
                         obj: null,
                         infoWindow: null,
                         options: function () {

@@ -33,11 +33,12 @@ app.factory('mapEventsService', ['$rootScope', 'mapTypeService', function ($root
                         name: "click",
                         label: "\"click\" event",
                         popupOptions: {
-                            content: function (e) {
-                                return 'The \"click\" event fired. You clicked the map at <b>' + e.latlng.lat + ', ' + e.latlng.lng + '</b>!'
-                            },
-                            eventResultContent: "e.latlng",
+                            content: 'The \"click\" event fired. You clicked the map at ',
+                            eventResultContent: 'e.latlng.lat + \', \' + e.latlng.lng',
                             latLng: "e.latlng"
+                        },
+                        eventContent: function (e) {
+                            return 'The \"click\" event fired. You clicked the map at <b>' + e.latlng.lat + ', ' + e.latlng.lng + '</b>!'
                         },
                         eventLatLng: function (e) {
                             return { lat: e.latlng.lat, lng: e.latlng.lng };
@@ -49,11 +50,12 @@ app.factory('mapEventsService', ['$rootScope', 'mapTypeService', function ($root
                         name: "moveend",
                         label: "\"moveend\" event",
                         popupOptions: {
-                            content: function (e) {
-                                return 'The \"moveend\" event fired. The new map center is <b>' + e.target.getCenter().lat + ", " + e.target.getCenter().lng + '</b>!'
-                            },
+                            content: 'The \"moveend\" event fired. The new map center is ',
                             eventResultContent: "e.target.getCenter().toString()",
                             latLng: "e.target.getCenter()"
+                        },
+                        eventContent: function (e) {
+                            return 'The \"moveend\" event fired. The new map center is <b>' + e.target.getCenter().lat + ", " + e.target.getCenter().lng + '</b>!'
                         },
                         eventLatLng: function (e) {
                             return { lat: e.target.getCenter().lat, lng: e.target.getCenter().lng };
@@ -71,10 +73,11 @@ app.factory('mapEventsService', ['$rootScope', 'mapTypeService', function ($root
                         name: "click",
                         label: "\"click\" event",
                         popupOptions: {
-                            content: function (e) { return "The \"click\" event fired. You clicked the map at " + e.latLng.toUrlValue() },
-                            eventResultContent: "e.latlng",
+                            content: "The \"click\" event fired. You clicked the map at ",
+                            eventResultContent: "e.latLng.lat() + \', \' + e.latLng.lng()",
                             latLng: "e.latlng"
                         },
+                        eventContent: function (e) { return "The \"click\" event fired. You clicked the map at " + e.latLng.toUrlValue() },
                         eventLatLng: function (e) {
                             return e.latLng;
                         },
@@ -82,23 +85,6 @@ app.factory('mapEventsService', ['$rootScope', 'mapTypeService', function ($root
                         enabled: false,
                         method: "popup"
                     }
-//                    ,{
-//                        name: "center_changed",
-//                        label: "\"center_changed\" event",
-//                        popupOptions: {
-//                            content: function (e) {
-//                                return 'The \"center_changed\" event fired. The new map center is <b>' + e.target.getCenter().lat + ", " + e.target.getCenter().lng + '</b>!'
-//                            },
-//                            eventResultContent: "e.target.getCenter().toString()",
-//                            latLng: "e.target.getCenter()"
-//                        },
-//                        eventLatLng: function (map) {
-//                            return map.mapObj.getCenter();
-//                        },
-//                        infoWindow: null,
-//                        enabled: false,
-//                        method: "popup"
-//                    }
                 ]
             }
 
