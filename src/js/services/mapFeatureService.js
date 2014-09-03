@@ -42,14 +42,7 @@ app.factory('mapFeatureService', ['$rootScope', 'mapService', 'mapTypeService', 
                         name: 'circle',
                         obj: null,
                         options: function () {
-                            var zoom = mapService.getZoom();
-                            var radius = 500000;
-
-                            if (zoom !== 0) {
-                                radius = radius / Math.pow(2, (zoom * 0.7));
-                            }
-
-                            return [ mapService.getLatLngInCurrentBounds(), radius, { color: 'red', fillColor: '#f03', fillOpacity: 0.5 } ];
+                            return [ mapService.getLatLngInCurrentBounds(), getCircleRadius(), { color: 'red', fillColor: '#f03', fillOpacity: 0.5 } ];
                         },
                         popupEnabled: false,
                         popupContent: "<b>Hello world</b><br>I'm a popup attached to a circle"
@@ -85,21 +78,20 @@ app.factory('mapFeatureService', ['$rootScope', 'mapService', 'mapTypeService', 
                             };
                         },
                         popupEnabled: false,
-                        popupContent: "<b>Hello world</b><br>I'm a popup attached to a marker"
+                        popupContent: "<b>Hello world</b><br>I'm a popup attached to a marker",
+                        outputObject: function() {
+                            return "{\n" +
+                                   "    position: new google.maps.LatLng" + mapService.getMapCenter() + ",\n" +
+                                   "    map: map, \n" +
+                                   "    title: \'Hello, world\'\n" +
+                                   "  }"
+                        }
                     },
                     {
                         name: 'Circle',
                         obj: null,
                         infoWindow: null,
                         options: function () {
-
-                            var zoom = mapService.getZoom();
-                            var radius = 500000;
-
-                            if (zoom !== 0) {
-                                radius = radius / Math.pow(2, (zoom * 0.7));
-                            }
-
                             return {
                                 strokeColor: '#FF0000',
                                 strokeOpacity: 0.8,
@@ -108,11 +100,23 @@ app.factory('mapFeatureService', ['$rootScope', 'mapService', 'mapTypeService', 
                                 fillOpacity: 0.35,
                                 map: mapService.getMap(),
                                 center: mapService.getLatLngInCurrentBounds(),
-                                radius: radius
+                                radius: getCircleRadius()
                             };
                         },
                         popupEnabled: false,
-                        popupContent: "<b>Hello world</b><br>I'm a popup attached to a circle"
+                        popupContent: "<b>Hello world</b><br>I'm a popup attached to a circle",
+                        outputObject: function() {
+                            return "{\n" +
+                            "    strokeColor: '#FF0000',\n" +
+                            "    strokeOpacity: 0.8,\n" +
+                            "    strokeWeight: 2,\n" +
+                            "    fillColor: '#FF0000',\n" +
+                            "    fillOpacity: 0.35,\n" +
+                            "    map: map,\n" +
+                            "    center: new google.maps.LatLng" + mapService.getLatLngInCurrentBounds() +",\n" +
+                            "    radius: " + getCircleRadius() + "\n" +
+                            "  }"
+                        }
                     },
                     {
                         name: 'Polygon',
@@ -134,7 +138,20 @@ app.factory('mapFeatureService', ['$rootScope', 'mapService', 'mapTypeService', 
                             };
                         },
                         popupEnabled: false,
-                        popupContent: "<b>Hello world</b><br>I'm a popup attached to a polygon"
+                        popupContent: "<b>Hello world</b><br>I'm a popup attached to a polygon",
+                        outputObject: function() {
+                            return "{\n" +
+                                "    paths: [new google.maps.LatLng" + mapService.getLatLngInCurrentBounds() + ",\n" +
+                                "            new google.maps.LatLng" + mapService.getLatLngInCurrentBounds() + ",\n" +
+                                "            new google.maps.LatLng" + mapService.getLatLngInCurrentBounds() + "],\n" +
+                                "    strokeColor: '#FF0000',\n" +
+                                "    strokeOpacity: 0.8,\n" +
+                                "    strokeWeight: 2,\n" +
+                                "    fillColor: '#FF0000',\n" +
+                                "    fillOpacity: 0.35,\n" +
+                                "    map: map\n" +
+                                "  }"
+                        }
                     }
                 ]
             }
@@ -198,6 +215,17 @@ app.factory('mapFeatureService', ['$rootScope', 'mapService', 'mapTypeService', 
 
     var featureEnabled = function(featureName) {
         return (get(featureName).obj);
+    };
+
+    var getCircleRadius = function() {
+        var zoom = mapService.getZoom();
+        var radius = 500000;
+
+        if (zoom !== 0) {
+            radius = radius / Math.pow(2, (zoom * 0.7));
+        }
+
+        return radius;
     };
 
     setFeaturesByMapType();

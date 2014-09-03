@@ -168,39 +168,55 @@ app.factory('mapCodeService', ['$rootScope', 'mapOptionsService', 'mapFeatureSer
 
             _.forIn(features, function (feature) {
                 js += "  ";
-                var options = feature.options();
                 js += "var " + feature.name + " = new google.maps." + feature.name + "(";
-
-                _.forIn(options, function (option, key) {
-
-                    js += JSON.stringify(option);
-
-                    if (parseInt(key, 10) < options.length - 1) {
-                        js += ", ";
-                    }
-                });
-                js += ").addTo(map);\n";
+                js += feature.outputObject();
+                js += ");\n";
             });
 
             return js;
         }
     };
 
-    var getMapFeaturePopups = function () {
-        var js = "",
-            popups = mapFeatureService.getAllUsedPopups();
+    var getMapFeaturePopups = {
+        OSM: function () {
+            var js = "",
+                popups = mapFeatureService.getAllUsedPopups();
 
-        if (popups.length) {
-            js += "\n  // Add feature popups\n";
-        } else {
-            return "";
+            if (popups.length) {
+                js += "\n  // Add feature popups\n";
+            } else {
+                return "";
+            }
+
+            _.forIn(popups, function (popup) {
+                js += "  ";
+                js += popup.name + ".bindPopup(&quot;&lt;b&gt;Hello world&lt;/b&gt;&lt;br&gt;I&#39;m a popup attached to " + popup.name + "&quot;);\n";
+            });
+            return js;
+        },
+        GM: function () {
+            var js = "",
+                features = mapFeatureService.getAllUsedPopups();
+
+            if (features.length) {
+                js += "\n  // Add feature popups\n";
+            } else {
+                return "";
+            }
+
+            _.forIn(features, function (feature) {
+                js += "  ";
+
+                js += "var infoWindow" + feature.name + " = new google.maps.InfoWindow();\n";
+
+                js += "  google.maps.event.addListener(" + feature.name +",'click', function(e) {\n";
+                js += "    infoWindow" + feature.name + ".setContent(&quot;&lt;b&gt;Hello world&lt;/b&gt;&lt;br&gt;I&#39;m a popup attached to " + feature.name + "&quot;);\n";
+                js += "    infoWindow" + feature.name + ".setPosition(e.latLng );\n";
+                js += "    infoWindow" + feature.name + ".open(map);\n";
+                js += "  });\n";
+            });
+            return js;
         }
-
-        _.forIn(popups, function (popup) {
-            js += "  ";
-            js += popup.name + ".bindPopup(&quot;&lt;b&gt;Hello world&lt;/b&gt;&lt;br&gt;I&#39;m a popup attached to " + popup.name + "&quot;);\n";
-        });
-        return js;
     };
 
     var getMapEvents = {
@@ -272,7 +288,7 @@ app.factory('mapCodeService', ['$rootScope', 'mapOptionsService', 'mapFeatureSer
         code.push(getMapOptions[activeMapType]());
         code.push(createMap[activeMapType]);
         code.push(getMapFeatures[activeMapType]());
-        code.push(getMapFeaturePopups());
+        code.push(getMapFeaturePopups[activeMapType]());
         code.push(getMapEvents[activeMapType]());
         code.push(js3);
         code.push(html3);

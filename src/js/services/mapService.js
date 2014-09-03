@@ -115,7 +115,8 @@ app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOpti
     };
 
     var getMapCenter = function () {
-        return map.mapObj.getCenter();
+        return getActiveMapTypeLatLngObj(map.mapObj.getCenter());
+//        return map.mapObj.getCenter();
     };
 
     var getLatLngInCurrentBounds = function () {
