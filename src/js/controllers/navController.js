@@ -1,8 +1,6 @@
 app.controller('NavController', ['$scope', '$location', 'mapCodeService', 'mapTypeService', function($scope, $location, mapCodeService, mapTypeService) {
     "use strict";
 
-    $scope.hello = "HEllwo world!";
-
     // Set map options for <select>
     $scope.mapTypes = mapTypeService.getAll();
     $scope.selectedMapType = mapTypeService.getActiveMapType();
@@ -39,7 +37,10 @@ app.controller('NavController', ['$scope', '$location', 'mapCodeService', 'mapTy
 
     // Option templates fire this function on click to raise event 'mapOptionChange'
     $scope.changeHandler = function () {
-        mapTypeService.setMapType($scope.selectedMapType.name);
+        mapTypeService.setMapType(this.option.name);
         mapTypeService.broadcastMapTypeChange();
+
+        $scope.showMenu = false;
+        $scope.selectedMapType = mapTypeService.getActiveMapType();
     };
 }]);
