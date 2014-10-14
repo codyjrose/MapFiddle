@@ -237,7 +237,6 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
         } catch (ignore) {}
     };
 
-
     /**
      * Returns all map options that are required for map creation as well as any options that have been modified.
      * @returns {object}
@@ -279,6 +278,7 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
         if (value instanceof L.LatLng) {
             value = [value.lat, value.lng];
         }
+
         // Set the value of the option
         get(optionName).value = value;
     };
@@ -308,7 +308,7 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
         $rootScope.$broadcast('mapOptionChange');
     };
 
-    // Init map options to OSM
+    // Init map options
     setOptionsByMapType();
     setDocsByMapType();
 
