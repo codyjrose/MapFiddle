@@ -1,3 +1,5 @@
+osm = null;
+
 app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOptionsService', function ($rootScope, $location, mapTypeService, mapOptionsService) {
     "use strict";
 
@@ -86,7 +88,7 @@ app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOpti
             storeMap(mapTypeName);
 
             // Create and add tile layer.
-            var osm = new L.TileLayer(options.url, options);
+            osm = new L.TileLayer(options.url, options);
             map.mapObj.addLayer(osm);
 
             addMoveEndEvent();
@@ -336,7 +338,7 @@ app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOpti
             map.mapObj.off(event.name);
         },
         GM: function (event) {
-            google.maps.event.clearInstanceListeners(event.obj);
+            google.maps.event.clearInstanceListeners(map.mapObj, event.name);
         }
     };
 
