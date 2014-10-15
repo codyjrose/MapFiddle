@@ -51,8 +51,7 @@ gulp.task('html', function () {
                 '//ajax.googleapis.com/ajax/libs/angularjs/1.2.20/angular-route.min.js',
                 '//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js',
                 '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js',
-                '//maps.googleapis.com/maps/api/js?v=3.exp'
-
+                '<script src="//maps.googleapis.com/maps/api/js?v=3.exp"></script>'
                 ],
             'css': 'css/styles.css',
             'ga': "<script>" +
