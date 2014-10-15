@@ -98,7 +98,12 @@ app.factory('mapCodeService', ['$rootScope', 'mapOptionsService', 'mapFeatureSer
 
                 switch (option.type) {
                     case "google.maps.LatLng":
-                        js += option.name + ": new google.maps.LatLng" + option.value.toString();
+                        if (Array.isArray(option.value)) {
+                            js += option.name + ": new google.maps.LatLng" + new google.maps.LatLng(option.value[0], option.value[1]);
+                        } else {
+                            js += option.name + ": new google.maps.LatLng" + option.value.toString();
+                        }
+
                         break;
                     case "object":
                         js += option.name + ": " + option.value.toString();

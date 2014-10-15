@@ -2,9 +2,9 @@ Mapstrap
 =========
 
 
-[Mapstrap](http://Mapstrap.com/) was created to promote the use of maps by making the process of creating one as simple as possible.
+[Mapstrap](http://Mapstrap.com/) Mapstrap was created to assist developers by providing much of the boilerplate code needed to create a web map. As well as providing working documentation for often used map features.
 
-It's intended audience is anyone who needs to include a map on their own website. Mapstrap simplifies the "getting started" phase by providing the HTML, CSS and JavaScript needed for a basic map.
+It can be used to build websites using OpenStreetMap and Leaflet.js or Google Maps.
 
 License
 ----
