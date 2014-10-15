@@ -29,13 +29,6 @@ app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOpti
     var setMapType = function(mapTypeName) {
         map = _.find(maps, function(map) { return map.name === mapTypeName; });
     };
-
-    /**
-     * Saves the map object to the maps array so the map doesn't have to be recreated each time the map type is changed.
-     */
-    var storeMap = function() {
-        _.find(maps, function(m) { return m.name === map.name; }).mapObj = map.mapObj;
-    };
     //endregion
 
     /**
@@ -55,46 +48,50 @@ app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOpti
     };
 
     /**
-     * Add moveend event to map.
-     * Mostly done so codeService can update it's output HTML/JS and the code will update as the map is moved around.
+     * Add map events to fire when the center of the map changes.
      */
-    var addMoveEndEvent = function () {
-        map.mapObj.on('moveend', function () {
-            $rootScope.$broadcast('mapMoveEnd');
-        });
+    var addMoveEndEvent = {
+        OSM: function() {
+            map.mapObj.on('moveend', function () {
+                $rootScope.$broadcast('mapMoveEnd');
+            })
+        },
+        GM: function() {
+            google.maps.event.addListener(map.mapObj, 'center_changed', function() {
+                $rootScope.$broadcast('mapMoveEnd');
+            });
+        }
     };
 
-    var initMap = function () {
+    var initMap = function() {
         var options = {};
         _.forIn(mapOptionsService.getAllModified(), function (option) {
             options[option.name] = option.value;
         });
-        var mapTypeName = activeMapType;
 
-        setMapType(mapTypeName);
+        setMapType(activeMapType);
 
         // Short curcuit if map already exists;
         if(map.mapObj) {
             return;
         }
 
-        if (mapTypeName === "OSM") {
+        var createOsmMap = function() {
             if ($location.absUrl().indexOf('/src') > 0) {
                 // Hacky way to check if work in dev or prod env. When in prod, images are served up via cdn.
                 L.Icon.Default.imagePath = 'assets/leaflet/';
             }
 
             map.mapObj = new L.Map('osmmap', options);
-            storeMap(mapTypeName);
 
             // Create and add tile layer.
-            osm = new L.TileLayer(options.url, options);
-            map.mapObj.addLayer(osm);
+            map.mapObj.addLayer(new L.TileLayer(options.url, options));
 
-            addMoveEndEvent();
+            addMoveEndEvent[activeMapType]();
             addLogo();
+        };
 
-        } else {
+        var createGoogleMap = function() {
             options.center = getActiveMapTypeLatLngObj(options.center);
             options.mapTypeControlOptions = {
                 style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
@@ -102,8 +99,16 @@ app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOpti
             };
 
             map.mapObj = new google.maps.Map(document.getElementById('gmap'), options);
+            addMoveEndEvent[activeMapType]();
+        };
 
-            storeMap(mapTypeName);
+        switch (activeMapType) {
+            case "OSM":
+                createOsmMap();
+                break;
+            case "GM":
+                createGoogleMap();
+                break;
         }
     };
 
@@ -118,7 +123,6 @@ app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOpti
 
     var getMapCenter = function () {
         return getActiveMapTypeLatLngObj(map.mapObj.getCenter());
-//        return map.mapObj.getCenter();
     };
 
     var getLatLngInCurrentBounds = function () {
@@ -195,7 +199,7 @@ app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOpti
     };
 
     var toggleControl = {
-        OSM : function(option) {
+        OSM: function(option) {
             if (option.value) {
                 map.mapObj[option.name].addTo(map.mapObj);
             } else {

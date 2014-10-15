@@ -166,13 +166,13 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
                     },
                     {
                         name: "center",
-                        value: [0,0],
+                        value: new google.maps.LatLng(0,0),
                         type: "google.maps.LatLng",
                         updateMethod: "",
                         label: "Set View",
                         tooltip: "Initial geographical center of the map.",
                         required: true,
-                        default: [0,0],
+                        default: new google.maps.LatLng(0,0),
                         inputType: false,
                         stateMethod: "getCenter"
                     },
