@@ -1,8 +1,39 @@
-app.factory('mapService', ['$rootScope', '$location', function ($rootScope, $location) {
+osm = null;
+
+app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOptionsService', function ($rootScope, $location, mapTypeService, mapOptionsService) {
     "use strict";
 
-    var map;
+    var activeMapType = mapTypeService.getActiveMapTypeName();
 
+    $rootScope.$on('mapTypeChange', function(e, mapTypeName) {
+        activeMapType = mapTypeName;
+    });
+
+    //region Map storage
+    var map,
+        maps = [
+            {
+                name: "OSM",
+                mapObj: null
+            },
+            {
+                name: "GM",
+                mapObj: null
+            }
+        ];
+
+    /**
+     * Assigns mapService's map object by map type.
+     * @param mapTypeName
+     */
+    var setMapType = function(mapTypeName) {
+        map = _.find(maps, function(map) { return map.name === mapTypeName; });
+    };
+    //endregion
+
+    /**
+     * Add the Mapstrap logo to the map
+     */
     var addLogo = function () {
         var logo = L.control({position: 'bottomleft'});
 
@@ -13,172 +44,325 @@ app.factory('mapService', ['$rootScope', '$location', function ($rootScope, $loc
             return branding;
         };
 
-        logo.addTo(map);
+        logo.addTo(map.mapObj);
     };
 
-    var addMoveEndEvent = function () {
-        map.on('moveend', function () {
-            $rootScope.$broadcast('mapMoveEnd');
+    /**
+     * Add map events to fire when the center of the map changes.
+     */
+    var addMoveEndEvent = {
+        OSM: function() {
+            map.mapObj.on('moveend', function () {
+                $rootScope.$broadcast('mapMoveEnd');
+            })
+        },
+        GM: function() {
+            google.maps.event.addListener(map.mapObj, 'center_changed', function() {
+                $rootScope.$broadcast('mapMoveEnd');
+            });
+        }
+    };
+
+    var initMap = function() {
+        var options = {};
+        _.forIn(mapOptionsService.getAllModified(), function (option) {
+            options[option.name] = option.value;
         });
-    };
 
-    var initMap = function (options) {
+        setMapType(activeMapType);
 
-        if ($location.absUrl().indexOf('/src') > 0) {
-            // Hacky way to check if work in dev or prod env. When in prod, images are served up via cdn.
-            L.Icon.Default.imagePath = 'assets/leaflet/';
+        // Short curcuit if map already exists;
+        if(map.mapObj) {
+            return;
         }
 
-        map = new L.Map('map', options);
+        var createOsmMap = function() {
+            if ($location.absUrl().indexOf('/src') > 0) {
+                // Hacky way to check if work in dev or prod env. When in prod, images are served up via cdn.
+                L.Icon.Default.imagePath = 'assets/leaflet/';
+            }
 
-        // create the tile layer with correct attribution
-        var osm = new L.TileLayer(options.url, options);
+            map.mapObj = new L.Map('osmmap', options);
 
-        map.addLayer(osm);
+            // Create and add tile layer.
+            map.mapObj.addLayer(new L.TileLayer(options.url, options));
 
-        addMoveEndEvent();
-        addLogo();
+            addMoveEndEvent[activeMapType]();
+            addLogo();
+        };
+
+        var createGoogleMap = function() {
+            options.center = getActiveMapTypeLatLngObj(options.center);
+            options.mapTypeControlOptions = {
+                style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                position: google.maps.ControlPosition.TOP_LEFT
+            };
+
+            map.mapObj = new google.maps.Map(document.getElementById('gmap'), options);
+            addMoveEndEvent[activeMapType]();
+        };
+
+        switch (activeMapType) {
+            case "OSM":
+                createOsmMap();
+                break;
+            case "GM":
+                createGoogleMap();
+                break;
+        }
     };
 
+    //region Map state functions
     var getMap = function () {
-        return map;
+        return map.mapObj;
     };
 
     var getZoom = function () {
-        return map.getZoom();
+        return map.mapObj.getZoom();
     };
 
     var getMapCenter = function () {
-        var center = map.getCenter();
-        return [ center.lat, center.lng ];
+        return getActiveMapTypeLatLngObj(map.mapObj.getCenter());
     };
 
     var getLatLngInCurrentBounds = function () {
-        var ne = map.getBounds().getNorthEast(),
-            sw = map.getBounds().getSouthWest(),
-            lat = Math.random() * (ne.lat - sw.lat) + sw.lat,
+        var ne = map.mapObj.getBounds().getNorthEast(),
+            sw = map.mapObj.getBounds().getSouthWest(),
+            lat, lng;
+
+        if (typeof(ne.lat) === 'function') {
+            lat = Math.random() * (ne.lat() - sw.lat()) + sw.lat();
+            lng = Math.random() * (ne.lng() - sw.lng()) + sw.lng();
+        } else {
+            lat = Math.random() * (ne.lat - sw.lat) + sw.lat;
             lng = Math.random() * (ne.lng - sw.lng) + sw.lng;
+        }
 
-        return [lat, lng];
+        return getActiveMapTypeLatLngObj([lat, lng]);
+    };
+    //endregion
+
+    //region Utility functions
+    /**
+     * Convert Array containing latitude and longitude into a google maps LatLng object.
+     * @param latLng
+     * @returns {*}
+     */
+    var convertArrayToGoogleLatLng = function(latLng) {
+        if (Array.isArray(latLng) || latLng instanceof L.latLng) {
+            return new google.maps.LatLng(latLng[0], latLng[1]);
+        }
+        return latLng;
+    };
+    /**
+     * Convert a google maps LatLng object to an array containing latitude and longitude.
+     * @param latLngObj
+     * @returns {*}
+     */
+    var convertGoogleToLeafletLatLng = function(latLngObj) {
+        if (latLngObj instanceof google.maps.LatLng) {
+            return new L.LatLng(latLngObj.lat(), latLngObj.lng());
+        }
+        return latLngObj;
     };
 
-    // Properties
-    // For options that are properties of the map. Ref: http://leafletjs.com/reference.html#map-properties
-    var toggleProperty = function (option) {
-        if (option.value) {
-            map[option.name].enable();
-        } else {
-            map[option.name].disable();
+    var getActiveMapTypeLatLngObj = function (latLng) {
+        switch (activeMapType) {
+            case "OSM":
+                if (latLng instanceof google.maps.LatLng) {
+                    return new L.LatLng(latLng.lat(), latLng.lng());
+                }
+                break;
+            case "GM":
+                if (Array.isArray(latLng)) {
+                    return new google.maps.LatLng(latLng[0], latLng[1]);
+                } else if (latLng instanceof L.LatLng) {
+                    return new google.maps.LatLng(latLng.lat, latLng.lng);
+                }
+                break;
+            default:
+                return latLng;
+        }
+        return latLng;
+    };
+    //endregion
+
+    //region Options
+    var toggleProperty = {
+        OSM: function (option) {
+            if (option.value) {
+                map.mapObj[option.name].enable();
+            } else {
+                map.mapObj[option.name].disable();
+            }
         }
     };
 
-    // For options that are map controls. Ref: http://leafletjs.com/reference.html#map-addcontrol
-    var toggleControl = function (option) {
-        if (option.value) {
-            map[option.name].addTo(map);
-        } else {
-            map[option.name].removeFrom(map);
+    var toggleControl = {
+        OSM: function(option) {
+            if (option.value) {
+                map.mapObj[option.name].addTo(map.mapObj);
+            } else {
+                map.mapObj[option.name].removeFrom(map.mapObj);
+            }
         }
     };
 
-    var updatePropertyOfOptions = function (option) {
-        map.options[option.name] = option.value;
+    var setOption = {
+        OSM: function(option) {
+            map.mapObj.options[option.name] = option.value;
+        },
+        GM: function(option) {
+            var o = {};
+            o[option.name] = option.value;
+
+            map.mapObj.setOptions(o);
+        }
     };
 
     var setMapOption = function (option) {
         switch (option.updateMethod) {
-        case "mapProperty":
-            toggleProperty(option);
-            break;
-        case "control":
-            toggleControl(option);
-            break;
-        case "propertyOfMapDotOptions":
-            updatePropertyOfOptions(option);
-            break;
-        default:
-            break;
+            case "mapProperty":
+                toggleProperty[activeMapType](option);
+                break;
+            case "control":
+                toggleControl[activeMapType](option);
+                break;
+            case "setOption":
+                setOption[activeMapType](option);
+                break;
+            default:
+                break;
+        }
+    };
+    //endregion
+
+    //region Features
+    var addFeature = {
+        OSM: function (feature) {
+            feature.obj = L[feature.name].apply(null, feature.options())
+                .addTo(map.mapObj);
+        },
+        GM: function (feature) {
+            feature.obj = new google.maps[feature.name](feature.options());
+
         }
     };
 
-    // Features
-    var addFeature = function (feature) {
-        feature.obj = L[feature.name]
-            .apply(null, feature.options())
-            .addTo(map);
+    var removeFeature = {
+        OSM: function (feature) {
+            map.mapObj.removeLayer(feature.obj);
+            feature.obj = null;
+        },
+        GM: function (feature) {
+            feature.obj.setMap(null);
+            feature.obj = null;
+        }
     };
 
-    var removeFeature = function (feature) {
-        map.removeLayer(feature.obj);
-        feature.obj = null;
+    var bindPopupToFeature = {
+        OSM: function (feature) {
+            feature.obj.bindPopup(feature.popupContent);
+            feature.popupEnabled = true;
+        },
+        GM: function (feature) {
+            feature.infoWindow = new google.maps.InfoWindow();
+
+            google.maps.event.addListener(feature.obj, 'click', function(e) {
+                feature.infoWindow.setContent(feature.popupContent);
+                feature.infoWindow.setPosition(e.latLng);
+
+                feature.infoWindow.open(map.mapObj);
+            });
+        }
     };
 
-    var bindPopupToFeature = function (feature) {
-        feature.obj.bindPopup("<b>Hello world</b><br>I'm a popup attached to " + feature.name);
-        feature.popupEnabled = true;
-    };
-
-    var unbindPopupToFeature = function (feature) {
-        feature.obj.unbindPopup();
-        feature.popupEnabled = false;
+    var unbindPopupToFeature = {
+        OSM: function (feature) {
+            feature.obj.unbindPopup();
+            feature.popupEnabled = false;
+        },
+        GM: function (feature) {
+            google.maps.event.clearInstanceListeners(feature.obj);
+            feature.infoWindow = null;
+            feature.popupEnabled = false;
+        }
     };
 
     var toggleMapFeature = function (feature) {
         if (feature.obj) {
-            unbindPopupToFeature(feature);
-            removeFeature(feature);
+            unbindPopupToFeature[activeMapType](feature);
+            removeFeature[activeMapType](feature);
         } else {
-            addFeature(feature);
+            addFeature[activeMapType](feature);
         }
         return feature;
     };
 
     var toggleBindPopupToFeature = function (feature) {
         if (feature.popupEnabled) {
-            bindPopupToFeature(feature);
+            bindPopupToFeature[activeMapType](feature);
 
         } else {
-            unbindPopupToFeature(feature);
+            unbindPopupToFeature[activeMapType](feature);
+        }
+    };
+    //endregion
+
+    //region Events
+    var enableEvent = {
+        OSM: function (event) {
+            map.mapObj.on(event.name, function (e) {
+                var popupLatLng = event.eventLatLng(e);
+                var popupContent = event.eventContent(e);
+
+                L[event.method]()
+                    .setLatLng(popupLatLng)
+                    .setContent(popupContent)
+                    .openOn(map.mapObj);
+            });
+        },
+        GM: function (event) {
+            event.infoWindow = new google.maps.InfoWindow();
+
+            google.maps.event.addListener(map.mapObj, event.name, function(e) {
+                var popupLatLng = event.eventLatLng(e);
+                var popupContent = event.eventContent(e);
+
+                event.infoWindow.setContent(popupContent);
+                event.infoWindow.setPosition(popupLatLng);
+
+                event.infoWindow.open(map.mapObj);
+            });
         }
     };
 
-    // Events
-    var enableEvent = function (event) {
-        map.on(event.name, function (e) {
-            var latLng = event.eventLatLng(e);
-
-            L[event.method]()
-                .setLatLng(latLng)
-                .setContent(event.popupOptions.content + "<b>" + latLng.lat + "," + latLng.lng + "</b>!")
-                .openOn(map);
-        });
-    };
-
-    var disableEvent = function (event) {
-        map.off(event.name);
-
-        // Need to make sure moveend isn't turned off for the background map..
-        if (event.name === "moveend") {
-            addMoveEndEvent();
+    var disableEvent = {
+        OSM: function (event) {
+            map.mapObj.off(event.name);
+        },
+        GM: function (event) {
+            google.maps.event.clearInstanceListeners(map.mapObj, event.name);
         }
     };
 
     var toggleMapEvent = function (event) {
         if (!event.enabled) {
-            enableEvent(event);
+            enableEvent[activeMapType](event);
             event.enabled = true;
 
         } else {
-            disableEvent(event);
+            disableEvent[activeMapType](event);
             event.enabled = false;
         }
     };
+    //endregion
 
     return {
         initMap: initMap,
         getMap: getMap,
-        getMapCenter: getMapCenter,
         getZoom: getZoom,
+        getMapCenter: getMapCenter,
         getLatLngInCurrentBounds: getLatLngInCurrentBounds,
         setMapOption: setMapOption,
         toggleMapFeature: toggleMapFeature,

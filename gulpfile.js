@@ -50,8 +50,9 @@ gulp.task('html', function () {
                 '//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js',
                 '//ajax.googleapis.com/ajax/libs/angularjs/1.2.20/angular-route.min.js',
                 '//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js',
-                '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js'
-            ],
+                '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js',
+                '<script src="//maps.googleapis.com/maps/api/js?v=3.exp"></script>'
+                ],
             'css': 'css/styles.css',
             'ga': "<script>" +
                   "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){" +

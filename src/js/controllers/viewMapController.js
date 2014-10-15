@@ -1,30 +1,51 @@
-app.controller("ViewMapController", ['$scope', 'mapOptionsService', 'mapFeatureService','mapEventsService', 'mapService', 'geoLocationService', function($scope, mapOptionsService, mapFeatureService, mapEventsService, mapService, geoLocationService) {
+app.controller("ViewMapController", [
+        '$scope',
+        'mapOptionsService',
+        'mapFeatureService',
+        'mapEventsService',
+        'mapService',
+        'geoLocationService',
+        'mapTypeService',
+        function ($scope,
+                  mapOptionsService,
+                  mapFeatureService,
+                  mapEventsService,
+                  mapService,
+                  geoLocationService,
+                  mapTypeService) {
+
     "use strict";
 
-    geoLocationService.userLatLng()
-        .success(function(data, status, headers, config) {
-            if (status === 200) {
-                mapOptionsService.set('center', geoLocationService.getCountryLatLng(data.country_code));
-                mapOptionsService.broadcastChangedOption('center');
-            }
-        }).
-        error(function(data, status, headers, config) {
-            // Handle error.
-            console.log(data);
-            mapOptionsService.set('zoom', 3);
-            mapOptionsService.broadcastChangedOption('zoom');
-        }).
-        finally(function() {
+    $scope.showMapType = mapTypeService.getActiveMapTypeName();
 
-            // Get map options object to create the map
-            var optionsObject = {};
-            _.forIn(mapOptionsService.getAllModified(), function (option) {
-                optionsObject[option.name] = option.value;
+    var centerAndLoadMap = function() {
+        // Get the location of the user and zoom/center around it.
+        geoLocationService.userLatLng()
+            .success(function(data, status, headers, config) {
+                if (status === 200) {
+                    mapOptionsService.set('center', geoLocationService.getCountryLatLng(data.country_code));
+                    mapOptionsService.broadcastChangedOption('center');
+                }
+            }).
+            error(function(data, status, headers, config) {
+                // Set zoom to 3 so it shows all continents at 0,0
+                mapOptionsService.set('zoom', 3);
+                mapOptionsService.broadcastChangedOption('zoom');
+            }).
+            finally(function() {
+
+                // Initialize the map
+                mapService.initMap();
             });
+    };
 
-            // Initialize the map
-            mapService.initMap(optionsObject);
-        });
+    centerAndLoadMap();
+
+    $scope.$on('mapTypeChange', function (e, mapTypeName) {
+        $scope.showMapType = mapTypeName;
+
+        centerAndLoadMap();
+    });
 
     // Options have been changed via the sidebar, update the map.
     $scope.$on('mapOptionChange', function () {
@@ -38,13 +59,13 @@ app.controller("ViewMapController", ['$scope', 'mapOptionsService', 'mapFeatureS
         mapService.toggleMapFeature(feature);
     });
 
-    // Marker, circle, polygon has been added or removed, let everyone know.
+    // Marker, circle, polygon POPUP has been added or removed, let everyone know.
     $scope.$on('mapFeaturePopupChange', function () {
         var feature = mapFeatureService.lastUpdatedFeature();
         mapService.toggleBindPopupToFeature(feature);
     });
 
-    // Marker, circle, polygon has been added or removed, let everyone know.
+    // Map event added or removed, let everyone know.
     $scope.$on('mapEventChange', function () {
         var event = mapEventsService.lastUpdatedEvent();
         mapService.toggleMapEvent(event);

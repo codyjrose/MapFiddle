@@ -4,6 +4,10 @@ app.controller('MapFeaturesController', ['$scope', 'mapFeatureService', function
         $scope.features = mapFeatureService.getAll();
     };
 
+    $scope.initDocs = function () {
+        $scope.docs = mapFeatureService.getDocs();
+    };
+
     $scope.broadcastChangedFeature = function (featureName) {
         mapFeatureService.broadcastChangedFeature(featureName);
     };
@@ -12,5 +16,11 @@ app.controller('MapFeaturesController', ['$scope', 'mapFeatureService', function
         mapFeatureService.broadcastChangedFeaturePopup(featureName);
     };
 
+    $scope.$on('mapTypeChange', function() {
+        $scope.initFeatures();
+        $scope.initDocs();
+    });
+
     $scope.initFeatures();
+    $scope.initDocs();
 }]);

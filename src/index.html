@@ -2,7 +2,7 @@
 <html ng-app="app">
 <head>
     <meta charset="utf-8">
-    <title>Map Fiddle</title>
+    <title>Mapstrap</title>
     <link rel="shortcut icon" type="image/x-icon" href="assets/icons/FontAwesome_f041(0)_16.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- build:css -->
@@ -17,20 +17,33 @@
 <body>
 <div class="container-fluid">
     <div ng-controller="ViewMapController as mv">
-        <div id="map"></div>
+        <div ng-show="showMapType === 'OSM'"><div id="osmmap"></div></div>
+        <div ng-show="showMapType === 'GM'"><div id="gmap"></div></div>
     </div>
     <!-- http://getbootstrap.com/css/#grid -->
     <div class="row app-front">
         <div ng-controller="NavController as nc" class="col-sm-6 col-md-5 col-lg-3 pull-right">
+
+            <div id="select-map">
+                <button class="btn btn-default btn-full-width force-square no-outline" ng-click="showMenu = !showMenu">
+                    {{ selectedMapType.label }} <i class="fa fa-angle-down pull-right"></i>
+                </button>
+                <ul ng-show="showMenu" class="force-square" >
+                    <li ng-repeat="option in mapTypes" ng-show="selectedMapType.name !== '{{ option.name }}'"><a href="#" ng-click="changeHandler()">{{ option.label }}</a></li>
+                </ul>
+            </div>
             <ul class="nav nav-pills navbar-default nav-justified text-nowrap">
-                <li ng-class="{ active: nc.isSelected(1) }"><a class="force-square" ng-click="nc.selectTab(1)" href="#/options"><i class="fa fa-cogs"></i> Options</a></li>
-                <li ng-class="{ active: nc.isSelected(2) }"><a class="force-square" ng-click="nc.selectTab(2)" href="#/features"><i class="fa fa-map-marker"></i> Features</a></li>
-                <li ng-class="{ active: ncls.isSelected(3) }"><a class="force-square" ng-click="nc.selectTab(3)" href="#/events"><i class="fa fa-bolt"></i> Events</a></li>
-                <li ng-class="{ active: nc.isSelected(4) }"><a class="force-square" ng-click="nc.selectTab(4)" href="#/about"><i class="fa fa-question-circle"></i></a></li>
+                <li ng-class="{ active: nc.isSelectedTab('options') }"><a class="force-square" ng-click="nc.selectTab('options')" href="#"><i class="fa fa-cogs"></i> Options</a></li>
+                <li ng-class="{ active: nc.isSelectedTab('features') }"><a class="force-square" ng-click="nc.selectTab('features')" href="#"><i class="fa fa-map-marker"></i> Features</a></li>
+                <li ng-class="{ active: nc.isSelectedTab('events') }"><a class="force-square" ng-click="nc.selectTab('events')" href="#"><i class="fa fa-bolt"></i> Events</a></li>
+                <li ng-class="{ active: nc.isSelectedTab('about') }"><a class="force-square" ng-click="nc.selectTab('about')" href="#"><i class="fa fa-question-circle"></i></a></li>
             </ul>
             <!--This is where the options, data and events panels will appear.-->
-            <div class="panel force-square">
-                <div ng-view></div>
+            <div class="panel force-square" ng-switch="nc.selectedTab()">
+                <options-panel ng-switch-when="options"></options-panel>
+                <features-panel ng-switch-when="features"></features-panel>
+                <events-panel ng-switch-when="events"></events-panel>
+                <about-panel ng-switch-when="about"></about-panel>
             </div>
             <button class="btn btn-full-width force-square no-outline"
                     ng-class="{ 'btn-success': btnSuccess, 'btn-danger': !btnSuccess }"
@@ -56,15 +69,16 @@
 <script src="js/vendor/leaflet-src.js"></script>
 <script src="js/vendor/prettify/run_prettify.min.js"></script>
 <script src="js/vendor/prettify/prettify.min.js"></script>
+<script src="js/vendor/googlemaps3.exp.js"></script>
 <!-- endbuild -->
 <!-- build:js -->
 <script src="js/app.js"></script>
 <script src="js/controllers/navController.js"></script>
-<script src="js/controllers/MapOptionsController.js"></script>
-<script src="js/controllers/MapFeaturesController.js"></script>
-<script src="js/controllers/MapEventsController.js"></script>
+<script src="js/controllers/mapOptionsController.js"></script>
+<script src="js/controllers/mapFeaturesController.js"></script>
+<script src="js/controllers/mapEventsController.js"></script>
 <script src="js/controllers/viewMapController.js"></script>
-<script src="js/controllers/ViewCodeController.js"></script>
+<script src="js/controllers/viewCodeController.js"></script>
 <script src="js/directives/directives.js"></script>
 <script src="js/services/geoLocationService.js"></script>
 <script src="js/services/mapService.js"></script>
@@ -72,6 +86,8 @@
 <script src="js/services/mapFeatureService.js"></script>
 <script src="js/services/mapEventsService.js"></script>
 <script src="js/services/codeService.js"></script>
+<script src="js/services/mapTypeService.js"></script>
 <!-- endbuild -->
+
 </body>
 </html>
