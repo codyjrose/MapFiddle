@@ -67,7 +67,16 @@ app.factory('mapEventsService', ['$rootScope', 'mapTypeService', function ($root
             },
             {
                 name: "GM",
-                documentationLink: "",
+                docs: [
+                    {
+                        text: "Events",
+                        url: "//developers.google.com/maps/documentation/javascript/events"
+                    },
+                    {
+                        text: "Map and Marker click events",
+                        url: "//developers.google.com/maps/documentation/javascript/events#MarkerEvents"
+                    }
+                ],
                 data: [
                     {
                         name: "click",

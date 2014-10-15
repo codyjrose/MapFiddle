@@ -64,7 +64,16 @@ app.factory('mapFeatureService', ['$rootScope', 'mapService', 'mapTypeService', 
             },
             {
                 name: "GM",
-                docs: [],
+                docs: [
+                    {
+                        text: "Markers",
+                        url: "https://developers.google.com/maps/documentation/javascript/markers"
+                    },
+                    {
+                        text: "Shapes",
+                        url: "https://developers.google.com/maps/documentation/javascript/shapes"
+                    },
+                ],
                 data: [
                     {
                         name: 'Marker',

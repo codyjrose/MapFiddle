@@ -130,6 +130,12 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
             },
             {
                 name: "GM",
+                docs: [
+                    {
+                        text: "Map options",
+                        url: "//developers.google.com/maps/documentation/javascript/reference#MapOptions"
+                    }
+                ],
                 data: [
                     {
                         name: "panControl",
