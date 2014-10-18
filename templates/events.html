@@ -1,0 +1,8 @@
+<div class="panel-body">
+    <form role="form" class="">
+        <div class="form-group" ng-repeat="event in events">
+            <button class="btn btn-full-width" ng-click="broadcastChangedEvent(event.name)">{{ event.enabled ? "Remove" : "Add" }} {{ event.label }}</button>
+        </div>
+    </form>
+    <doc-box></doc-box>
+</div>

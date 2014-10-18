@@ -1,0 +1,14 @@
+<div class="panel-body">
+    <form role="form">
+        <div class="form-group" ng-repeat="feature in features">
+            <button class="btn btn-full-width" ng-click="broadcastChangedFeature(feature.name)">{{ feature.obj == null ? "Add" : "Remove" }} {{ feature.name }}</button>
+            <div >
+                <label for="{{ feature.name }}" ng-class="{ 'text-muted': feature.obj == null }">
+                    <input id="{{ feature.name }}" type="checkbox" ng-disabled="feature.obj == null" ng-model="feature.popupEnabled" ng-checked="feature.popupEnabled" ng-change="broadcastChangedFeaturePopup(feature.name)">
+                    Show popup when {{ feature.name }} is clicked.
+                </label>
+            </div>
+        </div>
+    </form>
+    <doc-box></doc-box>
+</div>

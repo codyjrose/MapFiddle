@@ -1,0 +1,13 @@
+<div class="panel-body">
+    <div class="row">
+        <form role="form" class="col-sm-6">
+            <div class="form-group" ng-repeat="option in options">
+                <div ng-if="option.inputType == 'range'" option-range="option"></div>
+                <div ng-if="option.inputType == 'checkbox'" option-checkbox="option"></div>
+                <!-- Use this tag to show option data -->
+                <!--<pre>{{option}}</pre>-->
+            </div>
+        </form>
+    </div>
+    <doc-box></doc-box>
+</div>
