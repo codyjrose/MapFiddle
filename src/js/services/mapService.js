@@ -90,7 +90,7 @@ app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOpti
         };
 
         var createGoogleMap = function() {
-            options.center = getActiveMapTypeLatLngObj(options.center);
+            options.center = getActiveMapTypeLatLngObj[activeMapType](options.center);
             options.mapTypeControlOptions = {
                 style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
                 position: google.maps.ControlPosition.TOP_LEFT
@@ -132,7 +132,7 @@ app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOpti
      * @returns {object}
      */
     var getMapCenter = function () {
-        return getActiveMapTypeLatLngObj(map.mapObj.getCenter());
+        return getActiveMapTypeLatLngObj[activeMapType](map.mapObj.getCenter());
     };
 
     /**
@@ -152,7 +152,7 @@ app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOpti
             lng = Math.random() * (ne.lng - sw.lng) + sw.lng;
         }
 
-        return getActiveMapTypeLatLngObj([lat, lng]);
+        return getActiveMapTypeLatLngObj[activeMapType]([lat, lng]);
     };
     //endregion
 
@@ -180,22 +180,22 @@ app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOpti
         return latLngObj;
     };
 
-    var getActiveMapTypeLatLngObj = function (latLng) {
-        switch (activeMapType) {
-            case "OSM":
-                if (latLng instanceof google.maps.LatLng) {
-                    return new L.LatLng(latLng.lat(), latLng.lng());
-                }
-                break;
-            case "GM":
-                if (Array.isArray(latLng)) {
-                    return new google.maps.LatLng(latLng[0], latLng[1]);
-                } else if (latLng instanceof L.LatLng) {
-                    return new google.maps.LatLng(latLng.lat, latLng.lng);
-                }
-                break;
-            default:
-                return latLng;
+    var getActiveMapTypeLatLngObj = {
+        "OSM": function (latLng) {
+            if (latLng instanceof google.maps.LatLng) {
+                return new L.LatLng(latLng.lat(), latLng.lng());
+            }
+
+            return latLng;
+        },
+        "GM": function (latLng) {
+            if (Array.isArray(latLng)) {
+                return new google.maps.LatLng(latLng[0], latLng[1]);
+            } else if (latLng instanceof L.LatLng) {
+                return new google.maps.LatLng(latLng.lat, latLng.lng);
+            }
+
+            return latLng;
         }
     };
     //endregion
