@@ -1,5 +1,3 @@
-osm = null;
-
 app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOptionsService', function ($rootScope, $location, mapTypeService, mapOptionsService) {
     "use strict";
 
@@ -113,18 +111,34 @@ app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOpti
     };
 
     //region Map state functions
+    /**
+     * Returns the currently active map object
+     * @returns {google.maps.Map|L.Map}
+     */
     var getMap = function () {
         return map.mapObj;
     };
 
+    /**
+     * Gets the zoom level of the map.
+     * @returns {int}
+     */
     var getZoom = function () {
         return map.mapObj.getZoom();
     };
 
+    /**
+     * Returns the center of the map
+     * @returns {object}
+     */
     var getMapCenter = function () {
         return getActiveMapTypeLatLngObj(map.mapObj.getCenter());
     };
 
+    /**
+     * Returns a lat/lng object that is within the current map bounds.
+     * @returns {object}
+     */
     var getLatLngInCurrentBounds = function () {
         var ne = map.mapObj.getBounds().getNorthEast(),
             sw = map.mapObj.getBounds().getSouthWest(),
@@ -148,7 +162,7 @@ app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOpti
      * @param latLng
      * @returns {*}
      */
-    var convertArrayToGoogleLatLng = function(latLng) {
+    var convertLeafletToGoogleLatLng = function(latLng) {
         if (Array.isArray(latLng) || latLng instanceof L.latLng) {
             return new google.maps.LatLng(latLng[0], latLng[1]);
         }
@@ -183,7 +197,6 @@ app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOpti
             default:
                 return latLng;
         }
-        return latLng;
     };
     //endregion
 
@@ -220,15 +233,20 @@ app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOpti
         }
     };
 
+    /**
+     * Takes in an option, checks how it's supposed to be updated (with the updateMethod)
+     * and chooses the associated function to set the option on the map.
+     * @param option
+     */
     var setMapOption = function (option) {
         switch (option.updateMethod) {
             case "mapProperty":
                 toggleProperty[activeMapType](option);
                 break;
-            case "control":
+            case "mapControl":
                 toggleControl[activeMapType](option);
                 break;
-            case "setOption":
+            case "mapOption":
                 setOption[activeMapType](option);
                 break;
             default:
@@ -289,6 +307,10 @@ app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOpti
         }
     };
 
+    /**
+     * Add / remove feature (circle, polygon, marker) to the active map.
+     * @param feature
+     */
     var toggleMapFeature = function (feature) {
         if (feature.obj) {
             unbindPopupToFeature[activeMapType](feature);
@@ -296,9 +318,12 @@ app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOpti
         } else {
             addFeature[activeMapType](feature);
         }
-        return feature;
     };
 
+    /**
+     * Add / remove popup to the active map. Popups are attached to features.
+     * @param feature
+     */
     var toggleBindPopupToFeature = function (feature) {
         if (feature.popupEnabled) {
             bindPopupToFeature[activeMapType](feature);
@@ -346,6 +371,10 @@ app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOpti
         }
     };
 
+    /**
+     * Turn on / off map events.
+     * @param event
+     */
     var toggleMapEvent = function (event) {
         if (!event.enabled) {
             enableEvent[activeMapType](event);

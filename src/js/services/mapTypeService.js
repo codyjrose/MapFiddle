@@ -1,7 +1,7 @@
 app.factory('mapTypeService', ['$rootScope', function ($rootScope) {
     "use strict";
 
-    var mapTypes = {},
+    var mapTypes = [],
         activeMapType = {};
 
     mapTypes = [

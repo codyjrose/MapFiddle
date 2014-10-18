@@ -6,7 +6,6 @@ app.factory('mapFeatureService', ['$rootScope', 'mapService', 'mapTypeService', 
     $rootScope.$on('mapTypeChange', function(e, mapTypeName) {
         activeMapType = mapTypeName;
         setFeaturesByMapType();
-        setDocsByMapType();
     });
 
     var lastUpdatedFeature = {},
@@ -72,7 +71,7 @@ app.factory('mapFeatureService', ['$rootScope', 'mapService', 'mapTypeService', 
                     {
                         text: "Shapes",
                         url: "https://developers.google.com/maps/documentation/javascript/shapes"
-                    },
+                    }
                 ],
                 data: [
                     {
@@ -170,44 +169,63 @@ app.factory('mapFeatureService', ['$rootScope', 'mapService', 'mapTypeService', 
     features.docs = [];
 
     /**
-     * Sets features data by map type.
+     * Sets features data by map type
      */
     var setFeaturesByMapType = function() {
         var d = _.find(featuresByMapType, function (feature) { return feature.name === activeMapType; });
         features.data = d.data;
-    };
-
-    /**
-     * Sets features doc list by map type.
-     */
-    var setDocsByMapType = function() {
-        var d = _.find(featuresByMapType, function (feature) { return feature.name === activeMapType; });
         features.docs = d.docs;
     };
 
+    /**
+     * Get feature object by name
+     * @param featureName
+     * @returns {object}
+     */
     var get = function (featureName) {
         try {
             return _.find(getAll(), { name: featureName });
         } catch (ignore) {}
     };
 
+    /**
+     * Set feature.value property
+     * @param featureName
+     * @param value
+     */
     var set = function (featureName, value) {
         // Set the value of the option
         get(featureName).value = value;
     };
 
+    /**
+     * Get array of feature objects
+     * @returns {Array}
+     */
     var getAll = function () {
         return features.data;
     };
 
+    /**
+     * Get array of documentation objects
+     * @returns {Array}
+     */
     var getDocs = function () {
         return features.docs;
     };
 
+    /**
+     * Get array of all currently active feature objects
+     * @returns {Array}
+     */
     var getAllUsed = function () {
         return _.filter(getAll(), function (feature) { return feature.obj !== null; });
     };
 
+    /**
+     * Get array of all feature objects that have popups enabled
+     * @returns {Array}
+     */
     var getAllUsedPopups = function () {
         return _.filter(getAll(), function (feature) { return feature.popupEnabled; });
     };
@@ -222,10 +240,10 @@ app.factory('mapFeatureService', ['$rootScope', 'mapService', 'mapTypeService', 
         $rootScope.$broadcast('mapFeaturePopupChange');
     };
 
-    var featureEnabled = function(featureName) {
-        return (get(featureName).obj);
-    };
-
+    /**
+     * Get a radius based on zoom level. Used to create circle features
+     * @returns {number}
+     */
     var getCircleRadius = function() {
         var zoom = mapService.getZoom();
         var radius = 500000;
@@ -237,18 +255,16 @@ app.factory('mapFeatureService', ['$rootScope', 'mapService', 'mapTypeService', 
         return radius;
     };
 
+    // Init features
     setFeaturesByMapType();
-    setDocsByMapType();
 
     return {
         set: set,
-        setFeaturesByMapType: setFeaturesByMapType,
         get: get,
         getAll: getAll,
         getAllUsedPopups: getAllUsedPopups,
         getAllUsed: getAllUsed,
         getDocs: getDocs,
-        featureEnabled: featureEnabled,
         broadcastChangedFeature: broadcastChangedFeature,
         broadcastChangedFeaturePopup: broadcastChangedFeaturePopup,
         lastUpdatedFeature: function() { return lastUpdatedFeature }

@@ -6,7 +6,6 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
     $rootScope.$on('mapTypeChange', function(e, mapTypeName) {
         activeMapType = mapTypeName;
         setOptionsByMapType();
-        setDocsByMapType();
     });
 
     var lastUpdatedOption = {},     // Tracks the last updated option
@@ -23,7 +22,7 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
                     {
                         name: "zoomControl",
                         value: true,
-                        updateMethod: "control",
+                        updateMethod: "mapControl",
                         type: "boolean",
                         label: "Zoom Control",
                         tooltip: "Whether the zoom control is added to the map.",
@@ -34,7 +33,7 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
                     {
                         name: "attributionControl",
                         value: true,
-                        updateMethod: "control",
+                        updateMethod: "mapControl",
                         type: "boolean",
                         label: "Attribution Control",
                         tooltip: "Whether the attribution control is added to the map.",
@@ -140,7 +139,7 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
                     {
                         name: "panControl",
                         value: true,
-                        updateMethod: "setOption",
+                        updateMethod: "mapOption",
                         type: "boolean",
                         label: "Pan Control",
                         tooltip: "Whether the pan control is added to the map.",
@@ -152,7 +151,7 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
                         name: "streetViewControl",
                         value: true,
                         type: "boolean",
-                        updateMethod: "setOption",
+                        updateMethod: "mapOption",
                         label: "Street View Pegman",
                         tooltip: "The enabled/disabled state of the Street View Pegman control.",
                         required: false,
@@ -162,7 +161,7 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
                     {
                         name: "zoomControl",
                         value: true,
-                        updateMethod: "setOption",
+                        updateMethod: "mapOption",
                         type: "boolean",
                         label: "Zoom Control",
                         tooltip: "Whether the zoom control is added to the map.",
@@ -198,7 +197,7 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
                         name: "draggable",
                         value: true,
                         type: "boolean",
-                        updateMethod: "setOption",
+                        updateMethod: "mapOption",
                         label: "Dragging",
                         tooltip: "Whether the map be draggable with mouse/touch or not.",
                         required: false,
@@ -209,7 +208,7 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
                         name: "mapTypeControl",
                         value: true,
                         type: "boolean",
-                        updateMethod: "setOption",
+                        updateMethod: "mapOption",
                         label: "Map Type Control",
                         tooltip: "The enabled/disabled state of the Map type control.",
                         required: false,
@@ -295,13 +294,6 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
     var setOptionsByMapType = function() {
         var d = _.find(optionsByMapType, function (option) { return option.name === activeMapType; });
         options.data = d.data;
-    };
-
-    /**
-     * Sets options doc list by map type.
-     */
-    var setDocsByMapType = function() {
-        var d = _.find(optionsByMapType, function (feature) { return feature.name === activeMapType; });
         options.docs = d.docs;
     };
 
@@ -316,7 +308,6 @@ app.factory('mapOptionsService', ['$rootScope', 'mapTypeService', function ($roo
 
     // Init map options
     setOptionsByMapType();
-    setDocsByMapType();
 
     return {
         get:get,

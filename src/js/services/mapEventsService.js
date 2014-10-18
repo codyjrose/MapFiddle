@@ -5,8 +5,7 @@ app.factory('mapEventsService', ['$rootScope', 'mapTypeService', function ($root
 
     $rootScope.$on('mapTypeChange', function(e, mapTypeName) {
         activeMapType = mapTypeName;
-        setEventsData();
-        setDocsByMapType();
+        setEventsByMapType();
     });
 
     var lastUpdatedEvent = {},
@@ -105,17 +104,11 @@ app.factory('mapEventsService', ['$rootScope', 'mapTypeService', function ($root
     /**
      * Sets events data by map type name.
      */
-    var setEventsData = function() {
+    var setEventsByMapType = function() {
         var d = _.find(eventsByMapType, function (event) { return event.name === activeMapType; });
         events.data = d.data;
-    };
-
-    /**
-     * Sets events doc list by map type.
-     */
-    var setDocsByMapType = function() {
-        var d = _.find(eventsByMapType, function (event) { return event.name === activeMapType; });
         events.docs = d.docs;
+
     };
 
     var get = function (eventName) {
@@ -136,17 +129,12 @@ app.factory('mapEventsService', ['$rootScope', 'mapTypeService', function ($root
         return _.filter(getAll(), function (event) { return event.enabled; });
     };
 
-    var getDocumentationLink = function() {
-        return events.documentationLink;
-    };
-
     var broadcastChangedEvent = function (eventName) {
         lastUpdatedEvent = get(eventName);
         $rootScope.$broadcast('mapEventChange');
     };
 
-    setEventsData();
-    setDocsByMapType();
+    setEventsByMapType();
 
     return {
         get: get,
