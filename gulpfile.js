@@ -66,10 +66,15 @@ gulp.task('html', function () {
         .pipe(gulp.dest('dist/'));
 });
 
-// Watch Files For Changes
+// Copy icons
 gulp.task('icons', function () {
     gulp.src('src/assets/icons/*.png')
     .pipe(gulp.dest('dist/assets/icons/'));
+});
+
+// Copy CNAME file (needed for gh-pages to work)
+gulp.task('cname', function () {
+	gulp.src('src/CNAME').pipe(gulp.dest('dist/'));
 });
 
 // Watch Files For Changes
@@ -78,4 +83,4 @@ gulp.task('watch', function () {
 });
 
 // Default Task
-gulp.task('default', ['scripts', 'css', 'html', 'icons']);
+gulp.task('default', ['scripts', 'css', 'html', 'icons', 'cname']);
