@@ -19,7 +19,7 @@ app.factory('mapTypeService', ['$rootScope', function ($rootScope) {
         return activeMapType;
     };
 
-    var getActiveMapTypeName = function() {
+    var getActiveMapTypeName = function () {
         return getActiveMapType().name;
     };
 

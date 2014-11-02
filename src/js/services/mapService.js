@@ -30,22 +30,6 @@ app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOpti
     //endregion
 
     /**
-     * Add the Mapstrap logo to the map
-     */
-    var addLogo = function () {
-        var logo = L.control({position: 'bottomleft'});
-
-        logo.onAdd = function () {
-            var branding = L.DomUtil.create('h3', 'brand legend');
-
-            branding.innerHTML += "<span id='logo'><i class='fa fa-map-marker'></i> Mapstrap</span>";
-            return branding;
-        };
-
-        logo.addTo(map.mapObj);
-    };
-
-    /**
      * Add map events to fire when the center of the map changes.
      */
     var addMoveEndEvent = {
@@ -86,7 +70,6 @@ app.factory('mapService', ['$rootScope', '$location', 'mapTypeService', 'mapOpti
             map.mapObj.addLayer(new L.TileLayer(options.url, options));
 
             addMoveEndEvent[activeMapType]();
-            addLogo();
         };
 
         var createGoogleMap = function() {
