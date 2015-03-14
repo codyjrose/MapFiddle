@@ -14,7 +14,35 @@
     <link rel="stylesheet" href="css/font-awesome.min.css"/>
     <link rel="stylesheet" href="css/main.css"/>
     <!-- endbuild -->
+
     <!-- build:ga -->
+    <!-- endbuild -->
+
+    <!-- build:cdn -->
+    <script src="js/vendor/angular.js"></script>
+    <script src="js/vendor/angular-route.js"></script>
+    <script src="js/vendor/lodash.js"></script>
+    <script src="js/vendor/leaflet-src.js"></script>
+    <script src="js/vendor/prettify/run_prettify.min.js"></script>
+    <script src="js/vendor/prettify/prettify.min.js"></script>
+    <script src="js/vendor/googlemaps3.exp.js"></script>
+    <!-- endbuild -->
+    <!-- build:js -->
+    <script src="js/app.js"></script>
+    <script src="js/controllers/navController.js"></script>
+    <script src="js/controllers/mapOptionsController.js"></script>
+    <script src="js/controllers/mapFeaturesController.js"></script>
+    <script src="js/controllers/mapEventsController.js"></script>
+    <script src="js/controllers/viewMapController.js"></script>
+    <script src="js/controllers/viewCodeController.js"></script>
+    <script src="js/directives/directives.js"></script>
+    <script src="js/services/geoLocationService.js"></script>
+    <script src="js/services/mapService.js"></script>
+    <script src="js/services/mapOptionsService.js"></script>
+    <script src="js/services/mapFeatureService.js"></script>
+    <script src="js/services/mapEventsService.js"></script>
+    <script src="js/services/codeService.js"></script>
+    <script src="js/services/mapTypeService.js"></script>
     <!-- endbuild -->
 </head>
 <body>
@@ -25,7 +53,7 @@
     </div>
     <!-- http://getbootstrap.com/css/#grid -->
     <div class="row app-front">
-        <div ng-controller="NavController as nc" class="col-sm-6 col-md-5 col-lg-3 pull-right">
+        <div ng-controller="NavController as nc" class="col-sm-6 col-md-5 col-lg-3 pull-right" ng-cloak>
 			<div id="logo"><span><i class='fa fa-map-marker'></i> Mapstrap</span></div>
             <div id="select-map">
                 <button class="btn btn-default btn-full-width force-square no-outline" ng-click="showMenu = !showMenu">
@@ -54,7 +82,7 @@
                 <i class="fa fa-code"></i> {{ showHideText }} HTML + Javascript
             </button>
         </div>
-        <div ng-controller="ViewCodeController as cv" class="col-xs-11 col-md-6 col-lg-8 pull-right">
+        <div ng-controller="ViewCodeController as cv" class="col-xs-11 col-md-6 col-lg-8 pull-right" ng-cloak>
             <div ng-show="showCode()">
                 <div class="panel force-square">
                     <div class="panel-body">
@@ -65,32 +93,7 @@
         </div>
     </div>
 </div>
-<!-- build:cdn -->
-<script src="js/vendor/angular.js"></script>
-<script src="js/vendor/angular-route.js"></script>
-<script src="js/vendor/lodash.js"></script>
-<script src="js/vendor/leaflet-src.js"></script>
-<script src="js/vendor/prettify/run_prettify.min.js"></script>
-<script src="js/vendor/prettify/prettify.min.js"></script>
-<script src="js/vendor/googlemaps3.exp.js"></script>
-<!-- endbuild -->
-<!-- build:js -->
-<script src="js/app.js"></script>
-<script src="js/controllers/navController.js"></script>
-<script src="js/controllers/mapOptionsController.js"></script>
-<script src="js/controllers/mapFeaturesController.js"></script>
-<script src="js/controllers/mapEventsController.js"></script>
-<script src="js/controllers/viewMapController.js"></script>
-<script src="js/controllers/viewCodeController.js"></script>
-<script src="js/directives/directives.js"></script>
-<script src="js/services/geoLocationService.js"></script>
-<script src="js/services/mapService.js"></script>
-<script src="js/services/mapOptionsService.js"></script>
-<script src="js/services/mapFeatureService.js"></script>
-<script src="js/services/mapEventsService.js"></script>
-<script src="js/services/codeService.js"></script>
-<script src="js/services/mapTypeService.js"></script>
-<!-- endbuild -->
+
 
 </body>
 </html>
