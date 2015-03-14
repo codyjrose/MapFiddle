@@ -9,7 +9,17 @@
     <link rel="shortcut icon" type="image/x-icon" href="assets/icons/FontAwesome_f041(0)_16.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/styles.css">
+
     <script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-38807124-2', 'auto');ga('send', 'pageview');</script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.20/angular-route.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
+    <script src="//maps.googleapis.com/maps/api/js?v=3.exp"></script>
+    <script src="js/scripts.js"></script>
 </head>
 <body>
 <div class="container-fluid">
@@ -19,7 +29,7 @@
     </div>
     <!-- http://getbootstrap.com/css/#grid -->
     <div class="row app-front">
-        <div ng-controller="NavController as nc" class="col-sm-6 col-md-5 col-lg-3 pull-right">
+        <div ng-controller="NavController as nc" class="col-sm-6 col-md-5 col-lg-3 pull-right" ng-cloak>
 			<div id="logo"><span><i class='fa fa-map-marker'></i> Mapstrap</span></div>
             <div id="select-map">
                 <button class="btn btn-default btn-full-width force-square no-outline" ng-click="showMenu = !showMenu">
@@ -48,7 +58,7 @@
                 <i class="fa fa-code"></i> {{ showHideText }} HTML + Javascript
             </button>
         </div>
-        <div ng-controller="ViewCodeController as cv" class="col-xs-11 col-md-6 col-lg-8 pull-right">
+        <div ng-controller="ViewCodeController as cv" class="col-xs-11 col-md-6 col-lg-8 pull-right" ng-cloak>
             <div ng-show="showCode()">
                 <div class="panel force-square">
                     <div class="panel-body">
@@ -59,14 +69,7 @@
         </div>
     </div>
 </div>
-<script src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.20/angular-route.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
-<script src="//maps.googleapis.com/maps/api/js?v=3.exp"></script>
-<script src="js/scripts.js"></script>
+
 
 </body>
 </html>
